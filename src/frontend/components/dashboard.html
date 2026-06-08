@@ -195,7 +195,13 @@
                     <!-- Diet Analysis -->
                     <div class="glass-panel rounded-lg p-lg flex flex-col relative overflow-hidden">
                         <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
-                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Diet Impact Validation</h3>
+                        <div class="flex items-center gap-2 mb-2 relative group cursor-help w-fit z-20">
+                            <h3 class="font-headline-sm text-headline-sm text-on-surface">Diet Impact Validation</h3>
+                            <span class="material-symbols-outlined text-sm text-on-surface-variant bg-white/10 rounded-full w-5 h-5 flex items-center justify-center">question_mark</span>
+                            <div class="absolute left-0 top-full mt-2 w-64 p-3 bg-surface-container-highest border border-white/10 rounded-lg text-xs text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl backdrop-blur-md">
+                                Averaged CO2 grouping. Non-Veg diets typically output double the CO2 of Veg diets due to methane and land use.
+                            </div>
+                        </div>
                         <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Average daily kgCO2e by food type</p>
                         <div id="diet-chart-container" class="flex flex-col gap-4 z-10">
                             <!-- Injected via JS -->
@@ -204,7 +210,13 @@
                     <!-- Transport Analysis -->
                     <div class="glass-panel rounded-lg p-lg flex flex-col relative overflow-hidden">
                         <div class="absolute -right-10 -top-10 w-32 h-32 bg-secondary/10 rounded-full blur-3xl"></div>
-                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Transport Impact Validation</h3>
+                        <div class="flex items-center gap-2 mb-2 relative group cursor-help w-fit z-20">
+                            <h3 class="font-headline-sm text-headline-sm text-on-surface">Transport Impact Validation</h3>
+                            <span class="material-symbols-outlined text-sm text-on-surface-variant bg-white/10 rounded-full w-5 h-5 flex items-center justify-center">question_mark</span>
+                            <div class="absolute left-0 top-full mt-2 w-64 p-3 bg-surface-container-highest border border-white/10 rounded-lg text-xs text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl backdrop-blur-md">
+                                Averaged CO2 grouping. Note the 'Walking Paradox': Walking alone cannot offset a high-carbon diet or high electricity usage.
+                            </div>
+                        </div>
                         <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Average daily kgCO2e by transport mode</p>
                         <div id="transport-chart-container" class="flex flex-col gap-4 z-10">
                             <!-- Injected via JS -->
@@ -216,7 +228,13 @@
                     <!-- Electricity Tiers -->
                     <div class="glass-panel rounded-lg p-lg flex flex-col relative overflow-hidden">
                         <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-tertiary-container/10 rounded-full blur-3xl"></div>
-                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Electricity Impact Tiers</h3>
+                        <div class="flex items-center gap-2 mb-2 relative group cursor-help w-fit z-20">
+                            <h3 class="font-headline-sm text-headline-sm text-on-surface">Electricity Impact Tiers</h3>
+                            <span class="material-symbols-outlined text-sm text-on-surface-variant bg-white/10 rounded-full w-5 h-5 flex items-center justify-center">question_mark</span>
+                            <div class="absolute left-0 top-full mt-2 w-64 p-3 bg-surface-container-highest border border-white/10 rounded-lg text-xs text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl backdrop-blur-md">
+                                Averages CO2 output by home kWh tiers. This proves electricity is a massive contributor to overall footprint variance.
+                            </div>
+                        </div>
                         <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Average daily kgCO2e by home electricity efficiency</p>
                         <div id="electricity-chart-container" class="flex flex-col gap-4 z-10 flex-1 justify-center">
                             <!-- Injected via JS -->
@@ -224,7 +242,13 @@
                     </div>
                     <!-- Mythbusting Correlations -->
                     <div class="glass-panel rounded-lg p-lg flex flex-col relative overflow-hidden">
-                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Mythbusting Correlations</h3>
+                        <div class="flex items-center gap-2 mb-2 relative group cursor-help w-fit z-20">
+                            <h3 class="font-headline-sm text-headline-sm text-on-surface">Mythbusting Correlations</h3>
+                            <span class="material-symbols-outlined text-sm text-on-surface-variant bg-white/10 rounded-full w-5 h-5 flex items-center justify-center">question_mark</span>
+                            <div class="absolute right-0 top-full mt-2 w-64 p-3 bg-surface-container-highest border border-white/10 rounded-lg text-xs text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl backdrop-blur-md">
+                                Formula: Pearson Coefficient. A score near 1.0 means the metric strongly predicts a high carbon footprint. A score near 0.0 proves the metric has zero mathematical effect on your footprint.
+                            </div>
+                        </div>
                         <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Pearson correlation coefficient (1.0 = Perfect, 0.0 = None)</p>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 z-10 h-full items-center">
                             <div class="bg-black/20 border border-white/5 rounded-lg p-4 text-center">
@@ -356,12 +380,15 @@
             }
 
             const saved = simState.baseline - currentFootprint;
+            const savedPercentage = (saved / simState.baseline) * 100;
             
             const displayEl = document.getElementById('sim-total-co2');
             const startVal = parseFloat(displayEl.innerText) || simState.baseline;
             
             animateValue('sim-total-co2', startVal, currentFootprint, 800);
-            document.getElementById('sim-saved-co2').textContent = Math.max(0, saved).toFixed(1) + ' kg';
+            
+            // Display as percentage
+            document.getElementById('sim-saved-co2').textContent = Math.max(0, savedPercentage).toFixed(1) + '%';
             
             const badge = document.getElementById('sim-saved-badge');
             if (saved > 0) {
@@ -431,7 +458,7 @@
                 const dietRes = await fetch('/api/stats/diet');
                 const dietStats = await dietRes.json();
                 
-                const vegStat = dietStats.find(s => s.food_type.includes('Vegetarian'));
+                const vegStat = dietStats.find(s => s.food_type === 'Veg');
                 if (vegStat) simState.vegSavings = simState.baseline - vegStat.avg_co2;
                 const dietContainer = document.getElementById('diet-chart-container');
                 if (dietContainer && dietStats.length > 0) {

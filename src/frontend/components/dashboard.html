@@ -141,17 +141,17 @@
             <!-- Visually hidden title, mostly for structure if expanded later -->
         </div>
         <div class="flex flex-col gap-lg w-full">
-            <a href="/"
+            <a href="/" aria-label="Navigate to Dashboard"
                 class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-primary border-r-2 border-primary group">
-                <span
+                <span aria-hidden="true"
                     class="material-symbols-outlined text-primary group-hover:text-primary transition-colors">dashboard</span>
                 <span
                     class="font-label-md text-label-md text-primary opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Dashboard</span>
             </a>
             <!-- Sidebar links for ingestion and quarantine removed to make a single pane of glass -->
-            <a href="#"
+            <a href="#" aria-label="Navigate to Settings"
                 class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-on-surface-variant group mt-auto absolute bottom-lg left-0">
-                <span class="material-symbols-outlined">settings</span>
+                <span aria-hidden="true" class="material-symbols-outlined">settings</span>
                 <span
                     class="font-label-md text-label-md text-on-surface opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Settings</span>
             </a>
@@ -183,9 +183,9 @@
                             metrics and ingestion status.</p>
                     </div>
                     <div class="flex gap-md">
-                        <button id="refresh-btn"
+                        <button id="refresh-btn" aria-label="Refresh Dashboard Data"
                             class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors flex items-center gap-1">
-                            <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+                            <span aria-hidden="true" class="material-symbols-outlined text-sm">refresh</span> Refresh
                         </button>
                         <!-- Removed export and audit buttons -->
                     </div>

@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 import duckdb
 import os
 import sys
@@ -9,12 +10,29 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 app = FastAPI(title="Yeti-Tracker API")
 
+# Security: CORS and strict security headers
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    return response
+
 DB_PATH = "data/yeti.duckdb"
 
 @app.get("/api/stats/diet")
 def get_diet_stats():
     try:
         conn = duckdb.connect()
+        conn.execute("PRAGMA memory_limit='1GB'; PRAGMA threads=2;")
         query = """
             SELECT food_type, AVG(carbon_footprint_kg) as avg_co2 
             FROM read_csv_auto('data/personal_carbon_footprint_sample.csv') 
@@ -30,6 +48,7 @@ def get_diet_stats():
 def get_transport_stats():
     try:
         conn = duckdb.connect()
+        conn.execute("PRAGMA memory_limit='1GB'; PRAGMA threads=2;")
         query = """
             SELECT transport_mode, AVG(carbon_footprint_kg) as avg_co2 
             FROM read_csv_auto('data/personal_carbon_footprint_sample.csv') 
@@ -45,6 +64,7 @@ def get_transport_stats():
 def get_electricity_stats():
     try:
         conn = duckdb.connect()
+        conn.execute("PRAGMA memory_limit='1GB'; PRAGMA threads=2;")
         query = """
             SELECT 
                 CASE 
@@ -66,6 +86,7 @@ def get_electricity_stats():
 def get_correlations():
     try:
         conn = duckdb.connect()
+        conn.execute("PRAGMA memory_limit='1GB'; PRAGMA threads=2;")
         query = """
             SELECT 
                 CORR(electricity_kwh, carbon_footprint_kg) as elec_corr,

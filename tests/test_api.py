@@ -91,3 +91,25 @@ def test_api_baseline_stats(mock_connect):
     assert response.status_code == 200
     data = response.json()
     assert data["baseline_co2"] == 2500.5
+
+def test_api_data_download():
+    """Verify the download endpoint serves the CSV file."""
+    response = client.get("/api/data/download")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "text/csv; charset=utf-8"
+    assert "attachment; filename=" in response.headers["content-disposition"]
+
+@patch("src.main.duckdb.connect")
+def test_api_data_preview(mock_connect):
+    """Verify the data preview endpoint returns raw rows."""
+    mock_conn = MagicMock()
+    mock_res = MagicMock()
+    mock_res.df.return_value = pd.DataFrame([{"Body Type": "normal", "Sex": "female", "Diet": "pescatarian"}])
+    mock_conn.execute.return_value = mock_res
+    mock_connect.return_value = mock_conn
+
+    response = client.get("/api/data/preview")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 1
+    assert data[0]["Diet"] == "pescatarian"

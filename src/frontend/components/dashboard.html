@@ -182,12 +182,19 @@
                         <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time carbon footprint
                             metrics and ingestion status.</p>
                     </div>
-                    <div class="flex gap-md">
+                    <div class="flex gap-md flex-wrap justify-end">
+                        <button id="preview-btn" aria-label="Preview Data"
+                            class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors flex items-center gap-1 bg-surface-container/50">
+                            <span aria-hidden="true" class="material-symbols-outlined text-sm">manage_search</span> Preview Data
+                        </button>
+                        <a href="/api/data/download" download aria-label="Download Dataset"
+                            class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors flex items-center gap-1 bg-surface-container/50">
+                            <span aria-hidden="true" class="material-symbols-outlined text-sm">download</span> Download CSV
+                        </a>
                         <button id="refresh-btn" aria-label="Refresh Dashboard Data"
-                            class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors flex items-center gap-1">
+                            class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors flex items-center gap-1 bg-primary text-on-primary border-none font-bold shadow-lg shadow-primary/20">
                             <span aria-hidden="true" class="material-symbols-outlined text-sm">refresh</span> Refresh
                         </button>
-                        <!-- Removed export and audit buttons -->
                     </div>
                 </header>
                 <!-- Validation Panels Grid -->
@@ -333,6 +340,39 @@
             </div>
         </main>
     </div>
+
+    <!-- Data Preview Modal -->
+    <div id="data-preview-modal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modal-backdrop"></div>
+        <div class="glass-panel w-11/12 max-w-6xl max-h-[80vh] rounded-xl border border-white/20 shadow-2xl relative z-10 flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="modal-content">
+            <div class="flex justify-between items-center p-6 border-b border-white/10 bg-surface-container-highest">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">database</span>
+                    <h2 class="font-headline-md text-headline-md text-white">Raw Data Preview (Top 5 Rows)</h2>
+                </div>
+                <button id="close-modal-btn" class="text-on-surface-variant hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-0 overflow-auto flex-1 custom-scrollbar bg-black/20">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-surface-container-highest sticky top-0 z-10 shadow-md">
+                        <tr id="preview-thead" class="text-xs uppercase tracking-wider text-on-surface-variant font-label-md border-b border-white/10">
+                            <!-- Injected -->
+                        </tr>
+                    </thead>
+                    <tbody id="preview-tbody" class="text-sm text-on-surface divide-y divide-white/5 font-mono">
+                        <!-- Injected -->
+                    </tbody>
+                </table>
+                <div id="preview-loading" class="p-8 text-center text-on-surface-variant flex flex-col items-center gap-2 hidden">
+                    <span class="material-symbols-outlined animate-spin text-primary">sync</span>
+                    Loading data...
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Simulator State Variables
         let simState = {
@@ -343,6 +383,70 @@
             elecMed: 0,
             elecLow: 0
         };
+
+        // Modal Logic
+        const modal = document.getElementById('data-preview-modal');
+        const modalContent = document.getElementById('modal-content');
+        const previewBtn = document.getElementById('preview-btn');
+        const closeBtn = document.getElementById('close-modal-btn');
+        const backdrop = document.getElementById('modal-backdrop');
+
+        function openModal() {
+            modal.classList.remove('opacity-0', 'invisible');
+            modalContent.classList.remove('scale-95');
+            fetchPreviewData();
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0', 'invisible');
+            modalContent.classList.add('scale-95');
+        }
+
+        if (previewBtn) previewBtn.addEventListener('click', openModal);
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (backdrop) backdrop.addEventListener('click', closeModal);
+
+        async function fetchPreviewData() {
+            const thead = document.getElementById('preview-thead');
+            const tbody = document.getElementById('preview-tbody');
+            const loading = document.getElementById('preview-loading');
+            
+            thead.innerHTML = '';
+            tbody.innerHTML = '';
+            loading.style.display = 'flex';
+
+            try {
+                const res = await fetch('/api/data/preview');
+                const data = await res.json();
+                
+                loading.style.display = 'none';
+                
+                if (data.length > 0) {
+                    const columns = Object.keys(data[0]);
+                    
+                    // Headers
+                    columns.forEach(col => {
+                        thead.innerHTML += `<th class="p-4 whitespace-nowrap">${col}</th>`;
+                    });
+                    
+                    // Rows
+                    data.forEach(row => {
+                        let tr = `<tr class="hover:bg-white/5 transition-colors">`;
+                        columns.forEach(col => {
+                            tr += `<td class="p-4 whitespace-nowrap">${row[col]}</td>`;
+                        });
+                        tr += `</tr>`;
+                        tbody.innerHTML += tr;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td class="p-8 text-center text-on-surface-variant">No data available.</td></tr>`;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                tbody.innerHTML = `<tr><td class="p-8 text-center text-error">Failed to load preview data.</td></tr>`;
+                console.error("Preview fetch error:", error);
+            }
+        }
 
         // Number animation helper
         function animateValue(id, start, end, duration) {

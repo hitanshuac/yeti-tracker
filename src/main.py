@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import duckdb
 import os
@@ -117,6 +117,22 @@ def get_baseline_stats():
         return df.to_dict(orient="records")[0]
     except Exception:
         return {"baseline_co2": 0}
+
+@app.get("/api/data/download")
+def download_data():
+    return FileResponse("data/personal_carbon_footprint_sample.csv", media_type="text/csv", filename="yeti_carbon_sample.csv")
+
+@app.get("/api/data/preview")
+def preview_data():
+    try:
+        conn = duckdb.connect()
+        conn.execute("PRAGMA memory_limit='1GB'; PRAGMA threads=2;")
+        query = "SELECT * FROM read_csv_auto('data/personal_carbon_footprint_sample.csv') LIMIT 5"
+        df = conn.execute(query).df()
+        # Convert NaN/float to strings or None to avoid JSON serialization errors if any exist
+        return df.fillna("").to_dict(orient="records")
+    except Exception:
+        return []
 
 @app.get("/")
 def serve_dashboard():

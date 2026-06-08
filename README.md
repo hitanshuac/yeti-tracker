@@ -39,6 +39,9 @@ The system is built upon a formal **Medallion Architecture (Bronze, Silver, Gold
 3. **Silver Enrichment**: A local PyArrow-to-DuckDB pipeline validates the raw payloads via Pydantic. Valid data is enriched using a static Merchant Category Code (MCC) emission factors lookup table. Invalid data is safely quarantined to a Parquet Dead Letter Queue (DLQ).
 4. **Gold Reporting**: DuckDB quickly aggregates the enriched data to serve personalized insights back to the user interface.
 
+## Test Automation & API Verification
+In accordance with our strict `test-automation.md` protocols, the entire FastAPI backend and UI rendering layer has been fully verified using the **Red-Green-Refactor** loop. We use `pytest` and `fastapi.testclient.TestClient` to mock our data layer and guarantee all HTML files and JSON endpoints (`/api/dashboard-metrics`, `/api/ingestion-feed`, etc.) are served flawlessly.
+
 ## Any Assumptions Made
 - **$0 Open-Source Stack**: We assume a strictly $0 budget, avoiding paid APIs by generating our own static MCC-to-CO2 lookup tables and running all orchestration natively via Python.
 - **Single-Node Analytics**: We assume the dataset size for personal carbon tracking easily fits within the memory limits of a local machine, making an embedded DuckDB instance drastically more efficient than a cloud data warehouse.
@@ -50,8 +53,33 @@ git clone https://github.com/hitanshuac/yeti-tracker.git
 cd yeti-tracker
 python -m venv venv
 venv\Scripts\activate
-pip install pyarrow duckdb pydantic pytest ruff
+pip install pyarrow duckdb pydantic pytest ruff fastapi uvicorn httpx pandas
 ```
+
+### Running the Dashboard Locally
+```bash
+python -m uvicorn src.main:app --reload
+# Navigate to http://localhost:8000
+```
+
+## Dynamic Skill Integration
+The Yeti-Tracker utilizes a composable skill architecture. Core agentic capabilities are dynamically imported from `.agents/skills/` to enhance system intelligence without polluting the main application logic.
+
+## Current Capabilities
+- **Active Governance Rules**: `.agents/rules/01-hack2skill-rules.md`
+- **Product Templates**: `01_PRD.md`, `02_TAD.md`, `03_SECURITY.md`, `04_FRONTEND.md`, `05_TICKETS.md`
+- **Agentic Skills**: `diagram-generator`, `duckdb-optimizer`, `pipeline-architect`
+- **Automated Workflows**: 11 master workflows including `master-sync.md`, `test-automation.md`, and `error-observability.md`
+- **Python APIs**: FastAPI server (`src/main.py`), Git Manager (`src/capabilities/git_manager.py`)
+
+## Directory Structure
+- `src/`: Main application source code and backend logic.
+- `data/`: Local storage for embedded DuckDB, JSON logs, and data exports.
+- `.agents/`: Governance rules, product templates, agentic skills, and autonomous workflows.
+- `.antigravity/`: Antigravity brain configuration.
+
+## Adoption Method
+To adopt the Agentic Brain in other projects, seamlessly copy the `.agents/` directory into your repository and run the `master-sync.md` workflow to initialize the governance layer and establish the autonomous CI/CD bridge.
 
 ## Visual Reference Appendix
 Technical structural diagram generated via D2/Python, styled via `generate_image`.

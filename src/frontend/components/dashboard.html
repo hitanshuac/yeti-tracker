@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Yeti Carbon Tracker - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#004c69",
+                        "inverse-primary": "#006b5f",
+                        "secondary-container": "#00a6e0",
+                        "primary-fixed-dim": "#3cddc7",
+                        "on-tertiary": "#4b2800",
+                        "secondary-fixed": "#c4e7ff",
+                        "on-primary": "#003731",
+                        "on-surface-variant": "#bacac5",
+                        "primary-fixed": "#62fae3",
+                        "on-primary-fixed": "#00201c",
+                        "surface-tint": "#3cddc7",
+                        "inverse-on-surface": "#2a3040",
+                        "on-surface": "#dde2f8",
+                        "tertiary-container": "#ffac5a",
+                        "primary": "#57f1db",
+                        "tertiary-fixed-dim": "#ffb875",
+                        "on-background": "#dde2f8",
+                        "surface-dim": "#0d1322",
+                        "outline-variant": "#3c4a46",
+                        "on-tertiary-container": "#744000",
+                        "outline": "#859490",
+                        "on-primary-container": "#00574d",
+                        "surface-container-highest": "#2f3445",
+                        "inverse-surface": "#dde2f8",
+                        "background": "#0d1322",
+                        "primary-container": "#2dd4bf",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#001e2c",
+                        "on-tertiary-fixed-variant": "#6b3b00",
+                        "secondary": "#7bd0ff",
+                        "surface-bright": "#33394a",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#191f2f",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#080e1d",
+                        "surface": "#0d1322",
+                        "secondary-fixed-dim": "#7bd0ff",
+                        "on-secondary": "#00354a",
+                        "on-secondary-container": "#00374d",
+                        "surface-variant": "#2f3445",
+                        "tertiary": "#ffd1aa",
+                        "surface-container-low": "#151b2b",
+                        "surface-container-high": "#242a3a",
+                        "on-tertiary-fixed": "#2d1600",
+                        "on-primary-fixed-variant": "#005047",
+                        "tertiary-fixed": "#ffdcc0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "base": "4px",
+                        "md": "16px",
+                        "grid_gutter": "24px",
+                        "sm": "8px",
+                        "grid_columns": "12",
+                        "grid_margin": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-sm": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0B1120;
+            color: #dde2f8;
+            /* on-background */
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-hover:hover {
+            box-shadow: 0 0 10px rgba(87, 241, 219, 0.5);
+            /* primary glow */
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden bg-background text-on-background font-body-md">
+    <!-- SideNavBar -->
+    <nav
+        class="fixed left-0 top-0 h-full z-40 bg-white/5 backdrop-blur-xl border-r border-white/10 h-screen w-20 flex flex-col items-center py-lg hidden md:flex">
+        <div class="mb-xl flex flex-col items-center gap-2">
+            <span class="material-symbols-outlined font-headline-sm text-headline-sm text-primary"
+                style="font-variation-settings: 'FILL' 1;">eco</span>
+            <!-- Visually hidden title, mostly for structure if expanded later -->
+        </div>
+        <div class="flex flex-col gap-lg w-full">
+            <a href="/"
+                class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-primary border-r-2 border-primary group">
+                <span
+                    class="material-symbols-outlined text-primary group-hover:text-primary transition-colors">dashboard</span>
+                <span
+                    class="font-label-md text-label-md text-primary opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Dashboard</span>
+            </a>
+            <a href="/ingestion"
+                class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-on-surface-variant group">
+                <span class="material-symbols-outlined">input</span>
+                <span
+                    class="font-label-md text-label-md text-on-surface opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Ingestion</span>
+            </a>
+            <a href="/quarantine"
+                class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-on-surface-variant group">
+                <span class="material-symbols-outlined">warning</span>
+                <span
+                    class="font-label-md text-label-md text-on-surface opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Quarantine</span>
+            </a>
+            <a href="#"
+                class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-on-surface-variant group mt-auto absolute bottom-lg left-0">
+                <span class="material-symbols-outlined">settings</span>
+                <span
+                    class="font-label-md text-label-md text-on-surface opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Settings</span>
+            </a>
+        </div>
+    </nav>
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col md:ml-20 w-full h-full">
+        <!-- TopNavBar -->
+        <header
+            class="flex justify-between items-center w-full px-grid_margin h-16 bg-white/5 backdrop-blur-xl border-b border-white/10 z-30 docked full-width top-0">
+            <div class="flex items-center gap-md cursor-pointer">
+                <span class="font-headline-sm text-headline-sm font-bold text-primary">Yeti Carbon Tracker</span>
+            </div>
+            <div class="flex items-center gap-md">
+                <div class="relative hidden sm:block">
+                    <span
+                        class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+                    <input
+                        class="bg-black/20 border border-white/10 rounded-lg pl-8 pr-4 py-1.5 text-sm focus:border-primary focus:outline-none transition-colors w-64 text-on-surface placeholder:text-on-surface-variant"
+                        placeholder="Search..." type="text" />
+                </div>
+                <button
+                    class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <button
+                    class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95">
+                    <span class="material-symbols-outlined">account_circle</span>
+                </button>
+            </div>
+        </header>
+        <!-- Canvas / Dashboard Area -->
+        <main class="flex-1 overflow-y-auto p-grid_margin">
+            <!-- Dashboard Shell Panel -->
+            <div class="glass-panel rounded-xl p-lg min-h-full flex flex-col gap-xl">
+                <header class="flex justify-between items-end">
+                    <div>
+                        <h1 class="font-headline-lg text-headline-lg text-on-surface hidden md:block">Enterprise Audit
+                            Overview</h1>
+                        <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface md:hidden">Enterprise
+                            Audit</h1>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time carbon footprint
+                            metrics and ingestion status.</p>
+                    </div>
+                    <div class="flex gap-md">
+                        <button id="refresh-btn"
+                            class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+                        </button>
+                        <button
+                            class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors">Export
+                            Report</button>
+                        <button
+                            class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md glow-hover transition-all">New
+                            Audit</button>
+                    </div>
+                </header>
+                <!-- Metric Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-grid_gutter">
+                    <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 w-16 h-16 bg-primary/10 rounded-full blur-xl"></div>
+                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total
+                            Emissions</span>
+                        <div class="flex items-end gap-2">
+                            <span id="total-emissions" class="font-display-sm text-display-sm text-on-surface">--</span>
+                            <span id="emissions-unit" class="font-body-sm text-body-sm text-primary mb-1">tCO2e</span>
+                        </div>
+                        <div class="flex items-center gap-1 text-primary mt-2">
+                            <span class="material-symbols-outlined text-sm">trending_down</span>
+                            <span class="font-label-md text-label-md">-4.2% vs last month</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
+                        <span
+                            class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active
+                            Scopes</span>
+                        <div class="flex items-end gap-2">
+                            <span id="active-scopes" class="font-display-sm text-display-sm text-on-surface">--</span>
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <span class="flex items-center gap-1 font-label-md text-label-md text-on-surface-variant">
+                                <div class="w-2 h-2 rounded-full bg-primary"></div> S1
+                            </span>
+                            <span class="flex items-center gap-1 font-label-md text-label-md text-on-surface-variant">
+                                <div class="w-2 h-2 rounded-full bg-secondary"></div> S2
+                            </span>
+                            <span class="flex items-center gap-1 font-label-md text-label-md text-on-surface-variant">
+                                <div class="w-2 h-2 rounded-full bg-tertiary"></div> S3
+                            </span>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
+                        <span
+                            class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Quarantine
+                            Items</span>
+                        <div class="flex items-end gap-2">
+                            <span id="quarantine-items" class="font-display-sm text-display-sm text-error">--</span>
+                        </div>
+                        <div class="flex items-center gap-1 text-error mt-2">
+                            <span class="material-symbols-outlined text-sm">warning</span>
+                            <span class="font-label-md text-label-md">Requires attention</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
+                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Data
+                            Health</span>
+                        <div class="flex items-end gap-2">
+                            <span id="data-health-text" class="font-display-sm text-display-sm text-on-surface">--%</span>
+                        </div>
+                        <div class="w-full bg-black/30 h-1.5 rounded-full mt-2 overflow-hidden">
+                            <div id="data-health-bar" class="bg-primary h-full rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Main Chart Area Placeholder -->
+                <div class="glass-panel rounded-lg p-lg flex-1 min-h-[300px] flex flex-col relative">
+                    <div class="flex justify-between items-center mb-md">
+                        <h2 class="font-headline-sm text-headline-sm text-on-surface">Emissions Trend</h2>
+                        <div class="flex gap-2">
+                            <button
+                                class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors">1M</button>
+                            <button class="text-primary font-label-md text-label-md">3M</button>
+                            <button
+                                class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors">1Y</button>
+                        </div>
+                    </div>
+                    <!-- Decorative Chart Grid Lines -->
+                    <div
+                        class="absolute inset-x-lg top-[80px] bottom-lg flex flex-col justify-between pointer-events-none">
+                        <div class="border-t border-white/5 w-full"></div>
+                        <div class="border-t border-white/5 w-full"></div>
+                        <div class="border-t border-white/5 w-full"></div>
+                        <div class="border-t border-white/5 w-full"></div>
+                        <div class="border-t border-white/5 w-full"></div>
+                    </div>
+                    <!-- Dynamic Chart Area -->
+                    <div id="emissions-chart-container" class="flex-1 h-full flex items-end gap-4 mt-8 px-4 z-10 relative">
+                        <!-- Bars injected via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        async function fetchChartData() {
+            try {
+                const response = await fetch('/api/category-footprint');
+                const categories = await response.json();
+                
+                const container = document.getElementById('emissions-chart-container');
+                if (!container || !categories || categories.length === 0) return;
+                
+                container.innerHTML = ''; // Clear static blocks
+                const maxVal = Math.max(...categories.map(c => c.total_carbon_kg));
+                
+                // Take top 5 categories
+                categories.slice(0, 5).forEach((cat, index) => {
+                    const percentage = Math.max((cat.total_carbon_kg / maxVal) * 100, 10);
+                    const isPrimary = index % 2 === 0;
+                    const colorClass = isPrimary ? 'from-primary/20 border-primary/50' : 'from-secondary/20 border-secondary/50';
+                    const displayVal = cat.total_carbon_kg > 1000 ? (cat.total_carbon_kg/1000).toFixed(1) + 'k' : cat.total_carbon_kg.toFixed(1);
+                    const shortName = cat.category.split(',')[0].substring(0, 15);
+                    
+                    const barHtml = `
+                        <div class="w-full bg-gradient-to-t ${colorClass} to-transparent rounded-t-sm border-t relative group transition-all duration-500 ease-in-out" style="height: ${percentage}%;">
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/90 px-2 py-1 rounded text-xs text-on-surface border border-white/10 whitespace-nowrap z-20 pointer-events-none">
+                                ${shortName}: ${displayVal}
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += barHtml;
+                });
+            } catch (error) {
+                console.error("Failed to load chart data:", error);
+            }
+        }
+
+        async function fetchMetrics() {
+            try {
+                const response = await fetch('/api/dashboard-metrics');
+                const data = await response.json();
+                
+                document.getElementById('total-emissions').textContent = data.display_emissions;
+                document.getElementById('emissions-unit').textContent = data.emissions_unit;
+                document.getElementById('active-scopes').textContent = data.active_scopes;
+                document.getElementById('quarantine-items').textContent = data.quarantine_items;
+                document.getElementById('data-health-text').textContent = data.data_health + '%';
+                document.getElementById('data-health-bar').style.width = data.data_health_width;
+                
+                await fetchChartData(); // Fetch the dynamic chart data
+            } catch (error) {
+                console.error("Failed to load metrics from API:", error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchMetrics(); // Fetch once on load
+            
+            const refreshBtn = document.getElementById('refresh-btn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', () => {
+                    // Optional: Add visual feedback for refresh
+                    const icon = refreshBtn.querySelector('.material-symbols-outlined');
+                    if (icon) icon.classList.add('animate-spin');
+                    fetchMetrics().finally(() => {
+                        if (icon) icon.classList.remove('animate-spin');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

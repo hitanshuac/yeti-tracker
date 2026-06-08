@@ -20,6 +20,9 @@ Initially designed as an operational data pipeline (with Dead Letter Queues and 
 3. **The Real Culprits**: Electricity usage (0.42 correlation) and Non-Veg diets are the true massive predictors of CO2 output.
 
 ## Approach and Architecture
+
+![Architecture Overview](docs/assets/architecture_diagram_showcase.jpg)
+
 We utilize a minimalist **Split-Plane Architecture** featuring a production-grade Vanilla UI, backed by standard Python and DuckDB.
 
 1. **Frontend UI**: A fully accessible, dark-glassmorphism dashboard that visually charts our EDA findings without requiring user logins.

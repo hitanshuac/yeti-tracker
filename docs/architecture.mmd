@@ -1,0 +1,20 @@
+graph LR
+    %% Style Definitions
+    classDef browser fill:#0d1322,stroke:#57f1db,stroke-width:2px,color:#fff;
+    classDef api fill:#0d1322,stroke:#a020f0,stroke-width:2px,color:#fff;
+    classDef db fill:#0d1322,stroke:#57f1db,stroke-width:2px,color:#fff;
+    classDef csv fill:#0d1322,stroke:#a020f0,stroke-width:2px,color:#fff;
+    classDef agent fill:#1e1e1e,stroke:#ff0000,stroke-width:2px,color:#fff;
+
+    %% Nodes
+    Browser["Browser (Tailwind Dashboard)"]:::browser
+    FastAPI["FastAPI (Analytical Backend)"]:::api
+    DuckDB["DuckDB (Embedded OLAP)"]:::db
+    CSV["Kaggle Dataset (CSV)"]:::csv
+    Antigravity["Antigravity (Agentic Control)"]:::agent
+
+    %% Edges
+    Browser -->|"/api/stats/*"| FastAPI
+    FastAPI -->|"Aggregations & Math"| DuckDB
+    DuckDB -->|"read_csv_auto()"| CSV
+    Antigravity -.->|"CI/CD Enforcement"| FastAPI

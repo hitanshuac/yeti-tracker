@@ -1,26 +1,26 @@
 import pytest
 from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from src.models.carbon_activity import CarbonActivity
+from src.models.carbon_activity import RawTransaction
 
-def test_carbon_activity_valid():
-    activity = CarbonActivity(
-        activity_id="123e4567-e89b-12d3-a456-426614174000",
+def test_raw_transaction_valid():
+    tx = RawTransaction(
+        transaction_id=uuid4(),
         user_id="user_123",
-        activity_type="transport",
-        carbon_kg=12.5,
+        mcc="4111",
+        amount_inr=150.50,
         timestamp=datetime.now()
     )
-    assert isinstance(activity.activity_id, UUID)
-    assert activity.carbon_kg == 12.5
+    assert isinstance(tx.transaction_id, UUID)
+    assert tx.amount_inr == 150.50
 
-def test_carbon_activity_negative_carbon():
+def test_raw_transaction_negative_amount():
     with pytest.raises(ValueError):
-        CarbonActivity(
-            activity_id="123e4567-e89b-12d3-a456-426614174000",
+        RawTransaction(
+            transaction_id=uuid4(),
             user_id="user_123",
-            activity_type="transport",
-            carbon_kg=-5.0,
+            mcc="4111",
+            amount_inr=-50.0,
             timestamp=datetime.now()
         )

@@ -4,12 +4,23 @@
 
 ![Architecture Diagram](docs/assets/architecture_diagram_showcase.png)
 
-## Overview
+## Chosen Vertical
 **Carbon Footprint Tracking**: A smart solution that helps individuals understand, track, and reduce their carbon footprint through simple actions and personalized insights.
-We are building the backbone of the Yeti-Tracker using a minimalist, fault-tolerant Split-Plane Architecture centered around standard Python, Pydantic, and DuckDB.
 
-## Dynamic Skill Integration
-This repository leverages composable AI skills (`.agents/skills/`) to autonomously enforce SRE principles (e.g., DuckDB WAL, Memory Limits) and generate deterministic architecture diagrams using diagrams-as-code.
+## Approach and Logic
+We are building the backbone of the Yeti-Tracker using a minimalist, fault-tolerant Split-Plane Architecture centered around standard Python, Pydantic, and DuckDB. Our approach prioritizes **Efficiency** and **Fault Tolerance** by relying on strict data validation schemas and lightweight memory-capped analytics over heavy distributed clusters.
+
+## How the Solution Works
+The system is built upon a formal **Medallion Architecture (Bronze, Silver, Gold)**:
+1. **Agentic UI**: A smart, CLI-based terminal interaction model.
+2. **Bronze Ingestion**: Real-time `asyncio` streams simulate high-throughput ingestion, dumping raw payloads securely out of Git.
+3. **Silver Enrichment**: A local PyArrow-to-DuckDB pipeline validates the raw payloads via Pydantic. Valid data is enriched using a static Merchant Category Code (MCC) emission factors lookup table. Invalid data is safely quarantined to a Parquet Dead Letter Queue (DLQ).
+4. **Gold Reporting**: DuckDB quickly aggregates the enriched data to serve personalized insights back to the user interface.
+
+## Any Assumptions Made
+- **$0 Open-Source Stack**: We assume a strictly $0 budget, avoiding paid APIs by generating our own static MCC-to-CO2 lookup tables and running all orchestration natively via Python.
+- **Single-Node Analytics**: We assume the dataset size for personal carbon tracking easily fits within the memory limits of a local machine, making an embedded DuckDB instance drastically more efficient than a cloud data warehouse.
+- **Strict SRE Operations**: We assume all development runs through our integrated Agentic Workflows, ensuring strict adherence to the Hack2Skill repository constraints (<10MB size limit) and single-branch deployment mandates.
 
 ## Installation & Setup
 ```bash
@@ -20,29 +31,12 @@ venv\Scripts\activate
 pip install pyarrow duckdb pydantic pytest ruff
 ```
 
-## Current Capabilities
-- **Rules**: Core Constraints (10MB Size Limit)
-- **Python APIs**: `CarbonActivity` (Pydantic), PyArrow to DuckDB pipeline (`duckdb_ingest.py`), Parquet Dead Letter Queue (`processor.py`), Git Manager (`git_manager.py`).
-- **Product Templates**: PRD, TAD, Security, Frontend, Tickets.
-- **Skills**: Diagram Generator, DuckDB Optimizer, Pipeline Architect.
-- **Workflows**: Generate Product Docs, Test Automation, Update Docs, Generate Diagrams, Publish Showcase, Semantic Release, Error Observability, Master Sync, Secure Checkpoint, Git Sync.
-
-## Directory Structure
-- `src/`: Python source code (models, ingestion pipelines, capabilities).
-- `data/`: Git-ignored storage for `yeti.duckdb` and Parquet files.
-- `.agents/`: Agentic workflows, skills, rules, and templates.
-- `tests/`: Pytest automation suite.
-- `docs/`: Product documents and diagram assets.
-
-## Adoption Method
-To inject this Agentic Brain into another project, copy the `.agents/` directory and configure your `git_manager.py` checkpoint workflows.
-
 ## Visual Reference Appendix
 Technical structural diagram generated via D2/Python, styled via `generate_image`.
 
 ```mermaid
 graph LR
-    A[Client App] -->|Raw Carbon Data| B(PyArrow & Pydantic)
+    A[Agentic Client App] -->|Raw Carbon Data| B(PyArrow & Pydantic)
     B -->|Valid Data| C[(Local Embedded DB)]
     B -->|Invalid Data| D[(Parquet Quarantine)]
     

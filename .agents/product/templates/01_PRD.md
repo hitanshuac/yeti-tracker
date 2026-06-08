@@ -3,17 +3,17 @@
 ## 1. Product Overview
 **Name**: Yeti-Tracker
 **Vertical**: Carbon Footprint Tracking Assistant
-**Goal**: A minimalist, backend-focused data ingestion pipeline that allows individuals to track and reduce their carbon footprint through simple actions.
+**Goal**: A backend-focused, production-grade agentic solution that helps track and reduce carbon footprints through a local Medallion Architecture.
 
 ## 2. Target Audience
-Individuals tracking daily carbon-emitting activities (e.g., transportation, electricity usage). Downstream analytics tools/dashboards that will consume the clean data.
+Developers tracking daily carbon-emitting activities via an agentic CLI/Backend interface.
 
 ## 3. Scope & MVP
-- **In Scope**: A "Bronze" ingestion layer. Validation of raw data, quarantining invalid records to a Dead Letter Queue (DLQ), and storing valid records idempotently in an embedded DuckDB database.
-- **Out of Scope**: Frontend UI, complex distributed analytics (Spark/Airflow), machine learning inference.
+- **In Scope**: A "Bronze, Silver, Gold" ingestion backend layer. Validation of raw data, quarantining invalid records to a Dead Letter Queue (DLQ), and storing valid records idempotently in an embedded DuckDB database.
+- **Out of Scope**: Frontend UI. Complex distributed analytics orchestrators (Spark/Airflow).
 
 ## 4. Key Workflows
-1. User/System submits raw activity data.
-2. System validates data against strict schemas.
-3. System routes valid data to DuckDB.
-4. System routes invalid data to Parquet DLQ.
+1. Bronze layer generates asynchronous mock transaction data.
+2. Silver layer cleans and validates data against strict schemas, routing invalid data to a Parquet DLQ.
+3. Silver layer enriches data via static MCC mappings.
+4. Gold layer aggregates data into final reporting tables.

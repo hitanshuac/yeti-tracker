@@ -148,18 +148,7 @@
                 <span
                     class="font-label-md text-label-md text-primary opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Dashboard</span>
             </a>
-            <a href="/ingestion"
-                class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-on-surface-variant group">
-                <span class="material-symbols-outlined">input</span>
-                <span
-                    class="font-label-md text-label-md text-on-surface opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Ingestion</span>
-            </a>
-            <a href="/quarantine"
-                class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-on-surface-variant group">
-                <span class="material-symbols-outlined">warning</span>
-                <span
-                    class="font-label-md text-label-md text-on-surface opacity-0 group-hover:opacity-100 transition-opacity absolute left-24 bg-surface-container-high px-2 py-1 rounded">Quarantine</span>
-            </a>
+            <!-- Sidebar links for ingestion and quarantine removed to make a single pane of glass -->
             <a href="#"
                 class="flex flex-col items-center gap-1 w-full py-2 hover:bg-white/10 transition-all duration-200 active:scale-95 transition-transform text-on-surface-variant group mt-auto absolute bottom-lg left-0">
                 <span class="material-symbols-outlined">settings</span>
@@ -205,8 +194,13 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-grid_gutter">
                     <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
                         <div class="absolute -right-4 -top-4 w-16 h-16 bg-primary/10 rounded-full blur-xl"></div>
-                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total
-                            Emissions</span>
+                        <div class="flex items-center gap-1 group relative cursor-pointer w-max">
+                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Your Total Footprint</span>
+                            <span class="material-symbols-outlined text-[14px] text-on-surface-variant group-hover:text-primary transition-colors">help</span>
+                            <div class="absolute bottom-full left-0 mb-2 w-48 p-3 bg-surface-container-high border border-white/10 rounded-lg text-body-sm text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl pointer-events-none">
+                                The total amount of carbon dioxide your lifestyle has generated. Lowering this helps fight climate change!
+                            </div>
+                        </div>
                         <div class="flex items-end gap-2">
                             <span id="total-emissions" class="font-display-sm text-display-sm text-on-surface">--</span>
                             <span id="emissions-unit" class="font-body-sm text-body-sm text-primary mb-1">tCO2e</span>
@@ -217,8 +211,13 @@
                         </div>
                     </div>
                     <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
-                        <span
-                            class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Top Emitter</span>
+                        <div class="flex items-center gap-1 group relative cursor-pointer w-max">
+                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Biggest Carbon Source</span>
+                            <span class="material-symbols-outlined text-[14px] text-on-surface-variant group-hover:text-primary transition-colors">help</span>
+                            <div class="absolute bottom-full left-0 mb-2 w-48 p-3 bg-surface-container-high border border-white/10 rounded-lg text-body-sm text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl pointer-events-none">
+                                This habit contributes the most to your footprint. Focus your reduction efforts here for maximum impact!
+                            </div>
+                        </div>
                         <div class="flex items-end gap-2">
                             <span id="top-category-name" class="font-headline-sm text-headline-sm text-on-surface truncate">--</span>
                         </div>
@@ -227,9 +226,13 @@
                         </div>
                     </div>
                     <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
-                        <span
-                            class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Quarantine
-                            Items</span>
+                        <div class="flex items-center gap-1 group relative cursor-pointer w-max">
+                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Sync Errors</span>
+                            <span class="material-symbols-outlined text-[14px] text-on-surface-variant group-hover:text-error transition-colors">help</span>
+                            <div class="absolute bottom-full left-0 mb-2 w-48 p-3 bg-surface-container-high border border-white/10 rounded-lg text-body-sm text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl pointer-events-none">
+                                Activities with corrupted data. Our system safely quarantined them so your footprint stays accurate.
+                            </div>
+                        </div>
                         <div class="flex items-end gap-2">
                             <span id="quarantine-items" class="font-display-sm text-display-sm text-error">--</span>
                         </div>
@@ -239,7 +242,13 @@
                         </div>
                     </div>
                     <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
-                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Tracked Activities</span>
+                        <div class="flex items-center gap-1 group relative cursor-pointer w-max">
+                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions Logged</span>
+                            <span class="material-symbols-outlined text-[14px] text-on-surface-variant group-hover:text-primary transition-colors">help</span>
+                            <div class="absolute bottom-full left-0 mb-2 w-48 p-3 bg-surface-container-high border border-white/10 rounded-lg text-body-sm text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl pointer-events-none">
+                                The number of daily activities we've successfully analyzed to calculate your carbon footprint.
+                            </div>
+                        </div>
                         <div class="flex items-end gap-2">
                             <span id="total-activities" class="font-display-sm text-display-sm text-on-surface">--</span>
                         </div>
@@ -249,60 +258,62 @@
                         </div>
                     </div>
                 </div>
-                <!-- Main Chart Area Placeholder -->
-                <div class="glass-panel rounded-lg p-lg flex-1 min-h-[300px] flex flex-col relative">
-                    <div class="flex justify-between items-center mb-md">
-                        <h2 class="font-headline-sm text-headline-sm text-on-surface">Emissions Trend</h2>
-                        <!-- Removed chart time filters -->
+                <!-- Recent Activities Table -->
+                <div class="glass-panel rounded-lg flex-1 min-h-[300px] flex flex-col overflow-hidden relative">
+                    <div class="p-lg border-b border-white/10 flex justify-between items-center bg-black/20">
+                        <h2 class="font-headline-sm text-headline-sm text-on-surface">Recent Activities</h2>
                     </div>
-                    <!-- Decorative Chart Grid Lines -->
-                    <div
-                        class="absolute inset-x-lg top-[80px] bottom-lg flex flex-col justify-between pointer-events-none">
-                        <div class="border-t border-white/5 w-full"></div>
-                        <div class="border-t border-white/5 w-full"></div>
-                        <div class="border-t border-white/5 w-full"></div>
-                        <div class="border-t border-white/5 w-full"></div>
-                        <div class="border-t border-white/5 w-full"></div>
-                    </div>
-                    <!-- Dynamic Chart Area -->
-                    <div id="emissions-chart-container" class="flex-1 h-full flex items-end gap-4 mt-8 px-4 z-10 relative">
-                        <!-- Bars injected via JavaScript -->
+                    <div class="overflow-y-auto flex-1">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="sticky top-0 bg-[#161d2d] z-10 border-b border-white/10 shadow-md">
+                                <tr>
+                                    <th class="font-label-md text-label-md text-on-surface-variant p-4 py-3 uppercase">Date</th>
+                                    <th class="font-label-md text-label-md text-on-surface-variant p-4 py-3 uppercase">Category</th>
+                                    <th class="font-label-md text-label-md text-on-surface-variant p-4 py-3 uppercase text-right">Footprint (kgCO2e)</th>
+                                    <th class="font-label-md text-label-md text-on-surface-variant p-4 py-3 uppercase text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activity-feed-body" class="font-body-sm text-body-sm divide-y divide-white/5">
+                                <!-- Dynamic rows injected here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </main>
     </div>
     <script>
-        async function fetchChartData() {
+        async function fetchIngestionFeed() {
             try {
-                const response = await fetch('/api/category-footprint');
-                const categories = await response.json();
-                
-                const container = document.getElementById('emissions-chart-container');
-                if (!container || !categories || categories.length === 0) return;
-                
-                container.innerHTML = ''; // Clear static blocks
-                const maxVal = Math.max(...categories.map(c => c.total_carbon_kg));
-                
-                // Take top 5 categories
-                categories.slice(0, 5).forEach((cat, index) => {
-                    const percentage = Math.max((cat.total_carbon_kg / maxVal) * 100, 10);
-                    const isPrimary = index % 2 === 0;
-                    const colorClass = isPrimary ? 'from-primary/20 border-primary/50' : 'from-secondary/20 border-secondary/50';
-                    const displayVal = cat.total_carbon_kg > 1000 ? (cat.total_carbon_kg/1000).toFixed(1) + 'k' : cat.total_carbon_kg.toFixed(1);
-                    const shortName = cat.category.split(',')[0].substring(0, 15);
+                const response = await fetch('/api/ingestion-feed');
+                const records = await response.json();
+                const tbody = document.getElementById('activity-feed-body');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                records.forEach(record => {
+                    const isPassed = record.status === 'Logged';
+                    const statusClass = isPassed ? 'bg-primary/10 text-primary border-primary/20' : 'bg-error/10 text-error border-error/20';
+                    const dotClass = isPassed ? 'bg-primary' : 'bg-error';
                     
-                    const barHtml = `
-                        <div class="w-full bg-gradient-to-t ${colorClass} to-transparent rounded-t-sm border-t relative group transition-all duration-500 ease-in-out" style="height: ${percentage}%;">
-                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/90 px-2 py-1 rounded text-xs text-on-surface border border-white/10 whitespace-nowrap z-20 pointer-events-none">
-                                ${shortName}: ${displayVal}
+                    const carbonStr = record.carbon_kg !== undefined ? parseFloat(record.carbon_kg).toFixed(1) : '--';
+                    
+                    const row = `
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="p-4 text-on-background">${record.timestamp || '--'}</td>
+                        <td class="p-4 text-on-background font-medium">${record.category || '--'}</td>
+                        <td class="p-4 text-right text-secondary font-mono">${carbonStr}</td>
+                        <td class="p-4 text-center">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${statusClass}">
+                                <div class="w-1.5 h-1.5 rounded-full ${dotClass}"></div>
+                                <span class="text-[11px] font-semibold tracking-wider uppercase">${record.status}</span>
                             </div>
-                        </div>
-                    `;
-                    container.innerHTML += barHtml;
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
                 });
             } catch (error) {
-                console.error("Failed to load chart data:", error);
+                console.error("Failed to load activity feed:", error);
             }
         }
 
@@ -318,7 +329,7 @@
                 document.getElementById('total-activities').textContent = data.total_activities;
                 document.getElementById('quarantine-items').textContent = data.quarantine_items;
                 
-                await fetchChartData(); // Fetch the dynamic chart data
+                await fetchIngestionFeed(); // Fetch the dynamic table feed
             } catch (error) {
                 console.error("Failed to load metrics from API:", error);
             }

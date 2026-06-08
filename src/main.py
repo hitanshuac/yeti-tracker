@@ -85,9 +85,9 @@ def get_ingestion_feed():
     passed_records = []
     try:
         conn = duckdb.connect(str(DB_PATH))
-        query = "SELECT transaction_id, timestamp, mcc, amount_inr as amount, 'Passed' as status FROM silver_transactions ORDER BY timestamp DESC LIMIT 10"
+        query = "SELECT transaction_id, timestamp, category, carbon_kg, 'Logged' as status FROM silver_transactions ORDER BY timestamp DESC LIMIT 15"
         passed_df = conn.execute(query).df()
-        passed_df['timestamp'] = passed_df['timestamp'].astype(str)
+        passed_df['timestamp'] = passed_df['timestamp'].astype(str).str.split(' ').str[0] # just date for clean UI
         passed_records = passed_df.to_dict(orient="records")
         conn.close()
     except Exception:
@@ -99,19 +99,20 @@ def get_ingestion_feed():
             table = pq.read_table(DLQ_PATH)
             df = table.to_pandas()
             if 'timestamp' in df.columns:
-                df['timestamp'] = df['timestamp'].astype(str)
+                df['timestamp'] = df['timestamp'].astype(str).str.split(' ').str[0]
             df['status'] = 'Quarantined'
-            df = df.rename(columns={'amount_inr': 'amount'})
-            cols = ['transaction_id', 'timestamp', 'mcc', 'amount', 'status']
+            df['category'] = 'Unknown/Error'
+            df['carbon_kg'] = 0.0
+            cols = ['transaction_id', 'timestamp', 'category', 'carbon_kg', 'status']
             available_cols = [c for c in cols if c in df.columns]
             df = df[available_cols]
-            failed_records = df.head(10).to_dict(orient="records")
+            failed_records = df.head(5).to_dict(orient="records")
     except Exception:
         pass
 
     combined = passed_records + failed_records
     combined.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
-    return combined[:20]
+    return combined[:15]
 
 @app.get("/")
 def serve_dashboard():

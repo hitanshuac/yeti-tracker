@@ -3,132 +3,89 @@ from fastapi.responses import HTMLResponse
 import duckdb
 import os
 import sys
-import pyarrow.parquet as pq
 
 # Ensure the root directory is in the python path to support running `python src/main.py` directly
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from src.gold.reporting import get_category_footprint
 
 app = FastAPI(title="Yeti-Tracker API")
 
 DB_PATH = "data/yeti.duckdb"
-DLQ_PATH = "data/quarantine_transactions.parquet"
 
-@app.get("/api/dashboard-metrics")
-def get_metrics():
-    # 1. Total Emissions & Top Category
-    categories = get_category_footprint()
-    total_emissions = sum(c["total_carbon_kg"] for c in categories)
-    
-    if total_emissions > 1000:
-        display_emissions = f"{total_emissions/1000:.1f}k"
-        unit = "tCO2e"
-    else:
-        display_emissions = f"{total_emissions:.1f}"
-        unit = "kgCO2e"
-        
-    top_category_name = "N/A"
-    top_category_value = "0"
-    if categories:
-        top_category_name = categories[0]["category"].split(",")[0]
-        val = categories[0]["total_carbon_kg"]
-        top_category_value = f"{val/1000:.1f}k" if val > 1000 else f"{val:.1f}"
-    
-    # 2. Quarantine Items
-    quarantine_count = 0
-    if os.path.exists(DLQ_PATH):
-        try:
-            table = pq.read_table(DLQ_PATH)
-            quarantine_count = table.num_rows
-        except Exception:
-            pass
-            
-    # 3. Total Activities
-    valid_count = 0
-    if os.path.exists(DB_PATH):
-        try:
-            conn = duckdb.connect(DB_PATH)
-            valid_count = conn.execute("SELECT COUNT(*) FROM silver_transactions").fetchone()[0]
-            conn.close()
-        except Exception:
-            pass
-            
-    return {
-        "display_emissions": display_emissions,
-        "emissions_unit": unit,
-        "top_category_name": top_category_name,
-        "top_category_value": top_category_value,
-        "total_activities": valid_count,
-        "quarantine_items": quarantine_count
-    }
-
-@app.get("/api/category-footprint")
-def get_categories():
-    return get_category_footprint()
-
-@app.get("/api/quarantine-data")
-def get_quarantine_data():
-    if not os.path.exists(DLQ_PATH):
+@app.get("/api/stats/diet")
+def get_diet_stats():
+    try:
+        conn = duckdb.connect()
+        query = """
+            SELECT food_type, AVG(carbon_footprint_kg) as avg_co2 
+            FROM read_csv_auto('data/personal_carbon_footprint_sample.csv') 
+            GROUP BY food_type 
+            ORDER BY avg_co2 DESC
+        """
+        df = conn.execute(query).df()
+        return df.to_dict(orient="records")
+    except Exception:
         return []
-    try:
-        table = pq.read_table(DLQ_PATH)
-        df = table.to_pandas()
-        # Convert timestamp to string for JSON serialization
-        if 'timestamp' in df.columns:
-            df['timestamp'] = df['timestamp'].astype(str)
-        return df.head(50).to_dict(orient="records")
-    except Exception as e:
-        return {"error": str(e)}
 
-@app.get("/api/ingestion-feed")
-def get_ingestion_feed():
-    passed_records = []
+@app.get("/api/stats/transport")
+def get_transport_stats():
     try:
-        conn = duckdb.connect(str(DB_PATH))
-        query = "SELECT transaction_id, timestamp, category, carbon_kg, 'Logged' as status FROM silver_transactions ORDER BY timestamp DESC LIMIT 15"
-        passed_df = conn.execute(query).df()
-        passed_df['timestamp'] = passed_df['timestamp'].astype(str).str.split(' ').str[0] # just date for clean UI
-        passed_records = passed_df.to_dict(orient="records")
-        conn.close()
+        conn = duckdb.connect()
+        query = """
+            SELECT transport_mode, AVG(carbon_footprint_kg) as avg_co2 
+            FROM read_csv_auto('data/personal_carbon_footprint_sample.csv') 
+            GROUP BY transport_mode 
+            ORDER BY avg_co2 DESC
+        """
+        df = conn.execute(query).df()
+        return df.to_dict(orient="records")
     except Exception:
-        pass
+        return []
 
-    failed_records = []
+@app.get("/api/stats/electricity")
+def get_electricity_stats():
     try:
-        if os.path.exists(DLQ_PATH):
-            table = pq.read_table(DLQ_PATH)
-            df = table.to_pandas()
-            if 'timestamp' in df.columns:
-                df['timestamp'] = df['timestamp'].astype(str).str.split(' ').str[0]
-            df['status'] = 'Quarantined'
-            df['category'] = 'Unknown/Error'
-            df['carbon_kg'] = 0.0
-            cols = ['transaction_id', 'timestamp', 'category', 'carbon_kg', 'status']
-            available_cols = [c for c in cols if c in df.columns]
-            df = df[available_cols]
-            failed_records = df.head(5).to_dict(orient="records")
+        conn = duckdb.connect()
+        query = """
+            SELECT 
+                CASE 
+                    WHEN electricity_kwh < 10 THEN 'Low (<10 kWh)'
+                    WHEN electricity_kwh BETWEEN 10 AND 20 THEN 'Medium (10-20 kWh)'
+                    ELSE 'High (>20 kWh)' 
+                END as usage_tier,
+                AVG(carbon_footprint_kg) as avg_co2
+            FROM read_csv_auto('data/personal_carbon_footprint_sample.csv')
+            GROUP BY usage_tier
+            ORDER BY avg_co2 ASC
+        """
+        df = conn.execute(query).df()
+        return df.to_dict(orient="records")
     except Exception:
-        pass
+        return []
 
-    combined = passed_records + failed_records
-    combined.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
-    return combined[:15]
+@app.get("/api/stats/correlations")
+def get_correlations():
+    try:
+        conn = duckdb.connect()
+        query = """
+            SELECT 
+                CORR(electricity_kwh, carbon_footprint_kg) as elec_corr,
+                CORR(distance_km, carbon_footprint_kg) as dist_corr,
+                CORR(screen_time_hours, carbon_footprint_kg) as screen_corr
+            FROM read_csv_auto('data/personal_carbon_footprint_sample.csv')
+        """
+        df = conn.execute(query).df()
+        res = df.to_dict(orient="records")[0]
+        return {
+            "electricity": round(res["elec_corr"], 2),
+            "distance": round(res["dist_corr"], 2),
+            "screen_time": round(res["screen_corr"], 2)
+        }
+    except Exception:
+        return {"electricity": 0, "distance": 0, "screen_time": 0}
 
 @app.get("/")
 def serve_dashboard():
     with open("src/frontend/components/dashboard.html", "r", encoding="utf-8") as f:
-        html = f.read()
-    return HTMLResponse(content=html)
-
-@app.get("/ingestion")
-def serve_ingestion():
-    with open("src/frontend/components/ingestion.html", "r", encoding="utf-8") as f:
-        html = f.read()
-    return HTMLResponse(content=html)
-
-@app.get("/quarantine")
-def serve_quarantine():
-    with open("src/frontend/components/quarantine.html", "r", encoding="utf-8") as f:
         html = f.read()
     return HTMLResponse(content=html)
 

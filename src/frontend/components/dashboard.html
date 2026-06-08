@@ -190,148 +190,163 @@
                         <!-- Removed export and audit buttons -->
                     </div>
                 </header>
-                <!-- Metric Cards Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-grid_gutter">
-                    <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 w-16 h-16 bg-primary/10 rounded-full blur-xl"></div>
-                        <div class="flex items-center gap-1 group relative cursor-pointer w-max">
-                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Your Total Footprint</span>
-                            <span class="material-symbols-outlined text-[14px] text-on-surface-variant group-hover:text-primary transition-colors">help</span>
-                            <div class="absolute bottom-full left-0 mb-2 w-48 p-3 bg-surface-container-high border border-white/10 rounded-lg text-body-sm text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl pointer-events-none">
-                                The total amount of carbon dioxide your lifestyle has generated. Lowering this helps fight climate change!
-                            </div>
-                        </div>
-                        <div class="flex items-end gap-2">
-                            <span id="total-emissions" class="font-display-sm text-display-sm text-on-surface">--</span>
-                            <span id="emissions-unit" class="font-body-sm text-body-sm text-primary mb-1">tCO2e</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-primary mt-2">
-                            <span class="material-symbols-outlined text-sm">trending_down</span>
-                            <span class="font-label-md text-label-md">-4.2% vs last month</span>
+                <!-- Validation Panels Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-grid_gutter">
+                    <!-- Diet Analysis -->
+                    <div class="glass-panel rounded-lg p-lg flex flex-col relative overflow-hidden">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Diet Impact Validation</h3>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Average daily kgCO2e by food type</p>
+                        <div id="diet-chart-container" class="flex flex-col gap-4 z-10">
+                            <!-- Injected via JS -->
                         </div>
                     </div>
-                    <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
-                        <div class="flex items-center gap-1 group relative cursor-pointer w-max">
-                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Biggest Carbon Source</span>
-                            <span class="material-symbols-outlined text-[14px] text-on-surface-variant group-hover:text-primary transition-colors">help</span>
-                            <div class="absolute bottom-full left-0 mb-2 w-48 p-3 bg-surface-container-high border border-white/10 rounded-lg text-body-sm text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl pointer-events-none">
-                                This habit contributes the most to your footprint. Focus your reduction efforts here for maximum impact!
-                            </div>
-                        </div>
-                        <div class="flex items-end gap-2">
-                            <span id="top-category-name" class="font-headline-sm text-headline-sm text-on-surface truncate">--</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-secondary mt-2">
-                            <span class="font-label-md text-label-md" id="top-category-value">--</span><span class="font-label-md text-label-md"> kgCO2e</span>
-                        </div>
-                    </div>
-                    <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
-                        <div class="flex items-center gap-1 group relative cursor-pointer w-max">
-                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Sync Errors</span>
-                            <span class="material-symbols-outlined text-[14px] text-on-surface-variant group-hover:text-error transition-colors">help</span>
-                            <div class="absolute bottom-full left-0 mb-2 w-48 p-3 bg-surface-container-high border border-white/10 rounded-lg text-body-sm text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl pointer-events-none">
-                                Activities with corrupted data. Our system safely quarantined them so your footprint stays accurate.
-                            </div>
-                        </div>
-                        <div class="flex items-end gap-2">
-                            <span id="quarantine-items" class="font-display-sm text-display-sm text-error">--</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-error mt-2">
-                            <span class="material-symbols-outlined text-sm">warning</span>
-                            <span class="font-label-md text-label-md">Requires attention</span>
-                        </div>
-                    </div>
-                    <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
-                        <div class="flex items-center gap-1 group relative cursor-pointer w-max">
-                            <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions Logged</span>
-                            <span class="material-symbols-outlined text-[14px] text-on-surface-variant group-hover:text-primary transition-colors">help</span>
-                            <div class="absolute bottom-full left-0 mb-2 w-48 p-3 bg-surface-container-high border border-white/10 rounded-lg text-body-sm text-on-surface opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl pointer-events-none">
-                                The number of daily activities we've successfully analyzed to calculate your carbon footprint.
-                            </div>
-                        </div>
-                        <div class="flex items-end gap-2">
-                            <span id="total-activities" class="font-display-sm text-display-sm text-on-surface">--</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-primary mt-2">
-                            <span class="material-symbols-outlined text-sm">check_circle</span>
-                            <span class="font-label-md text-label-md">Validated</span>
+                    <!-- Transport Analysis -->
+                    <div class="glass-panel rounded-lg p-lg flex flex-col relative overflow-hidden">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-secondary/10 rounded-full blur-3xl"></div>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Transport Impact Validation</h3>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Average daily kgCO2e by transport mode</p>
+                        <div id="transport-chart-container" class="flex flex-col gap-4 z-10">
+                            <!-- Injected via JS -->
                         </div>
                     </div>
                 </div>
-                <!-- Recent Activities Table -->
-                <div class="glass-panel rounded-lg flex-1 min-h-[300px] flex flex-col overflow-hidden relative">
-                    <div class="p-lg border-b border-white/10 flex justify-between items-center bg-black/20">
-                        <h2 class="font-headline-sm text-headline-sm text-on-surface">Recent Activities</h2>
+                <!-- Deep Dive Correlations -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-grid_gutter flex-1">
+                    <!-- Electricity Tiers -->
+                    <div class="glass-panel rounded-lg p-lg flex flex-col relative overflow-hidden">
+                        <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-tertiary-container/10 rounded-full blur-3xl"></div>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Electricity Impact Tiers</h3>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Average daily kgCO2e by home electricity efficiency</p>
+                        <div id="electricity-chart-container" class="flex flex-col gap-4 z-10 flex-1 justify-center">
+                            <!-- Injected via JS -->
+                        </div>
                     </div>
-                    <div class="overflow-y-auto flex-1">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="sticky top-0 bg-[#161d2d] z-10 border-b border-white/10 shadow-md">
-                                <tr>
-                                    <th class="font-label-md text-label-md text-on-surface-variant p-4 py-3 uppercase">Date</th>
-                                    <th class="font-label-md text-label-md text-on-surface-variant p-4 py-3 uppercase">Category</th>
-                                    <th class="font-label-md text-label-md text-on-surface-variant p-4 py-3 uppercase text-right">Footprint (kgCO2e)</th>
-                                    <th class="font-label-md text-label-md text-on-surface-variant p-4 py-3 uppercase text-center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="activity-feed-body" class="font-body-sm text-body-sm divide-y divide-white/5">
-                                <!-- Dynamic rows injected here -->
-                            </tbody>
-                        </table>
+                    <!-- Mythbusting Correlations -->
+                    <div class="glass-panel rounded-lg p-lg flex flex-col relative overflow-hidden">
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Mythbusting Correlations</h3>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Pearson correlation coefficient (1.0 = Perfect, 0.0 = None)</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 z-10 h-full items-center">
+                            <div class="bg-black/20 border border-white/5 rounded-lg p-4 text-center">
+                                <span class="material-symbols-outlined text-tertiary mb-2">bolt</span>
+                                <div class="font-display-sm text-display-sm text-tertiary" id="corr-electricity">--</div>
+                                <div class="font-label-md text-label-md text-on-surface-variant uppercase mt-1">Electricity</div>
+                                <div class="text-xs text-primary mt-2">Strong Predictor</div>
+                            </div>
+                            <div class="bg-black/20 border border-white/5 rounded-lg p-4 text-center">
+                                <span class="material-symbols-outlined text-secondary mb-2">directions_car</span>
+                                <div class="font-display-sm text-display-sm text-secondary" id="corr-distance">--</div>
+                                <div class="font-label-md text-label-md text-on-surface-variant uppercase mt-1">Distance</div>
+                                <div class="text-xs text-on-surface-variant mt-2">Moderate Predictor</div>
+                            </div>
+                            <div class="bg-black/20 border border-white/5 rounded-lg p-4 text-center opacity-50">
+                                <span class="material-symbols-outlined text-on-surface-variant mb-2">tv</span>
+                                <div class="font-display-sm text-display-sm text-on-surface" id="corr-screen">--</div>
+                                <div class="font-label-md text-label-md text-on-surface-variant uppercase mt-1">Screen Time</div>
+                                <div class="text-xs text-on-surface-variant mt-2">Zero Impact</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
     <script>
-        async function fetchIngestionFeed() {
+        async function fetchEDACorrelations() {
             try {
-                const response = await fetch('/api/ingestion-feed');
-                const records = await response.json();
-                const tbody = document.getElementById('activity-feed-body');
-                if (!tbody) return;
-                tbody.innerHTML = '';
-
-                records.forEach(record => {
-                    const isPassed = record.status === 'Logged';
-                    const statusClass = isPassed ? 'bg-primary/10 text-primary border-primary/20' : 'bg-error/10 text-error border-error/20';
-                    const dotClass = isPassed ? 'bg-primary' : 'bg-error';
-                    
-                    const carbonStr = record.carbon_kg !== undefined ? parseFloat(record.carbon_kg).toFixed(1) : '--';
-                    
-                    const row = `
-                    <tr class="hover:bg-white/5 transition-colors">
-                        <td class="p-4 text-on-background">${record.timestamp || '--'}</td>
-                        <td class="p-4 text-on-background font-medium">${record.category || '--'}</td>
-                        <td class="p-4 text-right text-secondary font-mono">${carbonStr}</td>
-                        <td class="p-4 text-center">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${statusClass}">
-                                <div class="w-1.5 h-1.5 rounded-full ${dotClass}"></div>
-                                <span class="text-[11px] font-semibold tracking-wider uppercase">${record.status}</span>
+                // Electricity Stats
+                const elecRes = await fetch('/api/stats/electricity');
+                const elecStats = await elecRes.json();
+                const elecContainer = document.getElementById('electricity-chart-container');
+                if (elecContainer && elecStats.length > 0) {
+                    elecContainer.innerHTML = '';
+                    const maxElec = Math.max(...elecStats.map(e => e.avg_co2));
+                    elecStats.forEach(stat => {
+                        const width = Math.max((stat.avg_co2 / maxElec) * 100, 5);
+                        elecContainer.innerHTML += `
+                            <div class="w-full">
+                                <div class="flex justify-between font-label-md text-label-md text-on-surface mb-1 uppercase tracking-wider">
+                                    <span>${stat.usage_tier}</span>
+                                    <span class="text-tertiary font-mono">${stat.avg_co2.toFixed(1)} kg</span>
+                                </div>
+                                <div class="w-full bg-white/5 rounded-full h-2">
+                                    <div class="bg-tertiary h-2 rounded-full transition-all duration-1000" style="width: ${width}%"></div>
+                                </div>
                             </div>
-                        </td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                });
+                        `;
+                    });
+                }
+
+                // Correlations
+                const corrRes = await fetch('/api/stats/correlations');
+                const corrs = await corrRes.json();
+                document.getElementById('corr-electricity').textContent = corrs.electricity;
+                document.getElementById('corr-distance').textContent = corrs.distance;
+                document.getElementById('corr-screen').textContent = corrs.screen_time;
+
             } catch (error) {
-                console.error("Failed to load activity feed:", error);
+                console.error("Failed to load EDA stats", error);
+            }
+        }
+
+        async function fetchValidationStats() {
+            try {
+                // Diet Stats
+                const dietRes = await fetch('/api/stats/diet');
+                const dietStats = await dietRes.json();
+                const dietContainer = document.getElementById('diet-chart-container');
+                if (dietContainer && dietStats.length > 0) {
+                    dietContainer.innerHTML = '';
+                    const maxDiet = Math.max(...dietStats.map(d => d.avg_co2));
+                    dietStats.forEach(stat => {
+                        const width = Math.max((stat.avg_co2 / maxDiet) * 100, 5);
+                        dietContainer.innerHTML += `
+                            <div class="w-full">
+                                <div class="flex justify-between font-label-md text-label-md text-on-surface mb-1 uppercase tracking-wider">
+                                    <span>${stat.food_type}</span>
+                                    <span class="text-primary font-mono">${stat.avg_co2.toFixed(1)} kg</span>
+                                </div>
+                                <div class="w-full bg-white/5 rounded-full h-2">
+                                    <div class="bg-primary h-2 rounded-full transition-all duration-1000" style="width: ${width}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Transport Stats
+                const transRes = await fetch('/api/stats/transport');
+                const transStats = await transRes.json();
+                const transContainer = document.getElementById('transport-chart-container');
+                if (transContainer && transStats.length > 0) {
+                    transContainer.innerHTML = '';
+                    const maxTrans = Math.max(...transStats.map(t => t.avg_co2));
+                    transStats.forEach(stat => {
+                        const width = Math.max((stat.avg_co2 / maxTrans) * 100, 5);
+                        transContainer.innerHTML += `
+                            <div class="w-full">
+                                <div class="flex justify-between font-label-md text-label-md text-on-surface mb-1 uppercase tracking-wider">
+                                    <span>${stat.transport_mode}</span>
+                                    <span class="text-secondary font-mono">${stat.avg_co2.toFixed(1)} kg</span>
+                                </div>
+                                <div class="w-full bg-white/5 rounded-full h-2">
+                                    <div class="bg-secondary h-2 rounded-full transition-all duration-1000" style="width: ${width}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to load validation stats", error);
             }
         }
 
         async function fetchMetrics() {
             try {
-                const response = await fetch('/api/dashboard-metrics');
-                const data = await response.json();
-                
-                document.getElementById('total-emissions').textContent = data.display_emissions;
-                document.getElementById('emissions-unit').textContent = data.emissions_unit;
-                document.getElementById('top-category-name').textContent = data.top_category_name;
-                document.getElementById('top-category-value').textContent = data.top_category_value;
-                document.getElementById('total-activities').textContent = data.total_activities;
-                document.getElementById('quarantine-items').textContent = data.quarantine_items;
-                
-                await fetchIngestionFeed(); // Fetch the dynamic table feed
+                await fetchValidationStats();
+                await fetchEDACorrelations(); // Fetch the EDA insight panels
             } catch (error) {
-                console.error("Failed to load metrics from API:", error);
+                console.error("Failed to load metrics:", error);
             }
         }
 

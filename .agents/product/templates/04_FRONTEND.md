@@ -1,24 +1,26 @@
-# Frontend Specification
+# 04_FRONTEND: Visual Validation Spec
 
-## 1. Core Mandate
-A high-fidelity, production-grade interface is explicitly **in scope** to showcase the project to judges and demonstrate the complete Medallion architecture loop.
+## 1. UI Architecture
+The UI is a "Single Pane of Glass" Data Science Dashboard. It is built strictly with `index.html` and Tailwind CSS, utilizing a premium Dark Glassmorphism aesthetic.
 
-## 2. Technology Stack
-- **Framework**: Vite + React
-- **Styling**: Vanilla CSS (No Tailwind, as per Advanced Agentic Coding rules).
-- **Aesthetic**: Rich dark mode (#0D1117 background), glassmorphism components, vibrant neon accents (cyan/purple), micro-animations on hover.
+## 2. Component Design
+### 2.1 Validation Panels (Top Row)
+- **Diet Impact**: A horizontal bar chart component comparing Non-Veg, Mixed, and Veg `avg_co2`. Animated widths visually prove Diet as the primary driver.
+- **Transport Impact**: A horizontal bar chart comparing Walk, EV, Bike, Bus, and Car.
 
-## 3. Core Features
-- **Activity Submission Form**: Real-time validation for adding transport/electricity usage.
-- **Insights Dashboard**: Visual breakdown of carbon footprint trends over time.
-- **Graceful Fallbacks**: Error boundaries to catch rendering failures. Offline-capable UI elements that alert the user if the backend connection is lost.
+### 2.2 Deep Dive Correlations (Bottom Row)
+- **Electricity Impact Tiers**: Groups users into High/Medium/Low tiers and visualizes the massive disparity in carbon footprints.
+- **Mythbusting Scorecards**: A 3-column grid displaying raw Pearson correlation coefficients.
+  - Electricity (`0.42` - Strong Predictor)
+  - Distance (`0.31` - Moderate)
+  - Screen Time (`-0.03` - Zero Impact)
 
-## 4. Accessibility (Hack2Skill Mandate)
-- **Semantic HTML**: UI must rely heavily on semantic HTML5 elements.
-- **ARIA Roles**: Custom interactive elements must feature appropriate ARIA states.
-- **Keyboard Navigation**: Entire application must be navigable without a mouse.
-- **High Contrast**: Text and actionable components must meet WCAG 2.1 AA contrast requirements against the dark navy background.
+## 3. Styling Tokens
+- **Background**: Deep obsidian (`#0d1322`).
+- **Glass Panels**: `bg-white/5` with `backdrop-blur-xl` and `border-white/10`.
+- **Primary Color**: Cyan/Teal (`#57f1db`) for strong positive highlights.
+- **Typography**: `Inter` for clean, data-heavy readability. Monospace fonts used strictly for numerical outputs.
 
-## 5. Build Constraints
-- Must remain lightweight to respect the repository's 10MB limit.
-- Dev server is run via `npm run dev`.
+## 4. Interactivity
+- Zero page reloads. Data is fetched asynchronously on DOM load via native `fetch()` calls.
+- CSS transitions (`duration-1000`) provide smooth loading animations for the data bars, drawing the user's eye to the largest emitters.

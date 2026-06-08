@@ -1,25 +1,31 @@
-# Technical Architecture Document (TAD)
+# 02_TAD: Technical Architecture Design
 
-## 1. Technology Stack
-- **Frontend**: React/Vite Single Page Application (Glassmorphism Dashboard)
-- **Backend**: Standard Python 3.11+ (AsyncIO)
-- **Validation**: Pydantic
-- **In-Memory Transport**: PyArrow
-- **Database**: DuckDB (Embedded, Memory Capped, WAL enabled)
+## 1. System Overview
+The Yeti-Tracker employs a **Split-Plane Architecture** featuring a pure Data Science Execution Plane powered by DuckDB, overseen by the Antigravity Control Plane (`.agents/`).
 
-## 2. Architecture Principles
-- **Full-Stack Showcase**: Frontend UI is explicitly included to ensure high-fidelity presentation for evaluation.
-- **Minimalism & Fault Tolerance**: Avoid distributed complexity. Pipelines must fail gracefully.
-- **Idempotency**: Use `INSERT OR REPLACE` to prevent duplicate records on pipeline restarts.
-- **Single Node Efficiency**: Run on a single node to comply with strict 10MB repository size limits.
+## 2. Component Architecture
+- **Control Plane (`.agents/`)**: Houses the Hack2Skill constraints, workflows, and prompts.
+- **Data Layer (DuckDB)**: Embedded OLAP engine utilizing `read_csv_auto` to instantly query the synthetic Kaggle dataset (`data/personal_carbon_footprint_sample.csv`).
+- **Backend (FastAPI)**: A lightweight Python web server exposing analytical aggregations:
+  - `/api/stats/diet`
+  - `/api/stats/transport`
+  - `/api/stats/electricity`
+  - `/api/stats/correlations`
+- **Frontend (Vanilla HTML/JS + Tailwind)**: A glassmorphism dashboard utilizing native `fetch()` to render visual validation panels and scorecards.
 
-## 3. Directory Structure
-- `src/frontend/` - React/Vite UI dashboard.
-- `src/bronze/` - Raw async data ingestion.
-- `src/silver/` - Data validation and enrichment.
-- `src/gold/` - Analytical aggregations.
-- `src/models/` - Pydantic schemas.
-- `data/` - Git-ignored folder containing raw JSON, `yeti.duckdb`, and `quarantine.parquet`.
+## 3. Technology Stack
+- **Database**: DuckDB (Embedded, In-Memory processing)
+- **Backend**: FastAPI, Uvicorn
+- **Frontend**: HTML5, Tailwind CSS, Vanilla JS
+- **Data**: Synthetic Kaggle CSV (`personal_carbon_footprint_sample.csv`)
 
-## 4. Pipeline Flow
-`Frontend UI -> Async Generator -> Pydantic Validation -> [If Fail: Parquet DLQ] -> Enrichment -> PyArrow Table -> DuckDB`
+## 4. Data Flow
+1. **Request**: UI triggers `fetchMetrics()`.
+2. **Process**: FastAPI executes DuckDB SQL against the raw CSV.
+3. **Analyze**: DuckDB calculates Pearson correlations and groupings.
+4. **Respond**: FastAPI returns JSON arrays.
+5. **Render**: UI dynamically draws horizontal data bars based on the relative scale of the `avg_co2` values.
+
+## 5. Architectural Constraints
+- **Zero-State ETL**: Eliminated PyArrow Dead Letter Queues and `INSERT` logic. Data is treated immutably at read-time.
+- **Size**: Repository must not exceed 10MB. 

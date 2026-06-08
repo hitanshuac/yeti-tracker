@@ -1,19 +1,24 @@
-# Product Requirements Document (PRD)
+# 01_PRD: Yeti-Tracker EDA Showcase
 
-## 1. Product Overview
-**Name**: Yeti-Tracker
-**Vertical**: Carbon Footprint Tracking Assistant
-**Goal**: A backend-focused, production-grade agentic solution that helps track and reduce carbon footprints through a local Medallion Architecture.
+## 1. Product Vision
+Yeti-Tracker is a purely analytical, client-side data science showcase. Moving beyond operational tracking, it acts as a "Deep Dive EDA Engine" that uses mathematical correlations (Pearson coefficients) to visually debunk common myths around personal carbon footprints.
 
 ## 2. Target Audience
-Developers tracking daily carbon-emitting activities via an agentic CLI/Backend interface.
+- Data Scientists and Hackathon Judges (specifically for the Hack2Skill PromptWars).
+- Individuals looking for scientifically backed, high-yield behavioral changes rather than generic "eco-friendly" advice.
 
-## 3. Scope & MVP
-- **In Scope**: A production-grade Frontend UI (React/Vite) to showcase to judges. A "Bronze, Silver, Gold" ingestion backend layer. Validation of raw data, quarantining invalid records to a Dead Letter Queue (DLQ), and storing valid records idempotently in an embedded DuckDB database.
-- **Out of Scope**: Complex distributed analytics orchestrators (Spark/Airflow).
+## 3. Core Features (MVP)
+- **Direct Kaggle Ingestion**: Seamlessly reads raw CSV behavioral data via DuckDB without heavy ETL abstractions.
+- **Diet Impact Analysis**: Aggregates average daily carbon footprint by diet type (Veg, Non-Veg, Mixed).
+- **Transport Impact Analysis**: Aggregates footprint by transport mode to identify the "Walking Paradox" (where diet eclipses local transport savings).
+- **Mythbusting Correlations**: Calculates exact Pearson correlations for Electricity (Strong Predictor) vs Screen Time (Zero Impact).
 
-## 4. Key Workflows
-1. Bronze layer generates asynchronous mock transaction data.
-2. Silver layer cleans and validates data against strict schemas, routing invalid data to a Parquet DLQ.
-3. Silver layer enriches data via static MCC mappings.
-4. Gold layer aggregates data into final reporting tables.
+## 4. Non-Goals
+- Real-time banking integration or OAuth.
+- Cloud data warehousing (must remain 100% local).
+- Operational CRUD (Create, Read, Update, Delete) workflows.
+
+## 5. Success Metrics
+- Analytical query latency under 500ms via DuckDB.
+- Repository footprint strictly under 10MB.
+- UI explicitly highlights the two major EDA findings (Diet and Electricity).

@@ -1,0 +1,26 @@
+direction: right
+
+Browser: Tailwind Dashboard
+Browser.style.fill: "#0d1322"
+Browser.style.stroke: "#57f1db"
+
+FastAPI: Analytical Backend
+FastAPI.style.fill: "#0d1322"
+FastAPI.style.stroke: "#a020f0"
+
+DuckDB: Embedded OLAP Engine
+DuckDB.style.fill: "#0d1322"
+DuckDB.style.stroke: "#57f1db"
+
+CSV: Kaggle Dataset
+CSV.style.fill: "#0d1322"
+CSV.style.stroke: "#a020f0"
+
+Antigravity: Agentic Control Plane
+Antigravity.style.fill: "#1e1e1e"
+Antigravity.style.stroke: "#ff0000"
+
+Browser -> FastAPI: /api/stats/*
+FastAPI -> DuckDB: Aggregations & Math
+DuckDB -> CSV: read_csv_auto()
+Antigravity -> FastAPI: CI/CD Enforcement

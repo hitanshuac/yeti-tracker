@@ -9,8 +9,8 @@
 Developers tracking daily carbon-emitting activities via an agentic CLI/Backend interface.
 
 ## 3. Scope & MVP
-- **In Scope**: A "Bronze, Silver, Gold" ingestion backend layer. Validation of raw data, quarantining invalid records to a Dead Letter Queue (DLQ), and storing valid records idempotently in an embedded DuckDB database.
-- **Out of Scope**: Frontend UI. Complex distributed analytics orchestrators (Spark/Airflow).
+- **In Scope**: A production-grade Frontend UI (React/Vite) to showcase to judges. A "Bronze, Silver, Gold" ingestion backend layer. Validation of raw data, quarantining invalid records to a Dead Letter Queue (DLQ), and storing valid records idempotently in an embedded DuckDB database.
+- **Out of Scope**: Complex distributed analytics orchestrators (Spark/Airflow).
 
 ## 4. Key Workflows
 1. Bronze layer generates asynchronous mock transaction data.

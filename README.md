@@ -8,11 +8,11 @@
 **Carbon Footprint Tracking**: A smart solution that helps individuals understand, track, and reduce their carbon footprint through simple actions and personalized insights.
 
 ## Approach and Logic
-We are building the backbone of the Yeti-Tracker using a minimalist, fault-tolerant Split-Plane Architecture centered around standard Python, Pydantic, and DuckDB. Our approach prioritizes **Efficiency** and **Fault Tolerance** by relying on strict data validation schemas and lightweight memory-capped analytics over heavy distributed clusters.
+We are building the backbone of the Yeti-Tracker using a minimalist, full-stack Split-Plane Architecture featuring a production-grade React/Vite Frontend, backed by standard Python, Pydantic, and DuckDB. Our approach prioritizes **Efficiency** and **Fault Tolerance** by relying on strict data validation schemas and lightweight memory-capped analytics over heavy distributed clusters.
 
 ## How the Solution Works
 The system is built upon a formal **Medallion Architecture (Bronze, Silver, Gold)**:
-1. **Agentic UI**: A smart, CLI-based terminal interaction model.
+1. **Frontend UI**: A fully accessible, glassmorphism dashboard allows users to submit and track their activities.
 2. **Bronze Ingestion**: Real-time `asyncio` streams simulate high-throughput ingestion, dumping raw payloads securely out of Git.
 3. **Silver Enrichment**: A local PyArrow-to-DuckDB pipeline validates the raw payloads via Pydantic. Valid data is enriched using a static Merchant Category Code (MCC) emission factors lookup table. Invalid data is safely quarantined to a Parquet Dead Letter Queue (DLQ).
 4. **Gold Reporting**: DuckDB quickly aggregates the enriched data to serve personalized insights back to the user interface.
@@ -36,7 +36,7 @@ Technical structural diagram generated via D2/Python, styled via `generate_image
 
 ```mermaid
 graph LR
-    A[Agentic Client App] -->|Raw Carbon Data| B(PyArrow & Pydantic)
+    A[React/Vite Frontend] -->|Raw Carbon Data| B(PyArrow & Pydantic)
     B -->|Valid Data| C[(Local Embedded DB)]
     B -->|Invalid Data| D[(Parquet Quarantine)]
     

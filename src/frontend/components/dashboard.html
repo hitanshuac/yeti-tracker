@@ -177,21 +177,7 @@
                 <span class="font-headline-sm text-headline-sm font-bold text-primary">Yeti Carbon Tracker</span>
             </div>
             <div class="flex items-center gap-md">
-                <div class="relative hidden sm:block">
-                    <span
-                        class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
-                    <input
-                        class="bg-black/20 border border-white/10 rounded-lg pl-8 pr-4 py-1.5 text-sm focus:border-primary focus:outline-none transition-colors w-64 text-on-surface placeholder:text-on-surface-variant"
-                        placeholder="Search..." type="text" />
-                </div>
-                <button
-                    class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95">
-                    <span class="material-symbols-outlined">notifications</span>
-                </button>
-                <button
-                    class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95">
-                    <span class="material-symbols-outlined">account_circle</span>
-                </button>
+                <!-- Removed non-working search bar and buttons -->
             </div>
         </header>
         <!-- Canvas / Dashboard Area -->
@@ -200,10 +186,10 @@
             <div class="glass-panel rounded-xl p-lg min-h-full flex flex-col gap-xl">
                 <header class="flex justify-between items-end">
                     <div>
-                        <h1 class="font-headline-lg text-headline-lg text-on-surface hidden md:block">Enterprise Audit
+                        <h1 class="font-headline-lg text-headline-lg text-on-surface hidden md:block">Personal Carbon
                             Overview</h1>
-                        <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface md:hidden">Enterprise
-                            Audit</h1>
+                        <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface md:hidden">Personal
+                            Carbon</h1>
                         <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time carbon footprint
                             metrics and ingestion status.</p>
                     </div>
@@ -212,12 +198,7 @@
                             class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors flex items-center gap-1">
                             <span class="material-symbols-outlined text-sm">refresh</span> Refresh
                         </button>
-                        <button
-                            class="border border-white/20 text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-white/5 transition-colors">Export
-                            Report</button>
-                        <button
-                            class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md glow-hover transition-all">New
-                            Audit</button>
+                        <!-- Removed export and audit buttons -->
                     </div>
                 </header>
                 <!-- Metric Cards Grid -->
@@ -237,21 +218,12 @@
                     </div>
                     <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
                         <span
-                            class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active
-                            Scopes</span>
+                            class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Top Emitter</span>
                         <div class="flex items-end gap-2">
-                            <span id="active-scopes" class="font-display-sm text-display-sm text-on-surface">--</span>
+                            <span id="top-category-name" class="font-headline-sm text-headline-sm text-on-surface truncate">--</span>
                         </div>
-                        <div class="flex gap-2 mt-2">
-                            <span class="flex items-center gap-1 font-label-md text-label-md text-on-surface-variant">
-                                <div class="w-2 h-2 rounded-full bg-primary"></div> S1
-                            </span>
-                            <span class="flex items-center gap-1 font-label-md text-label-md text-on-surface-variant">
-                                <div class="w-2 h-2 rounded-full bg-secondary"></div> S2
-                            </span>
-                            <span class="flex items-center gap-1 font-label-md text-label-md text-on-surface-variant">
-                                <div class="w-2 h-2 rounded-full bg-tertiary"></div> S3
-                            </span>
+                        <div class="flex items-center gap-1 text-secondary mt-2">
+                            <span class="font-label-md text-label-md" id="top-category-value">--</span><span class="font-label-md text-label-md"> kgCO2e</span>
                         </div>
                     </div>
                     <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
@@ -267,13 +239,13 @@
                         </div>
                     </div>
                     <div class="glass-panel rounded-lg p-md flex flex-col gap-2 relative overflow-hidden">
-                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Data
-                            Health</span>
+                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Tracked Activities</span>
                         <div class="flex items-end gap-2">
-                            <span id="data-health-text" class="font-display-sm text-display-sm text-on-surface">--%</span>
+                            <span id="total-activities" class="font-display-sm text-display-sm text-on-surface">--</span>
                         </div>
-                        <div class="w-full bg-black/30 h-1.5 rounded-full mt-2 overflow-hidden">
-                            <div id="data-health-bar" class="bg-primary h-full rounded-full" style="width: 0%"></div>
+                        <div class="flex items-center gap-1 text-primary mt-2">
+                            <span class="material-symbols-outlined text-sm">check_circle</span>
+                            <span class="font-label-md text-label-md">Validated</span>
                         </div>
                     </div>
                 </div>
@@ -281,13 +253,7 @@
                 <div class="glass-panel rounded-lg p-lg flex-1 min-h-[300px] flex flex-col relative">
                     <div class="flex justify-between items-center mb-md">
                         <h2 class="font-headline-sm text-headline-sm text-on-surface">Emissions Trend</h2>
-                        <div class="flex gap-2">
-                            <button
-                                class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors">1M</button>
-                            <button class="text-primary font-label-md text-label-md">3M</button>
-                            <button
-                                class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors">1Y</button>
-                        </div>
+                        <!-- Removed chart time filters -->
                     </div>
                     <!-- Decorative Chart Grid Lines -->
                     <div
@@ -347,10 +313,10 @@
                 
                 document.getElementById('total-emissions').textContent = data.display_emissions;
                 document.getElementById('emissions-unit').textContent = data.emissions_unit;
-                document.getElementById('active-scopes').textContent = data.active_scopes;
+                document.getElementById('top-category-name').textContent = data.top_category_name;
+                document.getElementById('top-category-value').textContent = data.top_category_value;
+                document.getElementById('total-activities').textContent = data.total_activities;
                 document.getElementById('quarantine-items').textContent = data.quarantine_items;
-                document.getElementById('data-health-text').textContent = data.data_health + '%';
-                document.getElementById('data-health-bar').style.width = data.data_health_width;
                 
                 await fetchChartData(); // Fetch the dynamic chart data
             } catch (error) {

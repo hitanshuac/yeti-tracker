@@ -16,21 +16,25 @@ DLQ_PATH = "data/quarantine_transactions.parquet"
 
 @app.get("/api/dashboard-metrics")
 def get_metrics():
-    # 1. Total Emissions
+    # 1. Total Emissions & Top Category
     categories = get_category_footprint()
     total_emissions = sum(c["total_carbon_kg"] for c in categories)
-    # Convert to tonnes for display if > 1000
+    
     if total_emissions > 1000:
         display_emissions = f"{total_emissions/1000:.1f}k"
         unit = "tCO2e"
     else:
         display_emissions = f"{total_emissions:.1f}"
         unit = "kgCO2e"
+        
+    top_category_name = "N/A"
+    top_category_value = "0"
+    if categories:
+        top_category_name = categories[0]["category"].split(",")[0]
+        val = categories[0]["total_carbon_kg"]
+        top_category_value = f"{val/1000:.1f}k" if val > 1000 else f"{val:.1f}"
     
-    # 2. Active Scopes (Mocked as 3 for now based on UI)
-    active_scopes = 3
-    
-    # 3. Quarantine Items
+    # 2. Quarantine Items
     quarantine_count = 0
     if os.path.exists(DLQ_PATH):
         try:
@@ -39,7 +43,7 @@ def get_metrics():
         except Exception:
             pass
             
-    # 4. Data Health
+    # 3. Total Activities
     valid_count = 0
     if os.path.exists(DB_PATH):
         try:
@@ -49,18 +53,13 @@ def get_metrics():
         except Exception:
             pass
             
-    total_records = valid_count + quarantine_count
-    data_health = 100.0
-    if total_records > 0:
-        data_health = (valid_count / total_records) * 100
-        
     return {
         "display_emissions": display_emissions,
         "emissions_unit": unit,
-        "active_scopes": active_scopes,
-        "quarantine_items": quarantine_count,
-        "data_health": round(data_health, 1),
-        "data_health_width": f"{round(data_health, 1)}%"
+        "top_category_name": top_category_name,
+        "top_category_value": top_category_value,
+        "total_activities": valid_count,
+        "quarantine_items": quarantine_count
     }
 
 @app.get("/api/category-footprint")

@@ -16,7 +16,11 @@ To ensure our solution meets the highest standards of enterprise efficiency and 
 - **Relevant**: Directly satisfies all 5 PromptWars evaluation focus areas (Quality, Security, Efficiency, Testing, Accessibility) while solving the real-world problem of personal climate accountability.
 - **Time-bound**: Delivered a fully tested, production-grade MVP within the Hack2Skill time-decay multiplier window to maximize score output.
 
-### The PLAN Concept
+### The APPASA Concept (Data Strategy)
+In strict alignment with the Google Data Analytics professional standards, our data lifecycle follows the **APPASA** methodology (Ask, Prepare, Process, Analyze, Share, Act). 
+- 📊 **[Read the Full Data Analysis Showcase Here](docs/data_analysis_showcase.md)**
+
+### The PLAN Concept (Execution Strategy)
 - **P**repare: Established a strict Agentic Governance layer (`.agents/rules`) to enforce CI/CD, size constraints, and full-stack SRE protocols before writing a single line of application code.
 - **L**aunch: Deployed an asynchronous Bronze ingestion layer to securely mock and capture transaction data without exposing API keys or bloating Git history.
 - **A**nalyze: Wired the Silver validation and Gold analytical layers to clean, quarantine, and aggregate data, powering data-driven UI endpoints.

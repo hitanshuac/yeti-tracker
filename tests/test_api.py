@@ -77,3 +77,17 @@ def test_api_correlations(mock_connect):
     assert data["electricity"] == 0.42
     assert data["distance"] == 0.31
     assert data["screen_time"] == -0.03
+
+@patch("src.main.duckdb.connect")
+def test_api_baseline_stats(mock_connect):
+    """Verify the baseline API returns the global average."""
+    mock_conn = MagicMock()
+    mock_res = MagicMock()
+    mock_res.df.return_value = pd.DataFrame([{"baseline_co2": 2500.5}])
+    mock_conn.execute.return_value = mock_res
+    mock_connect.return_value = mock_conn
+
+    response = client.get("/api/stats/baseline")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["baseline_co2"] == 2500.5

@@ -104,6 +104,20 @@ def get_correlations():
     except Exception:
         return {"electricity": 0, "distance": 0, "screen_time": 0}
 
+@app.get("/api/stats/baseline")
+def get_baseline_stats():
+    try:
+        conn = duckdb.connect()
+        conn.execute("PRAGMA memory_limit='1GB'; PRAGMA threads=2;")
+        query = """
+            SELECT AVG(carbon_footprint_kg) as baseline_co2
+            FROM read_csv_auto('data/personal_carbon_footprint_sample.csv')
+        """
+        df = conn.execute(query).df()
+        return df.to_dict(orient="records")[0]
+    except Exception:
+        return {"baseline_co2": 0}
+
 @app.get("/")
 def serve_dashboard():
     with open("src/frontend/components/dashboard.html", "r", encoding="utf-8") as f:

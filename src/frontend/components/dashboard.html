@@ -248,15 +248,151 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Personal Impact Simulator -->
+                <div class="glass-panel rounded-xl p-lg mt-grid_gutter flex flex-col md:flex-row gap-xl items-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-primary/5 blur-3xl rounded-full"></div>
+                    <div class="flex-1 z-10">
+                        <h3 class="font-headline-lg text-headline-lg text-on-surface mb-2">Personal Impact Simulator</h3>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Toggle the switches below to simulate how adopting sustainable habits dynamically reduces your footprint compared to the global average.</p>
+                        
+                        <div class="flex flex-col gap-4">
+                            <!-- Veg Toggle -->
+                            <label class="flex items-center justify-between cursor-pointer p-4 rounded-lg border border-white/10 hover:bg-white/5 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <span aria-hidden="true" class="material-symbols-outlined text-primary">eco</span>
+                                    <span class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Adopt Vegetarian Diet</span>
+                                </div>
+                                <input type="checkbox" id="sim-veg" class="sr-only peer" aria-label="Toggle Vegetarian Diet">
+                                <div class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary relative"></div>
+                            </label>
+
+                            <!-- EV Toggle -->
+                            <label class="flex items-center justify-between cursor-pointer p-4 rounded-lg border border-white/10 hover:bg-white/5 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <span aria-hidden="true" class="material-symbols-outlined text-secondary">electric_car</span>
+                                    <span class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Switch to EV Transport</span>
+                                </div>
+                                <input type="checkbox" id="sim-ev" class="sr-only peer" aria-label="Toggle EV Transport">
+                                <div class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary relative"></div>
+                            </label>
+
+                            <!-- Electricity Slider -->
+                            <div class="flex flex-col gap-2 p-4 rounded-lg border border-white/10 hover:bg-white/5 transition-colors">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <span aria-hidden="true" class="material-symbols-outlined text-tertiary">bolt</span>
+                                        <span class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Electricity Usage (<span id="sim-elec-val">Average</span>)</span>
+                                    </div>
+                                </div>
+                                <input type="range" id="sim-elec" min="0" max="2" value="1" aria-label="Adjust Electricity Usage" class="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer accent-tertiary mt-2">
+                                <div class="flex justify-between text-xs text-on-surface-variant mt-1 font-mono uppercase">
+                                    <span>Low</span>
+                                    <span>Average</span>
+                                    <span>High</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 z-10 flex flex-col items-center justify-center p-8 bg-black/30 rounded-xl border border-white/10 text-center min-h-[300px]">
+                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-2">Simulated Annual Footprint</span>
+                        <div class="text-[64px] font-bold text-white mb-2 font-mono flex items-baseline gap-2">
+                            <span id="sim-total-co2">--</span> <span class="text-xl text-on-surface-variant font-sans">kg</span>
+                        </div>
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/50 text-primary font-label-md text-label-md mt-4 transition-opacity duration-300 opacity-0" id="sim-saved-badge">
+                            <span aria-hidden="true" class="material-symbols-outlined text-sm">arrow_downward</span>
+                            <span id="sim-saved-co2" class="font-mono">0 kg</span> CO2 Saved
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
     <script>
+        // Simulator State Variables
+        let simState = {
+            baseline: 0,
+            vegSavings: 0,
+            evSavings: 0,
+            elecHigh: 0,
+            elecMed: 0,
+            elecLow: 0
+        };
+
+        // Number animation helper
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = (start + progress * (end - start)).toFixed(1);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Main simulator calculation logic
+        function updateSimulator() {
+            if (simState.baseline === 0) return;
+            let currentFootprint = simState.baseline;
+            
+            if (document.getElementById('sim-veg').checked) {
+                currentFootprint -= simState.vegSavings;
+            }
+            if (document.getElementById('sim-ev').checked) {
+                currentFootprint -= simState.evSavings;
+            }
+            
+            const elecVal = parseInt(document.getElementById('sim-elec').value);
+            if (elecVal === 0) { // Low
+                currentFootprint -= (simState.elecMed - simState.elecLow);
+            } else if (elecVal === 2) { // High
+                currentFootprint += (simState.elecHigh - simState.elecMed);
+            }
+
+            const saved = simState.baseline - currentFootprint;
+            
+            const displayEl = document.getElementById('sim-total-co2');
+            const startVal = parseFloat(displayEl.innerText) || simState.baseline;
+            
+            animateValue('sim-total-co2', startVal, currentFootprint, 800);
+            document.getElementById('sim-saved-co2').textContent = Math.max(0, saved).toFixed(1) + ' kg';
+            
+            const badge = document.getElementById('sim-saved-badge');
+            if (saved > 0) {
+                badge.classList.remove('opacity-0');
+            } else {
+                badge.classList.add('opacity-0');
+            }
+        }
+
+        // Attach event listeners
+        document.getElementById('sim-veg').addEventListener('change', updateSimulator);
+        document.getElementById('sim-ev').addEventListener('change', updateSimulator);
+        document.getElementById('sim-elec').addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            const labels = ['Low', 'Average', 'High'];
+            document.getElementById('sim-elec-val').textContent = labels[val];
+            updateSimulator();
+        });
+
         async function fetchEDACorrelations() {
             try {
                 // Electricity Stats
                 const elecRes = await fetch('/api/stats/electricity');
                 const elecStats = await elecRes.json();
+                
+                const lowElec = elecStats.find(s => s.usage_tier.includes('Low'));
+                const medElec = elecStats.find(s => s.usage_tier.includes('Medium'));
+                const highElec = elecStats.find(s => s.usage_tier.includes('High'));
+                simState.elecLow = lowElec ? lowElec.avg_co2 : simState.baseline * 0.8;
+                simState.elecMed = medElec ? medElec.avg_co2 : simState.baseline;
+                simState.elecHigh = highElec ? highElec.avg_co2 : simState.baseline * 1.2;
                 const elecContainer = document.getElementById('electricity-chart-container');
                 if (elecContainer && elecStats.length > 0) {
                     elecContainer.innerHTML = '';
@@ -294,6 +430,9 @@
                 // Diet Stats
                 const dietRes = await fetch('/api/stats/diet');
                 const dietStats = await dietRes.json();
+                
+                const vegStat = dietStats.find(s => s.food_type.includes('Vegetarian'));
+                if (vegStat) simState.vegSavings = simState.baseline - vegStat.avg_co2;
                 const dietContainer = document.getElementById('diet-chart-container');
                 if (dietContainer && dietStats.length > 0) {
                     dietContainer.innerHTML = '';
@@ -317,6 +456,9 @@
                 // Transport Stats
                 const transRes = await fetch('/api/stats/transport');
                 const transStats = await transRes.json();
+                
+                const evStat = transStats.find(s => s.transport_mode.includes('EV') || s.transport_mode.includes('Electric'));
+                if (evStat) simState.evSavings = simState.baseline - evStat.avg_co2;
                 const transContainer = document.getElementById('transport-chart-container');
                 if (transContainer && transStats.length > 0) {
                     transContainer.innerHTML = '';
@@ -343,8 +485,18 @@
 
         async function fetchMetrics() {
             try {
+                // Fetch Baseline
+                const baseRes = await fetch('/api/stats/baseline');
+                const baseData = await baseRes.json();
+                simState.baseline = baseData.baseline_co2;
+                document.getElementById('sim-total-co2').innerText = simState.baseline.toFixed(1);
+
+                // Fetch other metrics
                 await fetchValidationStats();
-                await fetchEDACorrelations(); // Fetch the EDA insight panels
+                await fetchEDACorrelations(); 
+                
+                // Initialize Simulator
+                updateSimulator();
             } catch (error) {
                 console.error("Failed to load metrics:", error);
             }
@@ -356,7 +508,6 @@
             const refreshBtn = document.getElementById('refresh-btn');
             if (refreshBtn) {
                 refreshBtn.addEventListener('click', () => {
-                    // Optional: Add visual feedback for refresh
                     const icon = refreshBtn.querySelector('.material-symbols-outlined');
                     if (icon) icon.classList.add('animate-spin');
                     fetchMetrics().finally(() => {

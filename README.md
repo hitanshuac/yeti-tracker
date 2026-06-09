@@ -5,14 +5,14 @@
 
 ## Executive Summary: A Data-Driven Strategy
 
-Yeti-Tracker is a purely analytical, client-side data science showcase. Moving far beyond generic operational tracking, it acts as a "Deep Dive EDA Engine" that uses mathematical correlations (Pearson coefficients) to visually debunk common myths around personal carbon footprints.
+Yeti-Tracker is a purely analytical, client-side decision engine. Moving far beyond generic operational tracking, it acts as a "Deep Dive EDA Engine" that uses mathematical correlations (Pearson coefficients) to visually debunk common myths around personal carbon footprints.
 
 ### The PACE Framework (Data Strategy)
 In strict alignment with Google Data Analytics professional standards, our data lifecycle follows the **PACE** methodology (Plan, Analyze, Construct, Execute). 
 - 📊 **[Read the Full Data Analysis Showcase Here](docs/data_analysis_showcase.md)**
 
-## The MVP Pivot
-Initially designed as an operational data pipeline (with Dead Letter Queues and Pydantic validation), our deep dive into the Kaggle dataset revealed that simple dashboards are ineffective. We pivoted the architecture to a pure **Exploratory Data Analysis (EDA) Showcase**.
+## Evolutionary Architecture
+Yeti-Tracker evolved from an initial automated ingestion pipeline into a sophisticated analytical decision engine, prioritizing actionable insights over generic tracking.
 
 ### Key Findings We Proved:
 1. **The Walking Paradox**: Walking generates 0 emissions, but high-impact diets and electricity usage completely eclipse the savings from walking.
@@ -24,9 +24,30 @@ Initially designed as an operational data pipeline (with Dead Letter Queues and 
 - **Architecture**: We assume that a 100% client-side local runtime is sufficient, removing the need for a cloud data warehouse, external API integrations, or OAuth.
 - **Pre-cleaned Data**: We assume the CSV data is pre-validated, removing the need for PyArrow DLQs (Dead Letter Queues) at runtime.
 
+## User Flow
+1. **Ingest**: Automated data ingestion and schema validation layer.
+2. **Analyze**: The EDA engine reveals the biggest emission culprit.
+3. **Act**: The Simulator delivers actionable, professional recommendations.
+
 ## Approach and Logic: The Bronze -> Silver -> Gold DuckDB Pipeline
 
-![Architecture Overview](docs/assets/architecture_diagram.png)
+```mermaid
+graph LR
+    subgraph Bronze ["Bronze Tier (Validation)"]
+        RawData["Raw CSV Data"]
+    end
+    subgraph Silver ["Silver Tier (Aggregation)"]
+        DuckDB["Local DuckDB Instance"]
+    end
+    subgraph Gold ["Gold Tier (Dashboard/Simulator)"]
+        FastAPI["FastAPI Endpoint"]
+        Frontend["Tailwind Frontend"]
+    end
+
+    RawData --> DuckDB
+    DuckDB --> FastAPI
+    FastAPI --> Frontend
+```
 
 We utilize a robust **Bronze -> Silver -> Gold Data Pipeline** mapped conceptually to our EDA architecture, using DuckDB for high-performance, vectorized data processing without bloated external ETL frameworks.
 

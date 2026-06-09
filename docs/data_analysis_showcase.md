@@ -89,4 +89,4 @@ ORDER BY total_co2 DESC
 **Objective**: Use the insights to drive data-driven decision-making.
 
 By presenting this structured data, we shift the user's focus from ineffective actions to high-yield behavioral changes.
-- **Data-Driven Action**: Instead of telling the user to "Walk more" (which the data shows is easily eclipsed by bad habits elsewhere), the dashboard explicitly advises them: **"Substitute 3 Non-Veg days with Veg days this week to cut your total footprint by ~30%."**
+- **Data-Driven Action**: Instead of telling the user to "Walk more" (which the data shows is easily eclipsed by bad habits elsewhere), the dashboard explicitly advises them: **"Implement a Carbon-Neutral Meal Plan initiative, optimizing a 30% reduction in Scope 3 dietary emissions."**

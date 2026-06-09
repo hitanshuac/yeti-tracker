@@ -1,9 +1,9 @@
 # Yeti-Tracker: Deep Dive EDA Data Science Engine 🌍
+**Vertical/Persona:** "Sustainability / Enterprise ESG" built for an "Enterprise Sustainability Officer"
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![DuckDB](https://img.shields.io/badge/duckdb-embedded-yellow.svg)
 
 ## Executive Summary: A Data-Driven Strategy
-*Prepared by: Principal Engineer Antigravity for the PromptWars Board of Directors.*
 
 Yeti-Tracker is a purely analytical, client-side data science showcase. Moving far beyond generic operational tracking, it acts as a "Deep Dive EDA Engine" that uses mathematical correlations (Pearson coefficients) to visually debunk common myths around personal carbon footprints.
 
@@ -19,15 +19,20 @@ Initially designed as an operational data pipeline (with Dead Letter Queues and 
 2. **The Screen Time Myth**: We proved mathematically that screen time has *zero correlation* (-0.03) with an individual's carbon footprint.
 3. **The Real Culprits**: Electricity usage (0.42 correlation) and Non-Veg diets are the true massive predictors of CO2 output.
 
-## Approach and Architecture
+## Assumptions
+- **Data Source**: We assume the synthetic Kaggle dataset (`personal_carbon_footprint_sample.csv`) is representative of the real-world behavioral patterns we intend to study. Real-time user input is omitted to keep the data grounded and statistically significant.
+- **Architecture**: We assume that a 100% client-side local runtime is sufficient, removing the need for a cloud data warehouse, external API integrations, or OAuth.
+- **Pre-cleaned Data**: We assume the CSV data is pre-validated, removing the need for PyArrow DLQs (Dead Letter Queues) at runtime.
 
-![Architecture Overview](docs/assets/architecture_diagram_showcase.jpg)
+## Approach and Logic: The Bronze -> Silver -> Gold DuckDB Pipeline
 
-We utilize a minimalist **Split-Plane Architecture** featuring a production-grade Vanilla UI, backed by standard Python and DuckDB.
+![Architecture Overview](docs/assets/architecture_diagram.png)
 
-1. **Frontend UI**: A fully accessible, dark-glassmorphism dashboard that visually charts our EDA findings without requiring user logins.
-2. **DuckDB Analytics Engine**: Instead of bloated ETL streams, we use DuckDB's in-memory `read_csv_auto` to instantly query the Kaggle dataset and perform heavy aggregations (like calculating Pearson Correlations in milliseconds).
-3. **Control Plane (`.agents/`)**: The Antigravity Brain enforcing Hack2Skill constraints and autonomous workflows.
+We utilize a robust **Bronze -> Silver -> Gold Data Pipeline** mapped conceptually to our EDA architecture, using DuckDB for high-performance, vectorized data processing without bloated external ETL frameworks.
+
+1. **Bronze (Raw Ingestion)**: The raw `.csv` Kaggle dataset acts as our ground-truth data source, ingested instantly in-memory.
+2. **Silver (Aggregations & Enrichment)**: Our FastAPI backend utilizes DuckDB's `read_csv_auto` to process the raw CSV, calculating Pearson correlations, carbon equivalent metrics, and averages in real-time.
+3. **Gold (Reporting)**: The final aggregated data structures are served directly to a fully accessible, semantic HTML/Tailwind dashboard, providing actionable visual insights for the Enterprise Sustainability Officer.
 
 ## Installation & Setup
 ```bash
@@ -39,8 +44,10 @@ pip install duckdb fastapi uvicorn httpx pandas
 ```
 
 ### Running the Dashboard Locally
+We have provided a convenience batch script to automatically start the API and Dashboard.
+
 ```bash
-python -m uvicorn src.main:app --reload
+run_server.bat
 # Navigate to http://localhost:8000
 ```
 
@@ -51,6 +58,3 @@ python -m uvicorn src.main:app --reload
 
 ## Adoption Method
 To adopt the Agentic Brain in other projects, seamlessly copy the `.agents/` directory into your repository and run the `master-sync.md` workflow to initialize the governance layer and establish the autonomous CI/CD bridge.
-
-## Acknowledgments
-Credit to the study antigravity repository for the agentic constraints framework.

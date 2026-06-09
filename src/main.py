@@ -134,6 +134,31 @@ def preview_data():
     except Exception:
         return []
 
+@app.get("/api/stats/summary")
+def get_summary_stats():
+    try:
+        conn = duckdb.connect()
+        conn.execute("PRAGMA memory_limit='1GB'; PRAGMA threads=2;")
+        query = """
+            SELECT 
+                SUM(carbon_footprint_kg) as total_emissions,
+                AVG(carbon_footprint_kg) as average_daily_emissions,
+                MAX(carbon_footprint_kg) as highest_emission_day,
+                AVG(CASE WHEN day_type = 'Weekday' THEN carbon_footprint_kg ELSE NULL END) as avg_weekday,
+                AVG(CASE WHEN day_type = 'Weekend' THEN carbon_footprint_kg ELSE NULL END) as avg_weekend
+            FROM read_csv_auto('data/personal_carbon_footprint_sample.csv')
+        """
+        df = conn.execute(query).df()
+        return df.to_dict(orient="records")[0]
+    except Exception:
+        return {
+            "total_emissions": 0,
+            "average_daily_emissions": 0,
+            "highest_emission_day": 0,
+            "avg_weekday": 0,
+            "avg_weekend": 0
+        }
+
 @app.get("/")
 def serve_dashboard():
     with open("src/frontend/components/dashboard.html", "r", encoding="utf-8") as f:

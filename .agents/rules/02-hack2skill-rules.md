@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Hack2Skill Challenge Rules & Instructions
 
 This master rule document governs the entire repository, directly echoing the official Hack2Skill Challenge instructions. All agentic workflows, architecture designs, and development processes must align with these mandates.

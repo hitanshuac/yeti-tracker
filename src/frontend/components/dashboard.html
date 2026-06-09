@@ -175,12 +175,9 @@
             <div class="glass-panel rounded-xl p-lg min-h-full flex flex-col gap-xl">
                 <header class="flex justify-between items-end">
                     <div>
-                        <h1 class="font-headline-lg text-headline-lg text-on-surface hidden md:block">Personal Carbon
-                            Overview</h1>
-                        <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface md:hidden">Personal
-                            Carbon</h1>
-                        <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time carbon footprint
-                            metrics and ingestion status.</p>
+                        <h1 class="font-headline-lg text-headline-lg text-on-surface hidden md:block">Enterprise Employee Carbon Overview</h1>
+                        <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface md:hidden">Enterprise Staff Carbon</h1>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Aggregated ESG metrics and deep-dive correlations across the organization.</p>
                     </div>
                     <div class="flex gap-md flex-wrap justify-end">
                         <button id="preview-btn" aria-label="Preview Data"
@@ -197,6 +194,37 @@
                         </button>
                     </div>
                 </header>
+                
+                <!-- Top-Level KPIs -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-grid_gutter mb-4">
+                    <div class="glass-panel rounded-lg p-lg border-l-4 border-l-primary flex flex-col justify-center">
+                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Total Staff Emissions</span>
+                        <div class="font-display-sm text-display-sm text-primary font-mono flex items-baseline gap-2">
+                            <span id="kpi-total-emissions">--</span> <span class="text-sm text-on-surface-variant font-sans">kg CO2</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-lg p-lg border-l-4 border-l-secondary flex flex-col justify-center">
+                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Daily Average / Employee</span>
+                        <div class="font-display-sm text-display-sm text-secondary font-mono flex items-baseline gap-2">
+                            <span id="kpi-avg-emissions">--</span> <span class="text-sm text-on-surface-variant font-sans">kg CO2</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-lg p-lg border-l-4 border-l-tertiary flex flex-col justify-center">
+                        <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Weekday vs Weekend Avg</span>
+                        <div class="flex items-center gap-4 mt-2">
+                            <div class="flex flex-col">
+                                <span class="text-xs text-on-surface-variant uppercase">Weekday</span>
+                                <span class="text-lg text-white font-mono" id="kpi-avg-weekday">--</span>
+                            </div>
+                            <div class="h-8 w-px bg-white/20"></div>
+                            <div class="flex flex-col">
+                                <span class="text-xs text-on-surface-variant uppercase">Weekend</span>
+                                <span class="text-lg text-white font-mono" id="kpi-avg-weekend">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Validation Panels Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-grid_gutter">
                     <!-- Diet Analysis -->
@@ -614,6 +642,21 @@
             }
         }
 
+        async function fetchSummaryStats() {
+            try {
+                const res = await fetch('/api/stats/summary');
+                const data = await res.json();
+                
+                // Animate Top-Level KPIs
+                animateValue('kpi-total-emissions', 0, data.total_emissions, 1000);
+                animateValue('kpi-avg-emissions', 0, data.average_daily_emissions, 1000);
+                animateValue('kpi-avg-weekday', 0, data.avg_weekday, 1000);
+                animateValue('kpi-avg-weekend', 0, data.avg_weekend, 1000);
+            } catch (error) {
+                console.error("Failed to load summary stats", error);
+            }
+        }
+
         async function fetchMetrics() {
             try {
                 // Fetch Baseline
@@ -623,6 +666,7 @@
                 document.getElementById('sim-total-co2').innerText = simState.baseline.toFixed(1);
 
                 // Fetch other metrics
+                await fetchSummaryStats();
                 await fetchValidationStats();
                 await fetchEDACorrelations(); 
                 

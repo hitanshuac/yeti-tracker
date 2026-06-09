@@ -10,6 +10,6 @@ IF EXIST "venv\Scripts\activate.bat" (
 
 echo.
 echo Running Uvicorn...
-python -m uvicorn src.main:app --reload
+venv\Scripts\python.exe -m uvicorn src.main:app --reload
 
 pause

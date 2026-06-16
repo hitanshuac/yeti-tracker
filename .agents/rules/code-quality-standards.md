@@ -5,7 +5,7 @@ This document codifies the strict requirements for achieving a perfect maintaina
 ## 1. Project Structure & Imports (Pylint/Flake8 Compliance)
 - **Rule**: Never use `sys.path.append()` hacks.
 - **Why**: Analyzers heavily penalize runtime `sys.path` manipulation, flagging them as `E0401` (Unable to import) and `C0413` (Wrong import position).
-- **Action**: 
+- **Action**:
   - Ensure every package directory (`src/`, subdirectories, `tests/`) has an `__init__.py` file.
   - Rely on `pyproject.toml` or `conftest.py` for path resolution.
   - All imports must be at the top of the file, ordered: stdlib -> third-party -> local (isort standard).

@@ -70,5 +70,5 @@ Eliminate the token-burn cycle of "write code → manually write tests → debug
 ## Token Conservation Rules
 1. **Never generate more than 5 test files in a single pass.** Run tests after each file.
 2. **Never debug a failing test for more than 3 iterations.** If a test fails 3 times, flag it for user review.
-3. **Reuse fixtures aggressively.** 
+3. **Reuse fixtures aggressively.**
 4. **Keep test output concise.** Use short traceback flags (`--tb=short`, `--silent`) to minimize noise.

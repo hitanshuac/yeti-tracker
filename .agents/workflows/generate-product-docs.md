@@ -29,4 +29,3 @@ For each ticket in `05_TICKETS.md`:
 2. Execute `.agents/workflows/test-automation.md` to auto-generate test cases from the ticket's acceptance criteria.
 3. Run all tests. If any fail, log the failure via `.agents/workflows/error-observability.md`, fix the code, and re-run.
 4. Only proceed to the next ticket when all tests pass.
-

@@ -17,7 +17,7 @@ This workflow ensures the local workspace is securely connected to a remote GitH
 
 2. **Verify GitHub CLI**
    - Execute `gh auth status` to verify the user is logged into GitHub.
-   - If `gh` is missing, run `winget install --id GitHub.cli --silent --accept-source-agreements --accept-package-agreements` (on Windows). 
+   - If `gh` is missing, run `winget install --id GitHub.cli --silent --accept-source-agreements --accept-package-agreements` (on Windows).
    - If `gh` is installed but unauthenticated, instruct the user to run `gh auth login` in their terminal and pause execution until they confirm.
 
 3. **Provision Remote Repository**

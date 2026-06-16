@@ -76,4 +76,3 @@ Execute the phases sequentially. Phase 0 is only relevant for repositories that 
 1. Confirm `src/capabilities/git_manager.py` exists for safe Git operations.
 2. Confirm `src/capabilities/ci_log_fetcher.py` exists for remote CI/CD log syncing.
 3. Confirm `src/capabilities/watch_ci.ps1` exists for autonomous background monitoring.
-

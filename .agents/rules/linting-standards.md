@@ -8,7 +8,7 @@ Enforce exponential-speed static analysis and formatting using **Ruff**. This re
 ## Configuration
 - Target Python Version: 3.11+
 - Line Length: 120 (to accommodate Agentic payload signatures)
-- Rules Enforced: 
+- Rules Enforced:
   - `E`, `F` (Pyflakes, pycodestyle)
   - `I` (isort)
   - `UP` (pyupgrade)

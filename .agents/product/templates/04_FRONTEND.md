@@ -1,24 +1,19 @@
-# Frontend Specification Document
+# Frontend Architecture & Design
 
-## 1. Design System & Theming
-- **Color Palette:** [Primary, Secondary, Background, Error, etc.]
-- **Typography:** [Font families, sizes, weights]
-- **Component Library:** [e.g., Tailwind UI, Radix, Material UI]
+## 1. UX/UI Principles
+- **Framework**: Streamlit is used to rapidly construct the UI and bind state natively to Python execution without React/Node boilerplate.
+- **Color Palette**: Dark mode by default (`#0e1117`).
+- **Gamified Metaphors**: Visceral impact is prioritized over dry statistics. The UI visually degrades when absurd footprint thresholds are crossed.
 
-## 2. Global State Management
-[How is state shared across components? E.g., React Context, Redux, Zustand]
+## 2. Layout Structure
+A 2-column layout (`col1`, `col2` with a 2:1 ratio) to separate the Data Ingestion (Right) from the Data Visualization (Left).
 
-## 3. Core Layouts & Routing
-*List the primary views and their routes.*
-- `/` - Landing Page
-- `/dashboard` - Authenticated User Dashboard
-- `/settings` - User Preferences
+### Right Column: The Ingestion & Verification
+1. **The Confessional**: A `st.text_area` for natural language input. A primary button ("Extract Data") triggers the LLM.
+2. **Human Verification Sliders**: Three standard `st.slider` components mapped to Streamlit Session State (`st.session_state.parsed_data`). The math engine listens to these, not the LLM.
 
-## 4. API Contracts
-*Define how the frontend expects to communicate with the backend.*
-- **Base URL:** `/api/v1`
-- **Data Format:** `application/json`
-- **Error Handling:** [Describe how API errors are surfaced to the user]
-
-## 5. Accessibility (a11y) & Responsiveness
-[List requirements like WCAG compliance, mobile-first design constraints, etc.]
+### Left Column: The Dashboard / Gamification
+1. **State 1 (Normal)**: Displays two `create_gauge_fig` Plotly dials showing Yearly Carbon (green) and Tree Offset Debt (red).
+2. **State 2 (Yeti Alert)**: Triggers at > 5,000kg. Hides gauges, displays `data/assets/yeti_alert.png` and a warning.
+3. **State 3 (Godzilla Alert)**: Triggers at > 9,000kg. Displays `data/assets/godzilla_over_9000.png` and a massive red HTML header ("IT'S OVER 9000!!!").
+4. **The Yeti Advisor**: A secondary button at the bottom of the left column triggering the LLM roasting function `get_yeti_advice`.

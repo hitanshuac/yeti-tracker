@@ -1,22 +1,21 @@
-# Handover Document
+# Yeti-Tracker: Handover Document
 
-## System State
-The Yeti-Tracker is a **Pure EDA Data Science Engine** built around a logical Bronze -> Silver -> Gold pipeline.
-- **Execution**: DuckDB `read_csv_auto` natively analyzes the `personal_carbon_footprint_sample.csv` (Bronze).
-- **Validation**: FastAPI securely exposes aggregated ESG metrics and top-level KPIs via `/api/stats/*` (Silver).
-- **Presentation**: A dark-glassmorphism Tailwind UI visually displays the Enterprise Employee Carbon Overview (Gold).
+## Project Status: COMPLETED
+The Yeti-Tracker has successfully completed the Hack2Skill Challenge 3 sprint. The application pivoted from an AWS SRE Engine to a highly engaging, gamified **Personal Carbon Footprint Tracker**.
 
-## Active Rules & Workflows
-- All cache files have been purged to ensure strict <10MB limits.
-- The repository follows a Split-Plane Architecture, where the `.agents/` folder serves as the permanent Control Plane and PromptWars Brain.
-- Strict Constraints (`01-strict-constraints.md`) and Hack2Skill rules (`02-hack2skill-rules.md`) are the absolute laws governing this codebase.
+## The Gamified Pivot
+The current architecture relies on a **Hybrid LLM Pipeline**:
+1. **Ingestion**: The user types a natural language diary. Groq parses it into 3 integer values.
+2. **Verification Gate**: These values populate explicit UI sliders so the user can verify them. This isolates LLM non-determinism from the math engine.
+3. **Calculation**: DuckDB compounds the daily values into a 365-day forecast.
+4. **The Over 9000 Override**: If the forecast > 9000kg, the standard UI gauges shatter, displaying `godzilla_over_9000.png`.
+5. **Yeti Advisor**: A secondary LLM dynamically roasts the user's specific inputs and offers reduction advice.
 
-## 🤖 Antigravity Rebuild Protocol
-If you are an AI Agent (Antigravity) or human engineer spawning into this repository on a new machine, follow this exact sequence to rebuild the environment:
-1. **Initialize Environment**: Execute `python -m venv venv` and activate it.
-2. **Install Dependencies**: Execute `pip install -r requirements.txt`. Do NOT install heavy packages outside this list to protect the 10MB limit.
-3. **Verify Data**: Ensure `data/personal_carbon_footprint_sample.csv` is present.
-4. **Boot Server**: Run the `run_server.bat` file to automatically boot the Uvicorn/FastAPI backend on port 8000.
-5. **Run Tests**: Execute `python -m pytest tests/` to confirm the backend routing and mock endpoints are stable.
-6. **Context Sync**: Immediately read `.agents/rules/01-strict-constraints.md` to understand your operational boundaries.
-7. **Master Sync**: Execute the `.agents/workflows/master-sync.md` workflow. This serves as the primary orchestrator to automatically enforce governance, validate the architecture, and establish the CI/CD bridge before writing any new code.
+## Important Context for Future Agents
+- Do **NOT** remove the UI sliders. The architecture explicitly decoupled the LLM parsing from the DuckDB math to preserve idempotency and strict `f(x)=y` scientific validation.
+- All product templates (`.agents/product/templates/`) and ADRs (`.agents/architecture/adrs/`) accurately reflect this final state.
+- If you need to test the "Over 9000" Godzilla state, simply set "Miles Driven" to 500 in the UI and click run.
+
+## Missing/Future Capabilities
+- **Database Expansion**: Currently, DuckDB performs simple math. It could be expanded to run `CROSS JOINS` against real EPA datasets for precise regional electricity tracking if the user inputs their zip code.
+- **Vision Models**: If API limits relax, the static `yeti_alert.png` could be replaced by dynamic Generative AI outputs based on the exact severity of the footprint.

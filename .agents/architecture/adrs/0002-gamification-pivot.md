@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-For Hack2Skill Challenge 3 ("Prompt Wars Virtual"), the core application must be a "Carbon Footprint Awareness Platform" that helps *individuals* understand, track, and reduce their carbon footprint. The SME emphasized creating an "emotional, behavioral, or cognitive connection" (e.g., gamification). 
+For Hack2Skill Challenge 3 ("Prompt Wars Virtual"), the core application must be a "Carbon Footprint Awareness Platform" that helps *individuals* understand, track, and reduce their carbon footprint. The SME emphasized creating an "emotional, behavioral, or cognitive connection" (e.g., gamification).
 
 Our initial architecture pivoted to a highly technical "SRE GreenOps/FinOps Engine" using DuckDB CROSS JOINS on CCF AWS instance data. While mathematically robust, this completely missed the "individual awareness" prompt constraint and risked failing the AI grading rubric.
 

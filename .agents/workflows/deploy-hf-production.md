@@ -48,5 +48,5 @@ Hugging Face requires a specific YAML block at the very top of `README.md` to co
    - name: Push to HF Spaces
      run: git push https://user:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/${{ secrets.HF_SPACE_REPO }} main
    ```
-2. Commit and push all local changes to GitHub (`origin/main`). 
+2. Commit and push all local changes to GitHub (`origin/main`).
 3. The GitHub Action will trigger and seamlessly clone the repo into the Hugging Face Space.

@@ -1,19 +1,13 @@
-# Security & Access Document
+# Security & Access Control
 
-## 1. Authentication Strategy
-[How do users log in? E.g., JWT, OAuth2 with GitHub, API Keys]
+## 1. Authentication & Authorization
+- **App Access**: Yeti-Tracker is designed as a zero-trust local analytical tool. There is no user authentication implemented in the MVP dashboard.
+- **API Access**: The application communicates with the Groq inference engine. The `GROQ_API_KEY` is strictly excluded from version control via `.gitignore` and must be provided via a local `.secrets/.env` file.
 
-## 2. Role-Based Access Control (RBAC)
-*Define the roles and their permissions.*
-- **Admin:** [Permissions]
-- **User:** [Permissions]
-- **Agent/Service Account:** [Permissions]
+## 2. Input Validation (Defense in Depth)
+- **Prompt Injection (CWE-74)**: All natural language inputs passed to the LLM are sanitized via the `sanitize_input()` function, which truncates length to 15,000 characters and strips structural characters (`<`, `>`, `{`, `}`).
+- **Schema Validation**: The LLM output is strictly validated against the `ParsedPersonalData` Pydantic schema before it is allowed to interact with the UI.
 
-## 3. Secret Management
-[How are secrets stored and rotated? E.g., `.env` files via Pydantic Settings, GitHub Secrets. Agents MUST NOT hardcode secrets.]
-
-## 4. Data Privacy & Compliance
-[List any PII handling rules, GDPR compliance steps, or data masking requirements.]
-
-## 5. Network Security
-[e.g., CORS policies, Rate Limiting, WAF rules]
+## 3. Data Integrity & Idempotency
+- **Error Observability**: The `log_error_to_json` function relies on a pre-write atomic temp-file rename to prevent corruption of the `error_logs.json` file if the process crashes during a write. It implements a rigorous post-write assertion check to guarantee data is never silently dropped.
+- **Math Determinism**: The LLM does not execute math. The mathematical engine strictly reads typed integers from standard UI sliders.

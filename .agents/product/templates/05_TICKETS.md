@@ -1,24 +1,28 @@
-# Feature Ticket List
+# Execution Backlog (Tickets)
 
-*Agents must execute these tickets sequentially. Do not move to a new ticket until the previous one is fully verified.*
+All tickets for the Yeti-Tracker Hack2Skill project have been completed.
 
-## 🎟️ TICKET-001: [Ticket Title]
-- **Description:** [Brief description of the task]
-- **Acceptance Criteria:**
-  - [ ] Criteria 1
-  - [ ] Criteria 2
-- **Technical Constraints:** [e.g., Must use DuckDB `INSERT OR REPLACE`]
+- `[x]` **TICKET-001: Establish Observability**
+  - Implement Tier-0 error logging via `log_error_to_json`.
+  - Enforce pre-write validation and atomic file renames.
 
-## 🎟️ TICKET-002: [Ticket Title]
-- **Description:** [Brief description of the task]
-- **Acceptance Criteria:**
-  - [ ] Criteria 1
-  - [ ] Criteria 2
-- **Technical Constraints:** [e.g., Follow `04_FRONTEND.md` color tokens]
+- `[x]` **TICKET-002: LLM Ingestion Pipeline**
+  - Integrate Groq (`llama-3.1-8b-instant`).
+  - Write `parse_messy_text()` with strict Pydantic schema fallback logic.
 
-## 🎟️ TICKET-003: [Ticket Title]
-- **Description:** [Brief description of the task]
-- **Acceptance Criteria:**
-  - [ ] Criteria 1
-  - [ ] Criteria 2
-- **Technical Constraints:** [Constraints]
+- `[x]` **TICKET-003: DuckDB Math Engine**
+  - Implement `run_duckdb_math()` to forecast 365-day carbon footprints and tree offsets.
+
+- `[x]` **TICKET-004: Frontend Visuals (Normal State)**
+  - Implement dark-mode Plotly Gauges via `create_gauge_fig`.
+
+- `[x]` **TICKET-005: Gamification Pivot ("Over 9000")**
+  - Generate AI image assets (`yeti_alert.png`, `godzilla_over_9000.png`).
+  - Implement dynamic UI overrides based on mathematical thresholds.
+
+- `[x]` **TICKET-006: Human-in-the-Loop Hybrid Gate**
+  - Bind LLM output to standard UI Sliders.
+  - Decouple LLM hallucination risk from the DuckDB Math Engine.
+
+- `[x]` **TICKET-007: Yeti Advisor**
+  - Implement secondary LLM call (`get_yeti_advice()`) for dynamic reduction strategies.

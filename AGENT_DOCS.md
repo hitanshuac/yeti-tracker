@@ -10,8 +10,8 @@ We solved the core problem of AI "Prompt Wars" by bridging the gap between non-d
 3. **DuckDB Forecasting**: The deterministic core calculates the 365-day cumulative footprint from the seed sliders.
 
 ## Gamification and Emotional Connection
-To comply with the SME's requirement for "emotional awareness", we avoid dry, boring dashboards. 
-- If the footprint is sustainable, the UI remains a hyper-professional enterprise dashboard. 
+To comply with the SME's requirement for "emotional awareness", we avoid dry, boring dashboards.
+- If the footprint is sustainable, the UI remains a hyper-professional enterprise dashboard.
 - If the footprint crosses 9,000kg, the UI violently shatters into an "OVER 9000" Godzilla meme, shocking the user.
 - **The Yeti Advisor**: A secondary LLM dynamically roasts the user based on their specific inputs (e.g., driving 400 miles) and provides one actionable tip to reduce their footprint, satisfying the "Smart Assistant" and "Reduction" requirements.
 

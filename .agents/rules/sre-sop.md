@@ -13,9 +13,9 @@ The Inner Loop runs continuously during active development, ensuring that no cod
 
 - **Trigger:** After EVERY code modification (even a single line change).
 - **Action:** The agent MUST autonomously execute the `.agents/workflows/test-automation.md` workflow.
-- **Enforcement:** 
+- **Enforcement:**
   1. The agent MUST execute `pytest`.
-  2. **Failure Condition (Non-Zero Exit Code):** If tests fail, the agent MUST execute `.agents/workflows/error-observability.md` to log the failure, then fix the code, and retry. 
+  2. **Failure Condition (Non-Zero Exit Code):** If tests fail, the agent MUST execute `.agents/workflows/error-observability.md` to log the failure, then fix the code, and retry.
   3. **Halt Condition:** If the agent fails to fix the test after three (3) consecutive attempts, it MUST halt execution immediately and ask the user for manual intervention.
   4. **Success Condition (Exit Code 0):** The Inner Loop is only considered successful when `pytest` returns exit code `0` AND the test output explicitly shows that at least 1 test was collected and passed (preventing false positives from empty test suites).
   5. Upon meeting the Success Condition, the agent MUST provide the user with explicit UI/CLI commands to test the feature manually (Anti-Solipsism Protocol per `testing-standards.md` Rule 7) and wait for the human user to reply "approved" or "works" before moving to the next task.

@@ -1,0 +1,10 @@
+[
+  {
+    "timestamp": "2026-06-16T12:00:00+00:00",
+    "error_type": "ValueError",
+    "component": "tests/fixtures",
+    "message": "Sample error log entry",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  }
+]

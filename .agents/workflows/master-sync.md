@@ -1,3 +1,7 @@
+---
+description: A master orchestration workflow that sequentially validates, documents, generates assets, versions, and checkpoints the codebase.
+---
+
 # Master Sync Workflow
 
 **Trigger:** Explicit invocation via `/ask run @[.agents/workflows/master-sync.md]`

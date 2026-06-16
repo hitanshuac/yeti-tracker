@@ -1,31 +1,28 @@
-# 02_TAD: Technical Architecture Design
+# Technical Architecture Document (TAD)
 
-## 1. System Overview
-The Yeti-Tracker employs a **Split-Plane Architecture** featuring a pure Data Science Execution Plane powered by DuckDB, overseen by the Antigravity Control Plane (`.agents/`).
+## 1. System Context
+[Provide a high-level overview of how this system fits into the broader ecosystem. Who interacts with it?]
 
 ## 2. Component Architecture
-- **Control Plane (`.agents/`)**: Houses the Hack2Skill constraints, workflows, and prompts.
-- **Data Layer (DuckDB)**: Embedded OLAP engine utilizing `read_csv_auto` to instantly query the synthetic Kaggle dataset (`data/personal_carbon_footprint_sample.csv`).
-- **Backend (FastAPI)**: A lightweight Python web server exposing analytical aggregations:
-  - `/api/stats/diet`
-  - `/api/stats/transport`
-  - `/api/stats/electricity`
-  - `/api/stats/correlations`
-- **Frontend (Vanilla HTML/JS + Tailwind)**: A glassmorphism dashboard utilizing native `fetch()` to render visual validation panels and scorecards.
+*List the core components (e.g., API Gateway, Celery Workers, Database).*
+- **[Component Name]:** [Responsibility]
+- **[Component Name]:** [Responsibility]
 
-## 3. Technology Stack
-- **Database**: DuckDB (Embedded, In-Memory processing)
-- **Backend**: FastAPI, Uvicorn
-- **Frontend**: HTML5, Tailwind CSS, Vanilla JS
-- **Data**: Synthetic Kaggle CSV (`personal_carbon_footprint_sample.csv`)
+## 3. Data Flow / State Management
+[Describe how data moves through the system. E.g., User -> React Frontend -> FastAPI -> DuckDB]
 
-## 4. Data Flow
-1. **Request**: UI triggers `fetchMetrics()`.
-2. **Process**: FastAPI executes DuckDB SQL against the raw CSV.
-3. **Analyze**: DuckDB calculates Pearson correlations and groupings.
-4. **Respond**: FastAPI returns JSON arrays.
-5. **Render**: UI dynamically draws horizontal data bars based on the relative scale of the `avg_co2` values.
+## 4. Database Schema (High Level)
+*Define the core entities and their relationships.*
+```sql
+-- Example Schema
+CREATE TABLE users (
+    id UUID PRIMARY KEY,
+    email VARCHAR UNIQUE
+);
+```
 
-## 5. Architectural Constraints
-- **Zero-State ETL**: Eliminated PyArrow Dead Letter Queues and `INSERT` logic. Data is treated immutably at read-time.
-- **Size**: Repository must not exceed 10MB. 
+## 5. Technology Stack
+- **Frontend:** [e.g., Next.js, Tailwind]
+- **Backend:** [e.g., FastAPI, Python 3.11]
+- **Database:** [e.g., DuckDB]
+- **Infrastructure:** [e.g., Hugging Face Spaces, Docker]

@@ -1,0 +1,5 @@
+{
+  "region": "ap-south-1",
+  "instance_type": "p4d.24xlarge",
+  "count": 50
+}

@@ -1,0 +1,6 @@
+Hey SRE team,
+
+Please disregard the previous ticket about the m5.large boxes. We just got approval from the VP. We need to deploy exactly 100 p4d.24xlarge GPUs to ap-south-1 immediately for the new training run. 
+
+Let me know when they are provisioned.
+- Dave

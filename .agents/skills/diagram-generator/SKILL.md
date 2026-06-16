@@ -53,7 +53,7 @@ Because raw programmatic diagrams lack visual flair, you MUST apply a stylistic 
 
    Style: Dark navy background (#0D1117), glassmorphism node boxes with subtle glow,
    neon cyan and purple accent colors, clean enterprise dashboard aesthetic matching
-   the second reference image exactly. Include watermark "<your-username>".
+   the second reference image exactly. Include watermark "github.com/hitanshuac".
 
    CRITICAL: Every word of text must be spelled EXACTLY as listed above.
    ```

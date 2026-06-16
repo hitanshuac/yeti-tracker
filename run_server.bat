@@ -9,7 +9,7 @@ IF EXIST "venv\Scripts\activate.bat" (
 )
 
 echo.
-echo Running Uvicorn...
-venv\Scripts\python.exe -m uvicorn src.main:app --reload
+echo Running Streamlit...
+venv\Scripts\python.exe -m streamlit run app.py
 
 pause

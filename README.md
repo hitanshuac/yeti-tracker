@@ -1,59 +1,27 @@
-# Yeti-Tracker: Deep Dive EDA Data Science Engine 🌍
-**Vertical/Persona:** "Sustainability / Enterprise ESG" built for an "Enterprise Sustainability Officer"
+# Yeti-Tracker: Personal Carbon Footprint Gamification 🌍
+**Vertical/Persona:** "Carbon Footprint Awareness Platform" (Hack2Skill Challenge 3)
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![DuckDB](https://img.shields.io/badge/duckdb-embedded-yellow.svg)
+![Streamlit](https://img.shields.io/badge/streamlit-UI-red.svg)
 
-## Executive Summary: A Data-Driven Strategy
+## Executive Summary: The Hybrid LLM Pipeline
 
-Yeti-Tracker is a purely analytical, client-side decision engine. Moving far beyond generic operational tracking, it acts as a "Deep Dive EDA Engine" that uses mathematical correlations (Pearson coefficients) to visually debunk common myths around personal carbon footprints.
+Yeti-Tracker is an AI-powered personal carbon footprint platform that completely reimagines how individuals understand their environmental impact. Rather than a boring calculator, Yeti-Tracker is an emotional, gamified, cognitive mirror that classifies your daily habits into visceral visual metaphors.
 
-### The PACE Framework (Data Strategy)
-In strict alignment with Google Data Analytics professional standards, our data lifecycle follows the **PACE** methodology (Plan, Analyze, Construct, Execute). 
-- 📊 **[Read the Full Data Analysis Showcase Here](docs/data_analysis_showcase.md)**
+To solve the inherent conflict between **AI Hallucinations** (non-determinism) and **Scientific Data Integrity** (idempotent mathematics), Yeti-Tracker implements the **Hybrid Pipeline**:
 
-## Evolutionary Architecture
-Yeti-Tracker evolved from an initial automated ingestion pipeline into a sophisticated analytical decision engine, prioritizing actionable insights over generic tracking.
+1. **The Confessional (LLM Ingestion)**: Users paste a messy, natural language diary entry (e.g., "I drove 20 miles and ate a burger"). The `llama-3.1-8b-instant` LLM parses this frictionless data.
+2. **The Verification Gate**: The LLM *only* populates explicit UI sliders. The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
+3. **The 365-Day Forecaster**: A local DuckDB instance takes the verified seed day and compounds it deterministically across a 365-day year, calculating total CO2 and Tree Offset Debt.
+4. **The "Over 9000" Gamification**: If the footprint is sustainable, the UI remains a hyper-professional enterprise dashboard. If the footprint crosses 9,000kg (average global citizen), the UI violently shatters, flashing a "GODZILLA FOOTPRINT DETECTED: IT'S OVER 9000" meme.
+5. **The Yeti Advisor**: Finally, a second LLM dynamically generates a sarcastic, aggressive roasting from the perspective of a melting Yeti, providing one actionable way to reduce the footprint.
 
-### Key Findings We Proved:
-1. **The Walking Paradox**: Walking generates 0 emissions, but high-impact diets and electricity usage completely eclipse the savings from walking.
-2. **The Screen Time Myth**: We proved mathematically that screen time has *zero correlation* (-0.03) with an individual's carbon footprint.
-3. **The Real Culprits**: Electricity usage (0.42 correlation) and Non-Veg diets are the true massive predictors of CO2 output.
-
-## Assumptions
-- **Data Source**: We assume the synthetic Kaggle dataset (`personal_carbon_footprint_sample.csv`) is representative of the real-world behavioral patterns we intend to study. Real-time user input is omitted to keep the data grounded and statistically significant.
-- **Architecture**: We assume that a 100% client-side local runtime is sufficient, removing the need for a cloud data warehouse, external API integrations, or OAuth.
-- **Pre-cleaned Data**: We assume the CSV data is pre-validated, removing the need for PyArrow DLQs (Dead Letter Queues) at runtime.
-
-## User Flow
-1. **Ingest**: Automated data ingestion and schema validation layer.
-2. **Analyze**: The EDA engine reveals the biggest emission culprit.
-3. **Act**: The Simulator delivers actionable, professional recommendations.
-
-## Approach and Logic: The Bronze -> Silver -> Gold DuckDB Pipeline
-
-```mermaid
-graph LR
-    subgraph Bronze ["Bronze Tier (Validation)"]
-        RawData["Raw CSV Data"]
-    end
-    subgraph Silver ["Silver Tier (Aggregation)"]
-        DuckDB["Local DuckDB Instance"]
-    end
-    subgraph Gold ["Gold Tier (Dashboard/Simulator)"]
-        FastAPI["FastAPI Endpoint"]
-        Frontend["Tailwind Frontend"]
-    end
-
-    RawData --> DuckDB
-    DuckDB --> FastAPI
-    FastAPI --> Frontend
-```
-
-We utilize a robust **Bronze -> Silver -> Gold Data Pipeline** mapped conceptually to our EDA architecture, using DuckDB for high-performance, vectorized data processing without bloated external ETL frameworks.
-
-1. **Bronze (Raw Ingestion)**: The raw `.csv` Kaggle dataset acts as our ground-truth data source, ingested instantly in-memory.
-2. **Silver (Aggregations & Enrichment)**: Our FastAPI backend utilizes DuckDB's `read_csv_auto` to process the raw CSV, calculating Pearson correlations, carbon equivalent metrics, and averages in real-time.
-3. **Gold (Reporting)**: The final aggregated data structures are served directly to a fully accessible, semantic HTML/Tailwind dashboard, providing actionable visual insights for the Enterprise Sustainability Officer.
+## The Gamification Visuals
+If you dare to input a massive carbon footprint, you will face the consequences:
+<p align="center">
+  <img src="data/assets/yeti_alert.png" width="400" />
+  <img src="data/assets/godzilla_over_9000.png" width="400" />
+</p>
 
 ## Installation & Setup
 ```bash
@@ -61,21 +29,34 @@ git clone https://github.com/hitanshuac/yeti-tracker.git
 cd yeti-tracker
 python -m venv venv
 venv\Scripts\activate
-pip install duckdb fastapi uvicorn httpx pandas
+pip install -r requirements.txt
 ```
 
 ### Running the Dashboard Locally
-We have provided a convenience batch script to automatically start the API and Dashboard.
+We strictly follow 12-Factor App methodology for secrets. We have provided a template for you.
+1. Open `.secrets/.env` and add your **GROQ_API_KEY**.
+2. Run the convenience batch script to automatically start the Dashboard.
 
 ```bash
 run_server.bat
-# Navigate to http://localhost:8000
+# Automatically opens in your browser!
 ```
 
-## Directory Structure
-- `src/`: Main application source code and FastAPI endpoints.
-- `data/`: Kaggle dataset and generated metadata.
-- `.agents/`: Governance rules, product templates, agentic skills, and autonomous workflows.
+## Current Capabilities
+Yeti-Tracker enforces strict engineering standards via the `.agents` framework.
+- **Rules (18 Active)**: Including `defensive-programming.md`, `code-quality-standards.md`, `sre-sop.md`, and `12-factor-rules.md`.
+- **Python Architecture**: Built with Streamlit, Plotly, DuckDB, and Pydantic with idempotent I/O and strict error observability.
+- **Product Templates**: Fully populated `01_PRD.md`, `02_TAD.md`, `03_SECURITY.md`, `04_FRONTEND.md`, and `05_TICKETS.md`.
+- **Workflows (23 Active)**: Including `master-sync.md`, `test-automation.md`, and `update-docs.md`.
 
-## Adoption Method
-To adopt the Agentic Brain in other projects, seamlessly copy the `.agents/` directory into your repository and run the `master-sync.md` workflow to initialize the governance layer and establish the autonomous CI/CD bridge.
+## Directory Structure
+- `app.py`: The single-file Streamlit Hybrid Pipeline.
+- `data/`: `assets/` (Godzilla/Yeti images) + Error Observability JSON logs.
+- `tests/`: Automated Pytest verification suite (Contract testing, DuckDB testing).
+- `.agents/`: Governance rules, product templates, agentic skills (including LLM-Council), and autonomous workflows.
+
+## The Architecture of Decision
+All major architecture decisions (including the pivot to Gamification) are permanently recorded in `.agents/architecture/adrs/`. We use the **LLM-Council** skill to run 5-agent peer-reviewed debates on all features before implementing code.
+
+## Acknowledgments
+Credit to the study `antigravity` repository for the base templates and agentic workflows.

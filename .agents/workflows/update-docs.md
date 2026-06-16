@@ -1,3 +1,7 @@
+---
+description: Update all markdown documentation (README, Handover, etc.) to strictly match the current state of the codebase.
+---
+
 # Update Docs Workflow
 
 **Trigger:** Invoked by `master-sync.md` Phase 3, or manually via `/ask run @[.agents/workflows/update-docs.md]`

@@ -1,3 +1,7 @@
+---
+description: Autonomously audit, prompt, and securely inject required API keys into GitHub Secrets via the GitHub CLI.
+---
+
 # Setup Secrets Workflow
 
 This workflow ensures the executing Agent autonomously establishes the required CI/CD credentials securely in the GitHub repository, eliminating the need for humans to use a web browser.

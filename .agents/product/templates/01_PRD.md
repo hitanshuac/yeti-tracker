@@ -1,24 +1,28 @@
-# 01_PRD: Yeti-Tracker EDA Showcase
+# Product Requirements Document (PRD)
 
-## 1. Product Vision
-Yeti-Tracker is a purely analytical, client-side data science showcase. Moving beyond operational tracking, it acts as a "Deep Dive EDA Engine" that uses mathematical correlations (Pearson coefficients) to visually debunk common myths around personal carbon footprints.
+**Project Name:** [Insert Name]
+**Date:** [YYYY-MM-DD]
+**Status:** [Draft | In Review | Approved]
 
-## 2. Target Audience
-- Data Scientists and Hackathon Judges (specifically for the Hack2Skill PromptWars).
-- Individuals looking for scientifically backed, high-yield behavioral changes rather than generic "eco-friendly" advice.
+## 1. Objective
+[Clearly state the core problem this project solves. Why are we building this?]
+
+## 2. Target Audience / Personas
+- **Persona 1:** [Description and primary goal]
+- **Persona 2:** [Description and primary goal]
 
 ## 3. Core Features (MVP)
-- **Direct Kaggle Ingestion**: Seamlessly reads raw CSV behavioral data via DuckDB without heavy ETL abstractions.
-- **Diet Impact Analysis**: Aggregates average daily carbon footprint by diet type (Veg, Non-Veg, Mixed).
-- **Transport Impact Analysis**: Aggregates footprint by transport mode to identify the "Walking Paradox" (where diet eclipses local transport savings).
-- **Mythbusting Correlations**: Calculates exact Pearson correlations for Electricity (Strong Predictor) vs Screen Time (Zero Impact).
+*Must-have features for the first release.*
+1. [Feature 1]
+2. [Feature 2]
+3. [Feature 3]
 
-## 4. Non-Goals
-- Real-time banking integration or OAuth.
-- Cloud data warehousing (must remain 100% local).
-- Operational CRUD (Create, Read, Update, Delete) workflows.
+## 4. Out of Scope (Non-Goals)
+*Explicitly list what the AI/Agents should NOT attempt to build in this phase.*
+- [Non-goal 1]
+- [Non-goal 2]
 
 ## 5. Success Metrics
-- Analytical query latency under 500ms via DuckDB.
-- Repository footprint strictly under 10MB.
-- UI explicitly highlights the two major EDA findings (Diet and Electricity).
+*How will we know this product is successful?*
+- [Metric 1]
+- [Metric 2]

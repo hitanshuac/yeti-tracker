@@ -1,3 +1,7 @@
+---
+description: Verify showcase assets, synthesize documentation, and prepare the README for publishing.
+---
+
 # Publish Showcase Workflow
 
 **Trigger:** Invoked by `master-sync.md` Phase 5, or manually via `/ask run @[.agents/workflows/publish-showcase.md]`

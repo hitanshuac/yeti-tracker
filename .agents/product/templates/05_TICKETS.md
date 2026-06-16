@@ -1,17 +1,24 @@
-# 05_TICKETS: Actionable Backlog
+# Feature Ticket List
 
-## Phase 1: V1 Data Science MVP (COMPLETED)
-- `[x]` **TKT-001**: Scaffold FastAPI and serve static HTML dashboard.
-- `[x]` **TKT-002**: Clean Kaggle dataset and ingest via DuckDB `read_csv_auto`.
-- `[x]` **TKT-003**: Implement `/api/stats/diet` and `/api/stats/transport`.
-- `[x]` **TKT-004**: Implement mathematical EDA queries for Pearson Correlations.
-- `[x]` **TKT-005**: Overhaul UI to display glassmorphism Correlation Scorecards and horizontal bar charts.
+*Agents must execute these tickets sequentially. Do not move to a new ticket until the previous one is fully verified.*
 
-## Phase 2: Post-Hackathon Scalability (TODO)
-- `[ ]` **TKT-006: Add Geographical Filtering**
-  - Extract country/region from the dataset and allow users to filter correlations by geography (e.g., does Electricity impact footprint more in the US vs India?).
-- `[ ]` **TKT-007: Machine Learning Prediction Model**
-  - Train a lightweight `scikit-learn` Ridge Regression model to predict future footprint based on the user's historical habits.
-  - Expose via `/api/predict` endpoint.
-- `[ ]` **TKT-008: Automated Report Generation**
-  - Use Python to generate a PDF summary of the user's correlation metrics for offline viewing.
+## 🎟️ TICKET-001: [Ticket Title]
+- **Description:** [Brief description of the task]
+- **Acceptance Criteria:**
+  - [ ] Criteria 1
+  - [ ] Criteria 2
+- **Technical Constraints:** [e.g., Must use DuckDB `INSERT OR REPLACE`]
+
+## 🎟️ TICKET-002: [Ticket Title]
+- **Description:** [Brief description of the task]
+- **Acceptance Criteria:**
+  - [ ] Criteria 1
+  - [ ] Criteria 2
+- **Technical Constraints:** [e.g., Follow `04_FRONTEND.md` color tokens]
+
+## 🎟️ TICKET-003: [Ticket Title]
+- **Description:** [Brief description of the task]
+- **Acceptance Criteria:**
+  - [ ] Criteria 1
+  - [ ] Criteria 2
+- **Technical Constraints:** [Constraints]

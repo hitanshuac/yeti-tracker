@@ -1,3 +1,7 @@
+---
+description: description: Automatically commit and push the current workspace state to GitHub to prevent data loss.
+---
+
 # Secure Checkpoint Workflow
 
 1. Ask the user for a brief commit message describing the current state.

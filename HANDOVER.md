@@ -5,16 +5,16 @@ The Yeti-Tracker has successfully completed the Hack2Skill Challenge 3 sprint. T
 
 ## The Gamified Pivot
 The current architecture relies on a **Hybrid LLM Pipeline**:
-1. **Ingestion**: The user types a natural language diary. Groq parses it into 3 integer values.
+1. **Ingestion**: The user types a natural language diary. Groq parses it into 5 integer values.
 2. **Verification Gate**: These values populate explicit UI sliders so the user can verify them. This isolates LLM non-determinism from the math engine.
-3. **Calculation**: DuckDB compounds the daily values into a 365-day forecast.
-4. **The Over 9000 Override**: If the forecast > 9000kg, the standard UI gauges shatter, displaying `godzilla_over_9000.png`.
-5. **Yeti Advisor**: A secondary LLM dynamically roasts the user's specific inputs and offers reduction advice.
+3. **Dual-Mode Calculation**: DuckDB processes the data dynamically. If in "Daily Mode", it compounds the daily values into a 365-day forecast. In "Yearly Mode", it bypasses the multiplier for realistic accounting.
+4. **The Gamification Override**: The app visualizes Godzilla, Yeti, and Vegeta tiers based on the footprint's severity.
+5. **Yeti Advisor (RAG Enabled)**: A secondary LLM dynamically roasts the user by injecting scientifically accurate DuckDB FTS Context vectors to prevent hallucinated advice.
 
 ## Important Context for Future Agents
 - Do **NOT** remove the UI sliders. The architecture explicitly decoupled the LLM parsing from the DuckDB math to preserve idempotency and strict `f(x)=y` scientific validation.
+- Do **NOT** modify Streamlit widget bound values outside of the `on_click` event loop handlers (`handle_extract`, `handle_calculate`). Direct assignment will trigger a `StreamlitAPIException`.
 - All product templates (`.agents/product/templates/`) and ADRs (`.agents/architecture/adrs/`) accurately reflect this final state.
-- If you need to test the "Over 9000" Godzilla state, simply set "Miles Driven" to 500 in the UI and click run.
 
 ## Missing/Future Capabilities
 - **Database Expansion**: Currently, DuckDB performs simple math. It could be expanded to run `CROSS JOINS` against real EPA datasets for precise regional electricity tracking if the user inputs their zip code.

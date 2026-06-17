@@ -1,0 +1,8 @@
+activity,category,co2_kg_per_unit,social_cost_usd_per_kg,source_agency,description
+miles_driven,transport,0.40,0.19,EPA,Average passenger vehicle emissions per mile
+flight_miles,transport,0.25,0.19,EPA,Average domestic flight per passenger mile
+transit_miles,transport,0.14,0.19,EPA,Average bus or train transit per mile
+ac_hours,energy,1.50,0.19,EPA,Average residential HVAC consumption per hour
+restaurant_meal,diet,8.50,2.50,USEEIO,Average CO2 and financial premium per meal eaten out
+bottled_water_liter,diet,0.15,0.19,EPA,PET plastic manufacturing and transport
+mock_keyword_test,test,9.99,1.00,TEST,This is a mock keyword for RAG testing

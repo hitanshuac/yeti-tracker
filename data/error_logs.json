@@ -249,5 +249,201 @@
     "stack_trace_summary": "app.py:15 in <module> import plotly.graph_objects as go",
     "status": "RESOLVED",
     "resolution_strategy": "Added plotly to requirements.txt and ran pip install."
+  },
+  {
+    "timestamp": "2026-06-17T17:55:04.289755+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T18:13:38.998341+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T18:14:37.818921+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T18:15:53.001385+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T18:16:18.275561+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T18:38:34.925001+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T18:46:00.824638+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T18:46:56.545012+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T18:48:31.045078+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T19:00:49.695813+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T19:06:51.870717+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T19:45:21.859396+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T19:51:09.473342+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T19:58:31.944477+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T20:02:18.226960+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T20:06:19.639633+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T20:12:28.019187+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T20:14:10.726991+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T20:21:02.684737+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T20:25:46.805539+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T20:27:14.455308+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "StreamlitAPIException",
+    "component": "Streamlit UI",
+    "message": "st.session_state cannot be modified after the widget is instantiated. RESOLUTION: Implemented st.button on_click callbacks (handle_extract, handle_calculate) to intercept the event loop and update state before top-to-bottom execution begins.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "GamificationParadox",
+    "component": "DuckDB Math Engine",
+    "message": "Applying a 365x multiplier to daily lifestyle choices resulted in hilariously catastrophic yearly footprints, destroying the validity of direct yearly inputs. RESOLUTION: Implemented a Dual-Mode Forecaster dropdown that dynamically toggles the 365x multiplier and adjusts slider bounds based on Daily vs Yearly input modes.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
   }
 ]

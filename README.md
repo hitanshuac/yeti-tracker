@@ -13,10 +13,12 @@ Yeti-Tracker is an AI-powered personal carbon footprint platform that completely
 To solve the inherent conflict between **AI Hallucinations** (non-determinism) and **Scientific Data Integrity** (idempotent mathematics), Yeti-Tracker implements the **Hybrid Pipeline** (Split-Plane Architecture):
 
 1. **The Confessional (LLM Ingestion)**: Users paste a messy, natural language diary entry.
-2. **The Verification Gate**: The LLM *only* populates explicit UI sliders. The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
-3. **The 365-Day Forecaster**: A local DuckDB instance takes the verified seed day and compounds it deterministically across a 365-day year.
-4. **The "Over 9000" Gamification**: If the footprint crosses 9,000kg (average global citizen), the UI violently shatters, flashing a "GODZILLA FOOTPRINT DETECTED: IT'S OVER 9000" meme.
-5. **The Yeti Advisor**: Finally, a second LLM dynamically generates a sarcastic, aggressive roasting from the perspective of a melting Yeti.
+2. **The Verification Gate**: The LLM *only* populates explicit UI sliders using 5 integers. The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
+3. **Dual-Mode Forecaster**: A local DuckDB instance takes the verified seed and processes it based on the selected mode: either compounding it deterministically across a 365-day year, or accepting realistic yearly totals to skip the multiplier.
+4. **The "Over 9000" Gamification**: If the footprint crosses 9,000kg (average global citizen), the UI violently shatters, flashing a "GODZILLA FOOTPRINT DETECTED" meme based on multiple threshold tiers.
+5. **The Yeti Advisor & RAG Integration**: A secondary LLM dynamically queries `carbon_factors.csv` using DuckDB Full-Text Search to retrieve accurate scientific factors, then generates a sarcastic, aggressive roasting from the perspective of a melting Yeti based precisely on the user's explicit goal.
+
+**UX Integrity**: The entire ingestion pipeline is governed by Streamlit `on_click` event callbacks to completely eliminate `StreamlitAPIException` rendering crashes and ensure mathematically idempotent state synchronization.
 
 ## Dynamic Skill Integration
 The Yeti-Tracker's intelligence is powered by composable skill imports located in `.agents/skills/`. This allows the agent to dynamically load capabilities such as pipeline architecture, diagram generation, or running an LLM-Council debate without cluttering the core application logic.

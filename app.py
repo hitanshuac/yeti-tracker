@@ -167,17 +167,38 @@ def parse_messy_text(text: str) -> dict:
         return default_payload
 
 
-def get_yeti_advice(carbon: float, miles: int, ac: int, steaks: int) -> str:
-    """Uses LLM to generate a personalized, sarcastic Yeti advice string."""
+def get_yeti_advice(carbon: float, miles: int, ac: int, steaks: int, tier: str) -> str:
+    """Uses LLM to generate a personalized, context-aware advice string based on the severity tier."""
     from groq import Groq
 
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         return "I'm a Yeti without an API key, so I can't roast you. Just plant some trees, okay?"
 
+    if tier == "Godzilla":
+        system_msg = (
+            "You are a terrified news anchor. A colossal Godzilla Kaiju just woke up "
+            "because of the user's carbon footprint and is destroying the city! Scream at them in panic."
+        )
+    elif tier == "Yeti":
+        system_msg = (
+            "You are a furious Yeti. Your glaciers are melting into the ocean "
+            "because of the user's carbon footprint. Roast them aggressively."
+        )
+    elif tier == "Vegeta":
+        system_msg = (
+            "You are an arrogant Saiyan prince. You just scanned their carbon footprint "
+            "and it's over 5000. You are disgusted by their weak attempts at sustainability. Roast them."
+        )
+    else:
+        system_msg = (
+            "You are a slightly annoyed but polite environmental scientist. "
+            "The user's footprint is okay, but could be better. Give them a snarky tip."
+        )
+
     client = Groq(api_key=api_key)
     prompt = f"""
-    Act as a sarcastic Yeti whose snowy habitat is melting.
+    {system_msg}
     The user's yearly carbon forecast is {carbon:,.0f} kg.
     Today, they drove {miles} miles, used the AC for {ac} hours, and ate {steaks} beef meals.
 
@@ -268,59 +289,73 @@ if __name__ == "__main__":
         st.session_state.parsed_data["ac_hours"] = ac
         st.session_state.parsed_data["steaks_eaten"] = steaks
 
-        carbon, trees = run_duckdb_math(miles, ac, steaks)
+        st.markdown("---")
+        calculate_clicked = st.button("Calculate Impact", type="primary", use_container_width=True)
 
     with col1:
-        # THE GAMIFICATION TRIGGER ("OVER 9000")
-        if carbon > 9000:
-            st.error("🚨 CRITICAL WARNING 🚨")
-            st.markdown(
-                f"<h1 style='text-align: center; color: red; font-size: 60px;'>"
-                f"IT'S OVER 9000!!! ({carbon:,.0f} kg)</h1>",
-                unsafe_allow_html=True,
-            )
-            st.markdown("<h2 style='text-align: center;'>GODZILLA FOOTPRINT DETECTED</h2>", unsafe_allow_html=True)
+        if calculate_clicked:
+            carbon, trees = run_duckdb_math(miles, ac, steaks)
 
-            godzilla_path = Path("data/assets/godzilla_over_9000.png")
-            if godzilla_path.exists():
-                st.image(str(godzilla_path), use_container_width=True)
-            else:
-                st.warning("Godzilla image asset missing from data/assets/")
-
-        elif carbon > 5000:
-            st.warning("⚠️ WARNING: YETI FOOTPRINT")
-            st.markdown(
-                f"<h3 style='text-align: center;'>Yearly Forecast: {carbon:,.0f} kg</h3>", unsafe_allow_html=True
-            )
-            yeti_path = Path("data/assets/yeti_alert.png")
-            if yeti_path.exists():
-                st.image(str(yeti_path), use_container_width=True)
-            else:
-                st.warning("Yeti image asset missing from data/assets/")
-
-        else:
-            st.success("✅ Sustainable Human Footprint")
-            st.markdown("### Live 365-Day Forecasting Telemetry")
-            col_graph1, col_graph2 = st.columns(2)
-
-            with col_graph1:
-                # Average USA carbon footprint is ~15,000kg, global is ~4,000kg
-                fig_carbon = create_gauge_fig(
-                    value=carbon, title="Yearly Forecasted Carbon", max_val=15000, color="#00ffaa", suffix=" kg"
+            # THE 3-TIER GAMIFICATION TRIGGER
+            if carbon > 15000:
+                tier = "Godzilla"
+                st.error("🚨 APOCALYPTIC WARNING 🚨")
+                st.markdown(
+                    f"<h1 style='text-align: center; color: red; font-size: 60px;'>"
+                    f"TOTAL EXTINCTION ({carbon:,.0f} kg)</h1>",
+                    unsafe_allow_html=True,
                 )
-                st.plotly_chart(fig_carbon, use_container_width=True)
-
-            with col_graph2:
-                # 1 Tree = ~22kg/year
-                fig_trees = create_gauge_fig(
-                    value=trees, title="Trees Needed to Offset", max_val=700, color="#ff0055", suffix=" trees"
+                img_path = Path("data/assets/godzilla_extinction.png")
+            elif carbon > 9000:
+                tier = "Yeti"
+                st.error("🚨 CRITICAL WARNING 🚨")
+                st.markdown(
+                    f"<h1 style='text-align: center; color: red; font-size: 60px;'>"
+                    f"THE ICE IS GONE ({carbon:,.0f} kg)</h1>",
+                    unsafe_allow_html=True,
                 )
-                st.plotly_chart(fig_trees, use_container_width=True)
+                img_path = Path("data/assets/yeti_awakening.png")
+            elif carbon > 5000:
+                tier = "Vegeta"
+                st.warning("⚠️ WARNING: IT'S OVER 5000!")
+                st.markdown(
+                    f"<h3 style='text-align: center;'>Yearly Forecast: {carbon:,.0f} kg</h3>", unsafe_allow_html=True
+                )
+                img_path = Path("data/assets/vegeta_scouter.png")
+            else:
+                tier = "Normal"
+                img_path = None
 
-        # YETI ADVISOR (Dynamic Assistant)
-        st.markdown("---")
-        st.markdown("### ❄️ The Yeti Advisor")
-        if st.button("Ask the Yeti for Advice", type="secondary"):
-            with st.spinner("The Yeti is judging you..."):
-                advice = get_yeti_advice(carbon, miles, ac, steaks)
+            if img_path:
+                if img_path.exists():
+                    st.image(str(img_path), use_container_width=True)
+                else:
+                    st.warning(f"Image asset missing from {img_path}")
+            else:
+                st.success("✅ Sustainable Human Footprint")
+                st.markdown("### Live 365-Day Forecasting Telemetry")
+                col_graph1, col_graph2 = st.columns(2)
+
+                with col_graph1:
+                    fig_carbon = create_gauge_fig(
+                        value=carbon, title="Yearly Forecasted Carbon", max_val=15000, color="#00ffaa", suffix=" kg"
+                    )
+                    st.plotly_chart(fig_carbon, use_container_width=True)
+
+                with col_graph2:
+                    fig_trees = create_gauge_fig(
+                        value=trees, title="Trees Needed to Offset", max_val=700, color="#ff0055", suffix=" trees"
+                    )
+                    st.plotly_chart(fig_trees, use_container_width=True)
+
+            # YETI ADVISOR (Dynamic Assistant) - Auto Runs seamlessly!
+            st.markdown("---")
+            st.markdown("### 🎙️ The Smart Advisor")
+            with st.spinner("Analyzing your doom..."):
+                advice = get_yeti_advice(carbon, miles, ac, steaks, tier)
                 st.info(advice)
+        else:
+            st.info(
+                "👈 Adjust your daily inputs and click **'Calculate Impact'** "
+                "to view your 365-day cinematic forecast."
+            )

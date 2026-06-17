@@ -224,5 +224,30 @@
     "message": "Missing GROQ_API_KEY in environment variables.",
     "status": "UNRESOLVED",
     "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-16T20:25:00.909942+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T17:33:25.297140+00:00",
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY in environment variables.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-17T17:34:01.162694+00:00",
+    "error_type": "ModuleNotFoundError",
+    "component": "tests/test_app.py",
+    "message": "No module named 'plotly'",
+    "stack_trace_summary": "app.py:15 in <module> import plotly.graph_objects as go",
+    "status": "RESOLVED",
+    "resolution_strategy": "Added plotly to requirements.txt and ran pip install."
   }
 ]

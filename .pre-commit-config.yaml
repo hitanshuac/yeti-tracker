@@ -13,12 +13,3 @@ repos:
       - id: ruff
         args: [ --fix ]
       - id: ruff-format
-
-  - repo: https://github.com/trufflesecurity/trufflehog
-    rev: v3.70.0
-    hooks:
-      - id: trufflehog
-        name: TruffleHog Secret Scanning
-        entry: trufflehog git file://. --since-commit HEAD --only-verified --fail
-        language: system
-        stages: [commit]

@@ -18,4 +18,4 @@ The current architecture relies on a **Hybrid LLM Pipeline**:
 
 ## Missing/Future Capabilities
 - **Database Expansion**: Currently, DuckDB performs simple math. It could be expanded to run `CROSS JOINS` against real EPA datasets for precise regional electricity tracking if the user inputs their zip code.
-- **Vision Models**: If API limits relax, the static `yeti_alert.png` could be replaced by dynamic Generative AI outputs based on the exact severity of the footprint.
+- **Vision Models**: If API limits relax, the static `yeti.jpg` could be replaced by dynamic Generative AI outputs based on the exact severity of the footprint.

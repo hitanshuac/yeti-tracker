@@ -85,11 +85,11 @@ def seed_demo_history(session_id: str, db_path: str | None = None) -> None:
     end_date = datetime.datetime.now()
     start_date = end_date - datetime.timedelta(days=30)
     curr = start_date
-    base = 20.0
+    base = 3.28  # ~1200 kg/year
 
     while curr <= end_date:
-        base += random.uniform(0.1, 1.5)
-        d_val = base + random.uniform(-5.0, 10.0)
+        d_val = base + random.uniform(-0.5, 2.0)
+        d_val = max(0.0, d_val)  # Prevent negative daily footprints
         conn.execute(
             "INSERT INTO user_history VALUES (?, ?, ?, ?)",
             [session_id, curr, d_val, "Human"],

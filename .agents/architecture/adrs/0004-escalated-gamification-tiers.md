@@ -2,9 +2,9 @@
 
 ## Context
 The user requested that the gamification tier thresholds be escalated by factors of 10 to heighten the dramatic effect. The new tiers are:
-- `> 9,000`: Vegeta ("It's over 9000!")
+- `> 9,000`: Tier 1 Visual Asset
 - `> 90,000`: Yeti ("It's over 90000!")
-- `> 900,000`: Godzilla ("It's over 900000!")
+- `> 900,000`: Tier 3 Visual Asset
 
 ## Decision
 1. **Threshold Scaling**: We updated the trigger conditionals in `app.py` to match `9,000`, `90,000`, and `900,000` respectively.

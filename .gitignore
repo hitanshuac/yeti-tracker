@@ -1,5 +1,11 @@
 data/raw_transactions/
 data/
+!data/carbon_factors.csv
+!data/assets/
+!data/assets/**
+!data/.gitkeep
+data/error_logs.json
+data/error_logs.json.tmp
 .secrets/
 .env
 *.parquet

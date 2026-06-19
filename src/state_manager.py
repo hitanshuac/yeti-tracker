@@ -20,17 +20,15 @@ class AppState(BaseModel):
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
 
     # Slider values (yearly integers)
-    car_miles: int = 0
-    flight_miles: int = 0
-    transit_miles: int = 0
+    car_km: int = 0
+    flight_km: int = 0
+    transit_km: int = 0
     ac_hours: int = 0
     restaurant_meals: int = 0
 
     # Confessional text
     confessional_input: str = (
-        "I drove about 40 miles round trip for work. "
-        "Ate out at a fancy restaurant for lunch. "
-        "Left the AC on for 10 hours."
+        "I drove about 60 km round trip for work. " "Ate out at a restaurant for lunch. " "Left the AC on for 10 hours."
     )
     last_extracted_text: str = ""
 
@@ -52,16 +50,13 @@ _STATE_KEY = "_app_state_initialized"
 def init_state(st_session_state: dict) -> None:
     """Initialize st.session_state with default AppState values.
 
-    Only runs once per session.  Individual keys are written into
-    st.session_state so Streamlit widgets (which bind via ``key=``)
-    continue to work unchanged.
+    Individual keys are written into st.session_state so Streamlit widgets
+    (which bind via ``key=``) continue to work unchanged. This safely handles
+    hot-reloads by injecting any missing keys.
 
     Args:
         st_session_state: The ``st.session_state`` proxy dict.
     """
-    if _STATE_KEY in st_session_state:
-        return
-
     defaults = AppState()
     for field_name, value in defaults.model_dump().items():
         if field_name not in st_session_state:

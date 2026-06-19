@@ -12,9 +12,9 @@ FIXTURE_PATH = "tests/fixtures/carbon_factors_fixture.csv"
 def test_run_duckdb_math():
     """Verify DuckDB logic returns correct carbon and tax values."""
     result = run_duckdb_math(
-        car_miles=100,
-        flight_miles=500,
-        transit_miles=50,
+        car_km=100,
+        flight_km=500,
+        transit_km=50,
         ac_hours=10,
         restaurant_meals=2,
         dataset_path=FIXTURE_PATH,
@@ -23,15 +23,16 @@ def test_run_duckdb_math():
     assert result.carbon_tax_inr > 0
 
     result_zero = run_duckdb_math(
-        car_miles=0,
-        flight_miles=0,
-        transit_miles=0,
+        car_km=0,
+        flight_km=0,
+        transit_km=0,
         ac_hours=0,
         restaurant_meals=0,
         dataset_path=FIXTURE_PATH,
     )
-    assert result_zero.yearly_co2_kg == 0.0
-    assert result_zero.carbon_tax_inr == 0.0
+    # With 0 lifestyle inputs, only the 1500 kg baseline should remain
+    assert result_zero.yearly_co2_kg == 1500.0
+    assert result_zero.carbon_tax_inr == 1500.0 * 15.80
 
 
 def test_parse_confession_fallback():
@@ -40,8 +41,8 @@ def test_parse_confession_fallback():
     if original_key:
         del os.environ["GROQ_API_KEY"]
 
-    result = parse_confession("I drove 20 miles today")
-    assert result.miles_driven == 0
+    result = parse_confession("I drove 20 km today")
+    assert result.car_km == 0
     assert result.ac_hours == 0
     assert result.restaurant_meals == 0
 

@@ -18,8 +18,8 @@ The application relies on the Groq API for both the frictionless Text Ingestion 
 
 ## 3. Verify Static Assets
 Ensure that the Gamification assets were successfully generated and exist:
-- `data/assets/yeti.jpg`
-- `data/assets/godzilla.jpg`
+- `data/assets/tier2.jpg`
+- `data/assets/tier3.jpg`
 
 ## 4. Run the Dashboard
 Execute the convenience batch script to launch Streamlit:

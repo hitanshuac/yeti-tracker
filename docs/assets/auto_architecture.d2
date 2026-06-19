@@ -1,27 +1,48 @@
 direction: right
+
 classes: {
-  module: {
+  user_node: {
+    shape: person
+    style: { fill: "#4CAF50"; font-color: "#ffffff" }
+  }
+  ui: {
     shape: rectangle
-    style: {
-      border-radius: 5
-      fill: "#1e1e1e"
-      stroke: "#ffffff"
-      font-color: "#ffffff"
-    }
+    style: { fill: "#FF5722"; font-color: "#ffffff"; border-radius: 5 }
+  }
+  llm: {
+    shape: cloud
+    style: { fill: "#9C27B0"; font-color: "#ffffff" }
+  }
+  db: {
+    shape: cylinder
+    style: { fill: "#2196F3"; font-color: "#ffffff" }
+  }
+  engine: {
+    shape: hexagon
+    style: { fill: "#607D8B"; font-color: "#ffffff" }
   }
 }
 
-app: app { class: module }
-src_carbon_engine: src.carbon_engine { class: module }
-src_chart_factory: src.chart_factory { class: module }
-src_history: src.history { class: module }
-src_llm_service: src.llm_service { class: module }
-src_rag_service: src.rag_service { class: module }
-src_state_manager: src.state_manager { class: module }
+user: User { class: user_node }
 
-app -> src_carbon_engine
-app -> src_state_manager
-app -> src_rag_service
-app -> src_llm_service
-app -> src_history
-app -> src_chart_factory
+yeti_tracker: Yeti-Tracker Hybrid Pipeline {
+  style: { fill: transparent; stroke: "#cccccc"; stroke-dash: 5 }
+
+  app: Streamlit UI (app.py) { class: ui }
+  llm_svc: Groq Extraction (llm_service.py) { class: llm }
+  verification: UI Sliders (Verification Gate) { class: ui }
+  carbon: Deterministic Math (carbon_engine.py) { class: engine }
+  duck: DuckDB Instance { class: db }
+  history: UUID Session History { class: db }
+  gamification: Tier Classification Visuals { class: ui }
+
+  app -> llm_svc: 1. Natural Language Diary
+  llm_svc -> verification: 2. Parse to Integers
+  verification -> carbon: 3. User Approves Strict Values
+  carbon -> duck: 4. Execute SCC Math
+  carbon -> gamification: 5. Determine Catastrophe Tier
+  carbon -> history: 6. Persist Session
+}
+
+user -> yeti_tracker.app: Logs daily habits
+yeti_tracker.gamification -> user: Displays Roasts & Visuals

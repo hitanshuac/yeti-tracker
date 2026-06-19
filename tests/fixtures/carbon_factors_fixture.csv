@@ -1,8 +1,10 @@
-activity,category,co2_kg_per_unit,social_cost_usd_per_kg,source_agency,description
-miles_driven,transport,0.40,0.19,EPA,Average passenger vehicle emissions per mile
-flight_miles,transport,0.25,0.19,EPA,Average domestic flight per passenger mile
-transit_miles,transport,0.14,0.19,EPA,Average bus or train transit per mile
-ac_hours,energy,1.50,0.19,EPA,Average residential HVAC consumption per hour
-restaurant_meal,diet,8.50,2.50,USEEIO,Average CO2 and financial premium per meal eaten out
-bottled_water_liter,diet,0.15,0.19,EPA,PET plastic manufacturing and transport
-mock_keyword_test,test,9.99,1.00,TEST,This is a mock keyword for RAG testing
+activity,category,co2_kg_per_unit,social_cost_inr_per_kg,source_agency,description
+car_km,transport,0.15,15.80,CarbonCrux,Average mid-size petrol car emissions per km in India
+two_wheeler_km,transport,0.04,15.80,CarbonCrux,Average petrol scooter/motorcycle per km in India
+flight_km,transport,0.115,15.80,ICAO,Average domestic flight per passenger km
+train_km,transport,0.01,15.80,IndianRailways,Average Indian Railways electric traction per passenger km
+bus_km,transport,0.06,15.80,CSTEP,Average Indian public bus per passenger km
+ac_hours,energy,1.12,15.80,CEA,1.4kW avg AC unit at 0.8 kg CO2/kWh Indian grid intensity
+restaurant_meal,diet,3.5,15.80,ISEC,Average Indian restaurant meal including vegetarian options
+bottled_water_liter,diet,0.15,15.80,UNEP,PET plastic bottle manufacturing and transport
+mock_keyword_test,test,9.99,15.80,TEST,This is a mock keyword for RAG testing

@@ -3,13 +3,10 @@ streamlit
 plotly
 numpy
 pandas>=2.2.2
-diagrams==0.25.1
 Pillow
 pytest
 pydantic
 pyarrow
-openai>=1.0.0
-async-lru>=2.0.4
 python-dotenv
-markitdown
 groq
+scikit-learn>=1.9.0

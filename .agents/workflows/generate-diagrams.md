@@ -32,3 +32,8 @@ A generalized, universal pipeline to scan the project for any programmatic diagr
 ### Phase 4: Verification & Update
 1. Ensure `README.md` correctly references both the `_showcase` and `_technical` versions of core architecture diagrams where applicable.
 2. Report the generation of the dual diagram sets to the user.
+
+### Phase 5: Lossless Compression (WebP)
+1. You MUST execute a Python snippet using the `Pillow` library to convert all newly generated `docs/assets/*.png` files into lossless `.webp` format.
+2. You MUST delete the original `.png` files after successful conversion.
+3. You MUST update `README.md` and any other references to point to the `.webp` files instead of `.png`.

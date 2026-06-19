@@ -30,7 +30,7 @@ def _build_rag_query(text: str, dataset_path: str) -> str | None:
     conditions = [f"LOWER(description) LIKE '%{kw}%' OR LOWER(activity) LIKE '%{kw}%'" for kw in keywords]
     where_clause = " OR ".join(conditions)
     return (
-        f"SELECT activity, description, co2_kg_per_unit, social_cost_usd_per_kg "
+        f"SELECT activity, description, co2_kg_per_unit, social_cost_inr_per_kg "
         f"FROM read_csv_auto('{dataset_path}') "
         f"WHERE {where_clause} LIMIT 3"
     )

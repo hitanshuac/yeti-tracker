@@ -11,6 +11,7 @@ import re
 import time
 from typing import Any
 
+from groq import Groq, GroqError
 from pydantic import BaseModel, Field
 
 # ---------------------------------------------------------------------------
@@ -21,9 +22,9 @@ from pydantic import BaseModel, Field
 class ParsedPersonalData(BaseModel):
     """Schema for parsed lifestyle activities from natural language."""
 
-    miles_driven: int = Field(ge=0, default=0)
-    flight_miles: int = Field(ge=0, default=0)
-    transit_miles: int = Field(ge=0, default=0)
+    car_km: int = Field(ge=0, default=0)
+    flight_km: int = Field(ge=0, default=0)
+    transit_km: int = Field(ge=0, default=0)
     ac_hours: int = Field(ge=0, default=0)
     restaurant_meals: int = Field(ge=0, default=0)
 
@@ -41,24 +42,24 @@ class AdvisorAlternative(BaseModel):
 class AdvisorResponse(BaseModel):
     """Schema for the Yeti Advisor's full response."""
 
-    silver_lining: str = "I appreciate your honesty."
-    roast: str = "But your carbon footprint is a total disaster."
-    guilt_easing_question: str = "Are there any other guilty pleasures you want to share?"
+    silver_lining: str = "You're being honest about your habits — that's the first step."
+    roast: str = "But let's see if we can do better, shall we?"
+    guilt_easing_question: str = "Tell me more about your daily routine — any hidden habits?"
     alternatives: list[AdvisorAlternative] = Field(
         default_factory=lambda: [
             AdvisorAlternative(
                 type="Convenience",
-                alternative="Work from home 2 days a week",
-                pros="Save time and gas",
-                cons="Less social interaction",
-                est_monthly_savings_inr=500.0,
+                alternative="Switch to public transit for short trips",
+                pros="Saves money and reduces emissions",
+                cons="Less flexibility in schedule",
+                est_monthly_savings_inr=400.0,
             ),
             AdvisorAlternative(
                 type="Maximum Impact",
-                alternative="Sell your car and bike everywhere",
-                pros="Massive carbon savings",
-                cons="Extremely inconvenient in winter",
-                est_monthly_savings_inr=2500.0,
+                alternative="Replace AC with a ceiling fan when temperature permits",
+                pros="Massive electricity and carbon savings",
+                cons="Less comfortable on very hot days",
+                est_monthly_savings_inr=1500.0,
             ),
         ]
     )
@@ -77,13 +78,14 @@ If they say 'once a month', multiply by 12. If they say 'every workday', multipl
 If frequency is unspecified, assume the stated number is their yearly total.
 You MUST perform the math silently and output ONLY the final computed integer.
 DO NOT output formulas (e.g., no '260 * 10'). The JSON values MUST be raw integers.
-Estimate distances in km. If specific locations are mentioned without distances (e.g. "from Kandivali to Sakinaka"),
-you MUST estimate the real-world distance between them in km based on your geographic knowledge.
+All distances MUST be in kilometers (km). If specific locations are mentioned without distances
+(e.g. "from Kandivali to Sakinaka"), you MUST estimate the real-world distance between them
+in km based on your geographic knowledge.
 You MUST output a strict JSON object exactly matching this format:
 {{
-  "miles_driven": 0,
-  "flight_miles": 0,
-  "transit_miles": 0,
+  "car_km": 0,
+  "flight_km": 0,
+  "transit_km": 0,
   "ac_hours": 0,
   "restaurant_meals": 0
 }}
@@ -154,8 +156,9 @@ def _safe_eval_math_expr(match: "re.Match") -> str:
     expr = match.group(0)
     if re.fullmatch(r"[\d\s\*\+\-\/\.]+", expr):
         try:
+            # pylint: disable=eval-used
             return str(int(eval(expr)))
-        except Exception:
+        except (SyntaxError, NameError, TypeError, ZeroDivisionError):
             return "0"
     return "0"
 
@@ -187,6 +190,15 @@ def _recover_failed_generation(error_msg: str) -> dict | None:
 # ---------------------------------------------------------------------------
 
 
+def _handle_groq_error(error_str: str) -> dict | None:
+    """Handle and try to recover from Groq extraction errors."""
+    if "failed_generation" in error_str:
+        recovered = _recover_failed_generation(error_str)
+        if recovered:
+            return recovered
+    return None
+
+
 def _attempt_groq_extraction(client: Any, prompt: str) -> dict | None:
     """Attempt a single Groq API call and handle recovery.
 
@@ -206,15 +218,39 @@ def _attempt_groq_extraction(client: Any, prompt: str) -> dict | None:
         )
         content = response.choices[0].message.content
         return json.loads(content)
-    except Exception as e:
+    except GroqError as e:
         error_str = str(e)
         _log_llm_error(type(e).__name__, "parse_confession", error_str)
+        return _handle_groq_error(error_str)
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        error_str = str(e)
+        _log_llm_error(type(e).__name__, "parse_confession", error_str)
+        return _handle_groq_error(error_str)
 
-        if "failed_generation" in error_str:
-            recovered = _recover_failed_generation(error_str)
-            if recovered:
-                return recovered
-        return None
+
+LEGACY_MAP = {
+    "miles_driven": "car_km",
+    "flight_miles": "flight_km",
+    "transit_miles": "transit_km",
+}
+
+
+def _fallback_parse(mapped: dict) -> ParsedPersonalData:
+    """Fallback parsing logic for messy LLM outputs."""
+    fallback_data = {}
+    for k, v in mapped.items():
+        if k in ParsedPersonalData.model_fields.keys():
+            fallback_data[k] = max(0, int(float(v))) if isinstance(v, int | float) else 0
+    return ParsedPersonalData(**fallback_data)
+
+
+def _parse_groq_result(result: dict) -> ParsedPersonalData:
+    """Helper to parse result and handle legacy mapping safely."""
+    mapped = {LEGACY_MAP.get(k, k): v for k, v in result.items()}
+    try:
+        return ParsedPersonalData(**mapped)
+    except Exception:  # pylint: disable=broad-exception-caught
+        return _fallback_parse(mapped)
 
 
 def parse_confession(text: str) -> ParsedPersonalData:
@@ -226,8 +262,6 @@ def parse_confession(text: str) -> ParsedPersonalData:
     Returns:
         A validated ParsedPersonalData model.
     """
-    from groq import Groq
-
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         _log_llm_error("EnvironmentError", "parse_confession", "Missing GROQ_API_KEY.")
@@ -240,58 +274,26 @@ def parse_confession(text: str) -> ParsedPersonalData:
     for _attempt in range(3):
         result = _attempt_groq_extraction(client, prompt)
         if result:
-            try:
-                return ParsedPersonalData(**result)
-            except Exception:
-                return ParsedPersonalData(
-                    **{
-                        k: max(0, int(float(v))) if isinstance(v, int | float) else 0
-                        for k, v in result.items()
-                        if k in ParsedPersonalData.model_fields
-                    }
-                )
+            return _parse_groq_result(result)
         time.sleep(1)
 
     return ParsedPersonalData()
 
 
-def get_advisor_response(
+# pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
+def _build_advisor_prompt(
     carbon: float,
     tax: float,
-    car_miles: int,
-    flight_miles: int,
-    transit_miles: int,
+    car_km: int,
+    flight_km: int,
+    transit_km: int,
     ac: int,
     restaurant_meals: int,
-    tier: str,
     goal: str,
     kpis: str,
-    rag_context: str = "",
-) -> AdvisorResponse:
-    """Use LLM to generate personalized carbon reduction advice.
-
-    Args:
-        carbon: Yearly CO2 in kg.
-        tax: Yearly carbon tax in INR.
-        car_miles: Yearly car km.
-        flight_miles: Yearly flight km.
-        transit_miles: Yearly transit km.
-        ac: Yearly AC hours.
-        restaurant_meals: Yearly restaurant meals.
-        tier: Current gamification tier string.
-        goal: User's stated goal.
-        kpis: Historical accountability KPIs string.
-        rag_context: RAG context from dataset.
-
-    Returns:
-        A validated AdvisorResponse model.
-    """
-    from groq import Groq
-
-    api_key = os.environ.get("GROQ_API_KEY")
-    if not api_key:
-        return AdvisorResponse()
-
+    rag_context: str,
+) -> str:
+    """Helper to build the complex advisor prompt."""
     if carbon > 15000:
         system_msg = "You are a ruthless climate auditor. The user is actively destroying the planet."
     elif carbon > 8000:
@@ -301,18 +303,42 @@ def get_advisor_response(
 
     extra_txt = (
         f"The user's EXACT YEARLY FORECAST is {carbon:,.0f} kg, creating a Social Cost of Carbon "
-        f"(Tax Debt) of ₹{tax:,.2f} INR (calculated at 15.80 INR per kg CO2).\n"
-        f"This year, they will travel {car_miles} km by car, {flight_miles} km by plane, "
-        f"and {transit_miles} km by train/bus.\n"
+        f"(Tax Debt) of INR {tax:,.2f} (calculated at INR 15.80 per kg CO2).\n"
+        f"This year, they will travel {car_km} km by car, {flight_km} km by plane, "
+        f"and {transit_km} km by train/bus.\n"
         f"They will use the AC for {ac} hours, and eat out at restaurants {restaurant_meals} times."
     )
 
-    prompt = PROMPT_WRATH_SWITCH.format(
+    return PROMPT_WRATH_SWITCH.format(
         system_msg=system_msg,
         kpis=kpis,
         goal=goal,
         extra_txt=extra_txt,
         rag_context=rag_context,
+    )
+
+
+# pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
+def get_advisor_response(
+    carbon: float,
+    tax: float,
+    car_km: int,
+    flight_km: int,
+    transit_km: int,
+    ac: int,
+    restaurant_meals: int,
+    tier: str,  # pylint: disable=unused-argument
+    goal: str,
+    kpis: str,
+    rag_context: str = "",
+) -> AdvisorResponse:
+    """Use LLM to generate personalized carbon reduction advice."""
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        return AdvisorResponse()
+
+    prompt = _build_advisor_prompt(
+        carbon, tax, car_km, flight_km, transit_km, ac, restaurant_meals, goal, kpis, rag_context
     )
 
     client = Groq(api_key=api_key)

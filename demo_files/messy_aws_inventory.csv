@@ -1,7 +1,0 @@
-"AWS Server Log Export",,,
-"Date Generated: 2026-06-15",,,
-,,,
-Department,Owner,Target Region,Instance Specs,Requested Count
-AI_Research,Alice,"us-west-2","p3.16xlarge",25
-Data_Science,Bob,"eu-central-1","c5.large",500
-FinOps,Carol,"ap-southeast-2","t3.micro",10

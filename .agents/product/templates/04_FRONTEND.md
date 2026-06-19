@@ -15,5 +15,5 @@ A 2-column layout (`col1`, `col2`) to separate the Data Visualization (Left) fro
 ### Left Column: The Dashboard / Gamification
 1. **State 1 (Human)**: Displays Plotly gauges showing Yearly Carbon and the Monthly Carbon Tax mapped to an INR scale.
 2. **State 2 (Category 1 Warning)**: Triggers at > 9,000kg.
-3. **State 3 (Category 2 & 3 Catastrophe)**: Triggers at > 15,000kg and > 30,000kg. Displays massive red HTML headers, visual overrides (`godzilla.jpg`, `yeti.jpg`), and aggressive roasts.
+3. **State 3 (Category 2 & 3 Catastrophe)**: Triggers at > 15,000kg and > 30,000kg. Displays massive red HTML headers, visual overrides (`tier3.jpg`, `tier2.jpg`), and aggressive roasts.
 4. **The Yeti Advisor**: A secondary button at the bottom triggering the LLM roasting function `get_yeti_advice` and appending the dynamic mitigation strategies to the confessional.

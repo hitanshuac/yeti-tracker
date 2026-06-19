@@ -17,7 +17,7 @@ All tickets for the Yeti-Tracker Hack2Skill project have been completed.
   - Implement dark-mode Plotly Gauges via `create_gauge_fig`.
 
 - `[x]` **TICKET-005: Gamification Pivot ("Over 9000")**
-  - Generate AI image assets (`yeti_alert.png`, `godzilla_over_9000.png`).
+  - Generate AI image assets (`tier2_alert.png`, `tier3_alert.png`).
   - Implement dynamic UI overrides based on mathematical thresholds.
 
 - `[x]` **TICKET-006: Human-in-the-Loop Hybrid Gate**

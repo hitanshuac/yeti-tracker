@@ -15,7 +15,8 @@ To solve the inherent conflict between **AI Hallucinations** (non-determinism) a
 1. **The Confessional (LLM Ingestion)**: Users paste a messy, natural language diary entry.
 2. **The Verification Gate**: The LLM *only* populates explicit UI sliders using 5 integers (now strictly using **kilometers**). The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
 3. **Deterministic Math Engine**: A local DuckDB instance takes the verified seed and deterministically calculates the carbon cost and localized financial impact in **INR (₹)** based on a ₹15.80/kg Social Cost of Carbon (SCC).
-4. **The Catastrophe Tiers Gamification**: If the footprint crosses certain thresholds, users are placed into Catastrophe Categories (e.g., Category 3) and presented with aggressive visual and textual roasting to gamify footprint reduction.
+4. **Machine Learning Anomaly Detection**: `src/anomaly_detector.py` uses an Isolation Forest (scikit-learn) to dynamically infer your yearly baseline based on your history, enforcing an infrastructure minimum floor of 1,500 kg CO2/year.
+5. **The Catastrophe Tiers Gamification**: If the footprint crosses certain thresholds, users are placed into Catastrophe Categories (e.g., Category 3) and presented with aggressive visual and textual roasting to gamify footprint reduction.
 5. **Continuous Confession Loop**: A recursive input pattern where user responses are appended to their "confessional," enabling an addictive feedback loop that tracks history per-session via secure UUIDs.
 6. **The Smart Advisor**: Generates hyper-specific "Instant Gratification" alternatives (Convenience vs. Maximum Impact) to guarantee a 20% reduction, ensuring advice is contextual and never redundant.
 
@@ -62,6 +63,7 @@ Yeti-Tracker enforces strict engineering standards via the `.agents` framework. 
   - `state_manager.py`: Pydantic AppState management.
   - `carbon_engine.py`: Deterministic DuckDB math.
   - `llm_service.py`: Groq extraction and Advisor interactions.
+  - `anomaly_detector.py`: Scikit-learn Isolation Forest for baseline inference.
   - `rag_service.py`: Context retrieval.
   - `chart_factory.py`: Plotly visualizations.
   - `history.py`: DuckDB connection pooling and telemetry.
@@ -74,12 +76,7 @@ To inject the Agentic Brain into other projects, simply copy the `.agents/` dire
 
 ## Visual Reference Appendix
 <p align="center">
-  <img src="docs/assets/auto_architecture_showcase.png" width="800" alt="Living System Architecture" />
+  <img src="docs/assets/auto_architecture_showcase.webp" width="800" alt="Living System Architecture" />
 </p>
 <p align="center">
-  <img src="data/assets/yeti.jpg" width="400" />
-  <img src="data/assets/godzilla.jpg" width="400" />
-</p>
-
-## Acknowledgments
-Credit to the study `antigravity` repository for the base templates and agentic workflows.
+    </p>

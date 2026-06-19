@@ -17,7 +17,7 @@ Furthermore, we attempted to use an LLM (`llama-3.1-8b-instant`) to parse natura
 ## Decision
 
 We executed a "Gamification Pivot" with the following architectural components:
-1. **The "Over 9000" Metaphor**: We abandoned AWS data and returned to Personal Tracking. If the user's carbon footprint exceeds 9,000kg/year, the sleek UI "breaks" and massive AI-generated assets (a roaring Godzilla or furious Yeti) overtake the screen. This satisfies the SME's gamification and emotional awareness requirement.
+1. **The "Over 9000" Metaphor**: We abandoned AWS data and returned to Personal Tracking. If the user's carbon footprint exceeds 9,000kg/year, the sleek UI "breaks" and massive AI-generated assets (a dynamic Catastrophe Tier visual) overtake the screen. This satisfies the SME's gamification and emotional awareness requirement.
 2. **The Hybrid Pipeline**: To solve the LLM non-determinism, we implemented a "Human Verification Gate". The LLM parses a user's natural language "diary" (e.g., "I drove 20 miles") and updates explicit Streamlit Sliders. The DuckDB math engine *only* pulls from the Sliders, never the raw LLM output.
 3. **The Yeti Advisor**: To fulfill the "Smart Dynamic Assistant" requirement, we added a secondary LLM call at the end of the pipeline that uses the deterministic math to dynamically generate a sarcastic, personalized reduction strategy.
 

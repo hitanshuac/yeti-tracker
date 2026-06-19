@@ -238,9 +238,20 @@ LEGACY_MAP = {
 def _fallback_parse(mapped: dict) -> ParsedPersonalData:
     """Fallback parsing logic for messy LLM outputs."""
     fallback_data = {}
+    model_keys = list(ParsedPersonalData.model_fields.keys())
     for k, v in mapped.items():
-        if k in ParsedPersonalData.model_fields.keys():
-            fallback_data[k] = max(0, int(float(v))) if isinstance(v, int | float) else 0
+        lower_k = str(k).lower().strip()
+        # Fuzzy match to handle capitalization/spacing
+        for mk in model_keys:
+            if lower_k == mk.lower() or lower_k.replace(" ", "_") == mk.lower():
+                try:
+                    if isinstance(v, list) and len(v) > 0:
+                        v = v[0]
+                    # Safely coerce strings/floats to int
+                    fallback_data[mk] = max(0, int(float(v)))
+                except (ValueError, TypeError):
+                    pass  # Leave as default 0
+                break
     return ParsedPersonalData(**fallback_data)
 
 
@@ -249,7 +260,8 @@ def _parse_groq_result(result: dict) -> ParsedPersonalData:
     mapped = {LEGACY_MAP.get(k, k): v for k, v in result.items()}
     try:
         return ParsedPersonalData(**mapped)
-    except Exception:  # pylint: disable=broad-exception-caught
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        _log_llm_error(type(e).__name__, "parse_groq_result", str(e))
         return _fallback_parse(mapped)
 
 

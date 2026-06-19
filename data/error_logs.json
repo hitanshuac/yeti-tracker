@@ -655,5 +655,33 @@
     "message": "Missing GROQ_API_KEY.",
     "status": "RESOLVED",
     "resolution_strategy": "Fixed fallback payload to return all zeroes and updated pytest assertions."
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_messy_text",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
   }
 ]

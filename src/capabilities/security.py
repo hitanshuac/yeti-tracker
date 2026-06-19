@@ -20,6 +20,13 @@ PROMPT_INJECTION_SIGNATURES = [
 ]
 
 
+def _check_prompt_injection(text: str) -> None:
+    """Checks for known prompt injection signatures."""
+    for pattern in PROMPT_INJECTION_SIGNATURES:
+        if re.search(pattern, text):
+            raise HTTPException(status_code=400, detail="Malicious input pattern detected.")
+
+
 def sanitize_input(text: str) -> str:
     """
     Sanitizes raw input text to mitigate CWE-74 prompt injection and other attacks.
@@ -46,8 +53,6 @@ def sanitize_input(text: str) -> str:
     sanitized = "".join(ch for ch in sanitized if unicodedata.category(ch)[0] != "C")
 
     # 4. Check for known injection signatures
-    for pattern in PROMPT_INJECTION_SIGNATURES:
-        if re.search(pattern, sanitized):
-            raise HTTPException(status_code=400, detail="Malicious input pattern detected.")
+    _check_prompt_injection(sanitized)
 
     return sanitized.strip()

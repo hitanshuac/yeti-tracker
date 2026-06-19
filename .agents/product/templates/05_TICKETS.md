@@ -26,3 +26,8 @@ All tickets for the Yeti-Tracker Hack2Skill project have been completed.
 
 - `[x]` **TICKET-007: Yeti Advisor**
   - Implement secondary LLM call (`get_yeti_advice()`) for dynamic reduction strategies.
+
+- `[x]` **TICKET-008: Indian Carbon Engine Pivot**
+  - Transition from USD/miles to INR/km based on the ₹15.80/kg Social Cost of Carbon (SCC).
+  - Modify LLM extraction parsing layer to recover from mathematical expressions (Regex Evaluator).
+  - Force Continuous Confession loop, updating UUID session state natively.

@@ -4,14 +4,14 @@
 Yeti-Tracker is a Streamlit-based monolithic Python application. It leverages a Hybrid LLM pipeline (Groq), a localized embedded OLAP database (DuckDB), and robust schema validation (Pydantic) to securely manage the transition from natural language inputs to deterministic mathematical outputs.
 
 ## 2. Component Architecture
-1. **Frontend (Streamlit)**: Single-page application rendering the "Confessional" text area, verification sliders, Plotly gauges, and conditional "Over 9000" image overrides.
-2. **Ingestion Layer (Groq LLM + Pydantic)**: A prompt-engineered LLM (`llama-3.1-8b-instant`) extracts exactly three integers (Miles, AC, Steaks) from unstructured text and enforces them through the `ParsedPersonalData` Pydantic model.
-3. **Deterministic Core (DuckDB)**: A mathematically isolated SQL engine that calculates the 365-day cumulative CO2 footprint based *only* on the verified slider inputs.
-4. **Advisory Layer (Groq LLM)**: The `get_yeti_advice` function provides dynamic, gamified reduction strategies at the very end of the pipeline.
+1. **Frontend (Streamlit)**: Single-page application rendering the "Continuous Confessional" loop, verification sliders, Plotly gauges, and conditional Catastrophe image overrides.
+2. **Ingestion Layer (Groq LLM + Pydantic)**: A prompt-engineered LLM (`llama-3.3-70b-versatile`) extracts exactly five integers (Car KM, Flight KM, Transit KM, AC Hours, Restaurant Meals). A regex-based mathematical interceptor (`_recover_failed_generation`) parses failed mathematical expressions (e.g., `260 * 2`) to ensure valid JSON payload extraction.
+3. **Deterministic Core (DuckDB)**: A mathematically isolated SQL engine that calculates the cumulative CO2 footprint based *only* on the verified slider inputs. It tracks session history persistently via UUID and `yeti.duckdb`.
+4. **Advisory Layer & RAG (Groq LLM)**: The `get_yeti_advice` function uses DuckDB Full-Text Search to pull real Social Cost of Carbon (SCC) values, providing dynamic, gamified reduction strategies at the end of the pipeline based on the Indian baseline.
 5. **Observability**: `log_error_to_json` implements a thread-safe, idempotent, strictly typed JSON error logging mechanism per Tier 0 SRE rules.
 
 ## 3. Data Flow
-`User Text -> LLM JSON -> Pydantic Validation -> UI Sliders -> User Approval -> DuckDB Math -> UI Gamification -> LLM Yeti Advisor`
+`User Text -> LLM JSON -> Math Interceptor -> UI Sliders -> User Approval -> DuckDB Math -> UUID History DB -> UI Gamification -> DuckDB FTS -> LLM Yeti Advisor`
 
 ## 4. Dependencies
 - **Core**: Python 3.11+, Streamlit

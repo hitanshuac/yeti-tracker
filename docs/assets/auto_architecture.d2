@@ -1,0 +1,27 @@
+direction: right
+classes: {
+  module: {
+    shape: rectangle
+    style: {
+      border-radius: 5
+      fill: "#1e1e1e"
+      stroke: "#ffffff"
+      font-color: "#ffffff"
+    }
+  }
+}
+
+app: app { class: module }
+src_carbon_engine: src.carbon_engine { class: module }
+src_chart_factory: src.chart_factory { class: module }
+src_history: src.history { class: module }
+src_llm_service: src.llm_service { class: module }
+src_rag_service: src.rag_service { class: module }
+src_state_manager: src.state_manager { class: module }
+
+app -> src_chart_factory
+app -> src_history
+app -> src_llm_service
+app -> src_carbon_engine
+app -> src_state_manager
+app -> src_rag_service

@@ -57,16 +57,25 @@ Yeti-Tracker enforces strict engineering standards via the `.agents` framework. 
 
 ## Directory Structure
 
-- `src/`: Core logic and capabilities (e.g., `git_manager.py`, `observability.py`).
+- `app.py`: Thin Streamlit UI Orchestrator (~250 lines).
+- `src/`: Core service modules orchestrating business logic:
+  - `state_manager.py`: Pydantic AppState management.
+  - `carbon_engine.py`: Deterministic DuckDB math.
+  - `llm_service.py`: Groq extraction and Advisor interactions.
+  - `rag_service.py`: Context retrieval.
+  - `chart_factory.py`: Plotly visualizations.
+  - `history.py`: DuckDB connection pooling and telemetry.
+- `scripts/`: Internal tools, including `diagram_extractor.py` (AST codebase mapping).
 - `data/`: Local storage for `yeti.duckdb`, CSV baselines, and `error_logs.json`.
 - `.agents/`: Governance rules, product templates, agentic skills, and autonomous workflows.
-- `.antigravity/`: (Legacy reference; currently scrubbed in favor of `.agents/`).
 
 ## Adoption Method
 To inject the Agentic Brain into other projects, simply copy the `.agents/` directory to the root of your new project and invoke the `bootstrap.md` or `master-sync.md` workflows.
 
 ## Visual Reference Appendix
-*(Diagrams skipped during this sync pass to preserve existing structural baselines)*
+<p align="center">
+  <img src="docs/assets/auto_architecture_showcase.png" width="800" alt="Living System Architecture" />
+</p>
 <p align="center">
   <img src="data/assets/yeti.jpg" width="400" />
   <img src="data/assets/godzilla.jpg" width="400" />

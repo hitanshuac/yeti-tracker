@@ -7,6 +7,10 @@ A generalized, universal pipeline to scan the project for any programmatic diagr
 
 ## Execution Steps
 
+### Phase 0: Codebase Extraction (Auto-Sync)
+1. Execute `python scripts/diagram_extractor.py` to parse the `src/` directory.
+2. Ensure the script successfully outputs `docs/assets/auto_architecture.d2`.
+
 ### Phase 1: Diagram Discovery
 1. Scan the `docs/` folder (and any subfolders) for all `.d2` and `.py` diagram definition files.
 2. For each identified diagram file, extract the base `<diagram_name>` (e.g., `handover_flow.d2` -> `handover_flow`).

@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app import ParsedPersonalData
+from src.llm_service import ParsedPersonalData
 
 
 def test_parsed_personal_data_contract():
@@ -12,9 +12,15 @@ def test_parsed_personal_data_contract():
     assert validated.miles_driven == 20
     assert validated.restaurant_meals == 1
 
-    # Missing fields should raise ValidationError
+    # Partial fields should use defaults (ge=0, default=0)
+    partial = ParsedPersonalData(miles_driven=20)
+    assert partial.miles_driven == 20
+    assert partial.flight_miles == 0
+    assert partial.ac_hours == 0
+
+    # Negative values should raise ValidationError (ge=0 constraint)
     with pytest.raises(ValidationError):
-        ParsedPersonalData(miles_driven=20)  # Missing others
+        ParsedPersonalData(miles_driven=-5)
 
     # Invalid types should raise ValidationError
     with pytest.raises(ValidationError):

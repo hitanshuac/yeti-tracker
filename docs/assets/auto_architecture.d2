@@ -19,9 +19,9 @@ src_llm_service: src.llm_service { class: module }
 src_rag_service: src.rag_service { class: module }
 src_state_manager: src.state_manager { class: module }
 
-app -> src_chart_factory
-app -> src_history
-app -> src_llm_service
 app -> src_carbon_engine
 app -> src_state_manager
 app -> src_rag_service
+app -> src_llm_service
+app -> src_history
+app -> src_chart_factory

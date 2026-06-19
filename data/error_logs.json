@@ -683,5 +683,21 @@
     "message": "Missing GROQ_API_KEY.",
     "status": "UNRESOLVED",
     "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": "2026-06-19T16:54:25.314988Z",
+    "error_type": "SemanticOverrideHallucination",
+    "component": "agentic-governance",
+    "message": "The LLM agent hallucinated a raw git commit command and ignored the git_manager.py script because of a // turbo tag next to the words stage, commit, and push. Fixed by enforcing Tier 0 Deterministic Guardrails and banning raw git.",
+    "stack_trace_summary": "Traceback (most recent call last):\n  File \"<string>\", line 8, in <module>\nSemanticOverrideHallucination: The LLM agent hallucinated a raw git commit command and ignored the git_manager.py script because of a // turbo tag next to the words stage, commit, and push. Fixed by enforcing Tier 0 Deterministic Guardrails and banning raw git.\n",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
   }
 ]

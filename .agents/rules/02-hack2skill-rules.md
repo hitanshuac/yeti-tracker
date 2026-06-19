@@ -17,11 +17,11 @@ Make sure the following prerequisites are completed:
 - Maximum 3 attempts allowed.
 - The repository size must be less than 10 MB.
 - The GitHub repository must be public.
-- The repository should contain only one branch.
+- The repository MUST contain only one branch.
 - Failure to follow these rules may result in your submission not being evaluated.
 
 ## 3. Challenge Expectations
-Your solution should demonstrate:
+Your solution MUST demonstrate:
 - Ability to build a smart, dynamic assistant.
 - Logical decision making based on user context.
 - Practical and real-world usability.

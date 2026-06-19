@@ -16,6 +16,7 @@ The application was recently refactored from an 851-line `app.py` monolith into 
 - Do **NOT** remove the UI sliders. The architecture explicitly decoupled the LLM parsing from the DuckDB math to preserve idempotency and strict `f(x)=y` scientific validation.
 - Do **NOT** modify Streamlit widget bound values outside of the `on_click` event loop handlers (`handle_extract`, `handle_calculate`, `handle_reply`). Direct assignment will trigger a `StreamlitAPIException`.
 - All product templates (`.agents/product/templates/`) and ADRs (`.agents/architecture/adrs/`) accurately reflect this final state.
+- **Deterministic Guardrails**: The entire `.agents` governance framework has been sanitized of weak modals. All rules enforce absolute constraints and positive framing to prevent LLM hallucinations.
 
 ## Missing/Future Capabilities
 - **Database Expansion**: Currently, DuckDB performs simple math. It could be expanded to run `CROSS JOINS` against real EPA datasets for precise regional electricity tracking if the user inputs their zip code.

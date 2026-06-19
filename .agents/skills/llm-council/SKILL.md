@@ -3,7 +3,7 @@
 name: llm-council
 
 
-description: "Run any question, idea, or decision through a council of 5 AI advisors who independently analyze it, peer-review each other anonymously, and synthesize a final verdict. Based on Karpathy's LLM Council methodology. MANDATORY TRIGGERS: 'council this', 'run the council', 'war room this', 'pressure-test this', 'stress-test this', 'debate this'. STRONG TRIGGERS (use when combined with a real decision or tradeoff): 'should I X or Y', 'which option', 'what would you do', 'is this the right move', 'validate this', 'get multiple perspectives', 'I can't decide', 'I'm torn between'. Do NOT trigger on simple yes/no questions, factual lookups, or casual 'should I' without a meaningful tradeoff (e.g. 'should I use markdown' is not a council question). DO trigger when the user presents a genuine decision with stakes, multiple options, and context that suggests they want it pressure-tested from multiple angles."
+description: "Run any question, idea, or decision through a council of 5 AI advisors who independently analyze it, peer-review each other anonymously, and synthesize a final verdict. Based on Karpathy's LLM Council methodology. MANDATORY TRIGGERS: 'council this', 'run the council', 'war room this', 'pressure-test this', 'stress-test this', 'debate this'. STRONG TRIGGERS (use when combined with a real decision or tradeoff): 'MUST I X or Y', 'which option', 'what would you do', 'is this the right move', 'validate this', 'get multiple perspectives', 'I can't decide', 'I'm torn between'. Do NOT trigger on simple yes/no questions, factual lookups, or casual 'MUST I' without a meaningful tradeoff (e.g. 'MUST I use markdown' is not a council question). DO trigger when the user presents a genuine decision with stakes, multiple options, and context that suggests they want it pressure-tested from multiple angles."
 
 ---
 
@@ -14,7 +14,7 @@ description: "Run any question, idea, or decision through a council of 5 AI advi
 You ask one AI a question, you get one answer. That answer might be great. It might be mid. You have no way to tell because you only saw one perspective.
 
 
-The council fixes this. It runs your question through 5 independent advisors, each thinking from a fundamentally different angle. Then they review each other's work. Then a chairman synthesizes everything into a final recommendation that tells you where the advisors agree, where they clash, and what you should actually do.
+The council fixes this. It runs your question through 5 independent advisors, each thinking from a fundamentally different angle. Then they review each other's work. Then a chairman synthesizes everything into a final recommendation that tells you where the advisors agree, where they clash, and what you MUST actually do.
 
 
 This is adapted from Andrej Karpathy's LLM Council. He dispatches queries to multiple models, has them peer-review each other anonymously, then a chairman produces the final answer. We do the same thing inside Claude using sub-agents with different thinking lenses instead of different models.
@@ -31,7 +31,7 @@ The council is for questions where being wrong is expensive.
 
 Good council questions:
 
-- "Should I launch a $97 workshop or a $497 course?"
+- "MUST I launch a $97 workshop or a $497 course?"
 
 - "Which of these 3 positioning angles is strongest?"
 
@@ -39,7 +39,7 @@ Good council questions:
 
 - "Here's my landing page copy. What's weak?"
 
-- "Should I hire a VA or build an automation first?"
+- "MUST I hire a VA or build an automation first?"
 
 
 Bad council questions:
@@ -120,7 +120,7 @@ When the user says "council this" (or any trigger phrase), do two things before 
 Use `Glob` and quick `Read` calls to find these. Don't spend more than 30 seconds on this. You're looking for the 2-3 files that would give advisors the context they need to give specific, grounded advice instead of generic takes.
 
 
-**B. Frame the question.** Take the user's raw question AND the enriched context and reframe it as a clear, neutral prompt that all five advisors will receive. The framed question should include:
+**B. Frame the question.** Take the user's raw question AND the enriched context and reframe it as a clear, neutral prompt that all five advisors will receive. The framed question MUST include:
 
 
 1. The core decision or question
@@ -151,10 +151,10 @@ Spawn all 5 advisors simultaneously as sub-agents. Each gets:
 
 2. The framed question
 
-3. A clear instruction: respond independently. Do not hedge. Do not try to be balanced. Lean fully into your assigned perspective. If you see a fatal flaw, say it. If you see massive upside, say it. Your job is to represent your angle as strongly as possible. The synthesis comes later.
+3. A clear instruction: respond independently. Do not hedge. Do not MUST be balanced. Lean fully into your assigned perspective. If you see a fatal flaw, say it. If you see massive upside, say it. Your job is to represent your angle as strongly as possible. The synthesis comes later.
 
 
-Each advisor should produce a response of 150-300 words. Long enough to be substantive, short enough to be scannable.
+Each advisor MUST produce a response of 150-300 words. Long enough to be substantive, short enough to be scannable.
 
 
 **Sub-agent prompt template:**
@@ -178,7 +178,7 @@ A user has brought this question to the council:
 ---
 
 
-Respond from your perspective. Be direct and specific. Don't hedge or try to be balanced. Lean fully into your assigned angle. The other advisors will cover the angles you're not covering.
+Respond from your perspective. Be direct and specific. Don't hedge or MUST be balanced. Lean fully into your assigned angle. The other advisors will cover the angles you're not covering.
 
 
 Keep your response between 150-300 words. No preamble. Go straight into your analysis.
@@ -202,7 +202,7 @@ Spawn 5 new sub-agents, one for each advisor. Each reviewer sees all 5 anonymize
 
 2. Which response has the biggest blind spot and what is it?
 
-3. What did ALL responses miss that the council should consider?
+3. What did ALL responses miss that the council MUST consider?
 
 
 **Reviewer prompt template:**
@@ -255,7 +255,7 @@ Answer these three questions. Be specific. Reference responses by letter.
 
 2. Which response has the biggest blind spot? What is it missing?
 
-3. What did ALL five responses miss that the council should consider?
+3. What did ALL five responses miss that the council MUST consider?
 
 
 Keep your review under 200 words. Be direct.
@@ -287,7 +287,7 @@ The chairman's job is to produce the final council output. It follows this struc
 4. **The recommendation** — a clear, actionable recommendation. Not "it depends." Not "consider both sides." A real answer. The chairman can disagree with the majority if the reasoning supports it.
 
 
-5. **The one thing you should do first** — a single concrete next step. Not a list of 10 things. One thing.
+5. **The one thing you MUST do first** — a single concrete next step. Not a list of 10 things. One thing.
 
 
 **Chairman prompt template:**
@@ -460,7 +460,7 @@ Only save a transcript if the user asks for it or if the question is significant
 
 - **Always anonymize for peer review.** If reviewers know which advisor said what, they'll defer to certain thinking styles instead of evaluating on merit.
 
-- **The chairman can disagree with the majority.** If 4 out of 5 advisors say "do it" but the reasoning of the 1 dissenter is strongest, the chairman should side with the dissenter and explain why.
+- **The chairman can disagree with the majority.** If 4 out of 5 advisors say "do it" but the reasoning of the 1 dissenter is strongest, the chairman MUST side with the dissenter and explain why.
 
 - **Don't council trivial questions.** If the user asks something with one right answer, just answer it. The council is for genuine uncertainty where multiple perspectives add value.
 

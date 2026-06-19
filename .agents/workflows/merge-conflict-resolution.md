@@ -19,7 +19,7 @@ Do NOT pause for manual approval on predictable boilerplate collisions. Instead,
 - **`README.md` (Isolation Strategy):** DO NOT overwrite the target project's `README.md`. Keep the Base Environment documentation isolated in a separate file named `AGENT_DOCS.md`. Read the target project's `README.md` and append a single link to it (e.g., `[View Agentic Environment Documentation](AGENT_DOCS.md)`) at the bottom of the file. Ensure that credits to the original "study antigravity repo" are included in `AGENT_DOCS.md`.
 
 ### 3. Absolute No-Deletion Mandate
-- If you encounter obsolete folders (like a stale `.antigravity/` cache) or files that you believe should be deleted to prevent conflicts, **DO NOT DELETE THEM AUTOMATICALLY.**
+- If you encounter obsolete folders (like a stale `.antigravity/` cache) or files that you believe MUST be deleted to prevent conflicts, **DO NOT DELETE THEM AUTOMATICALLY.**
 - Any deletion must be proposed to the user and requires explicit authorization to proceed.
 
 ### 4. Proceed to Scaffolding

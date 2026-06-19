@@ -8,7 +8,7 @@ description: Safely backports locally hardened rules and workflows to the upstre
 This workflow automates the backporting of newly hardened rules and workflows from the local project to the master `Antigravity_Environment_Max` template repository. It solves the issue of keeping the upstream template expanded without triggering painful Git merge conflicts.
 
 ## Strategy: Local as Source of Truth
-When an agent hardens a rule locally (e.g., after a post-mortem), the local `.agents/` folder becomes the most advanced version of the framework. Therefore, the upstream repository should simply **adopt** the local changes entirely.
+When an agent hardens a rule locally (e.g., after a post-mortem), the local `.agents/` folder becomes the most advanced version of the framework. Therefore, the upstream repository MUST simply **adopt** the local changes entirely.
 
 ## Execution Steps
 

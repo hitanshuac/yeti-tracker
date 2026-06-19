@@ -29,7 +29,7 @@ When generating code, scaffolding architecture, or debugging issues within this 
 *Treat backing services as attached resources.*
 - DuckDB databases, external APIs, message queues, and any third-party service must be treated as attached resources addressable via a URL or connection string stored in config (Factor III).
 - The application must be able to swap a local DuckDB instance for a remote MotherDuck endpoint without code changes — only config changes.
-- No backing service should be treated as "special." Local and third-party services are interchangeable.
+- No backing service MUST be treated as "special." Local and third-party services are interchangeable.
 
 ## Factor V: Build, Release, Run
 *Strictly separate build and run stages.*
@@ -41,7 +41,7 @@ When generating code, scaffolding architecture, or debugging issues within this 
 ## Factor VI: Processes
 *Execute the app as one or more stateless processes.*
 - The application (e.g., FastAPI gateway) must execute **statelessly**.
-- The router should hold no memory of past requests.
+- The router MUST hold no memory of past requests.
 - Stateful persistence must be delegated to backing services (e.g., DuckDB telemetry, Parquet Dead-Letter Queues).
 - Never store session state in local memory or the filesystem within `src/`.
 
@@ -50,11 +50,11 @@ When generating code, scaffolding architecture, or debugging issues within this 
 - The application must be self-contained and bind to a port to serve requests.
 - For Hugging Face Spaces: bind to `0.0.0.0:7860` (see `hf-deployment-standards.md`).
 - For local development: bind to `0.0.0.0:8000` (or as configured via environment variable `PORT`).
-- No external web server injection (e.g., Apache, Nginx) should be assumed at the application layer.
+- No external web server injection (e.g., Apache, Nginx) MUST be assumed at the application layer.
 
 ## Factor VIII: Concurrency
 *Scale out via the process model.*
-- Design for horizontal scalability. Each process should be stateless (Factor VI) and disposable (Factor IX).
+- Design for horizontal scalability. Each process MUST be stateless (Factor VI) and disposable (Factor IX).
 - On constrained environments (HF Spaces free tier), run a single worker (`--workers 1`) to avoid OOM kills.
 - On production environments, scale by increasing the number of identical worker processes, not by adding threads to a monolith.
 
@@ -88,5 +88,5 @@ When 12-Factor Factor XI conflicts with project constraints that prohibit databa
 ## Factor XII: Admin Processes
 *Run admin/management tasks as one-off processes.*
 - Database migrations, one-time data fixes, and diagnostic scripts must be run as isolated one-off commands, not baked into the application startup.
-- Admin scripts should live in a dedicated `scripts/` directory (or be invoked via `python -m`) and use the same codebase and config as the running application.
+- Admin scripts MUST live in a dedicated `scripts/` directory (or be invoked via `python -m`) and use the same codebase and config as the running application.
 - Never modify production data via ad-hoc SQL. Use versioned migration scripts that are idempotent.

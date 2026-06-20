@@ -46,6 +46,16 @@ def _handle_extract() -> None:
     st.session_state.daytime_ac_hours = getattr(parsed, "daytime_ac_hours", 0)
     st.session_state.restaurant_meals = getattr(parsed, "restaurant_meals", 0)
 
+    # Save AI baselines for SRE Override tracking
+    st.session_state.ai_car_km = st.session_state.car_km
+    st.session_state.ai_flight_km = st.session_state.flight_km
+    st.session_state.ai_transit_km = st.session_state.transit_km
+    st.session_state.ai_daily_sleep_hours = st.session_state.daily_sleep_hours
+    st.session_state.ai_sleep_ac_on = st.session_state.sleep_ac_on
+    st.session_state.ai_daytime_ac_hours = st.session_state.daytime_ac_hours
+    st.session_state.ai_restaurant_meals = st.session_state.restaurant_meals
+
+    st.session_state.is_extracting = True
     st.session_state.show_missing_electricity_prompt = True
 
 
@@ -68,32 +78,115 @@ def _handle_calculate() -> None:
     if messy != last:
         _handle_extract()
         st.session_state.auto_extracted = True
+
+    # Detect SRE Human Override
+    override_fields = [
+        ("car_km", "ai_car_km", 0),
+        ("flight_km", "ai_flight_km", 0),
+        ("transit_km", "ai_transit_km", 0),
+        ("daily_sleep_hours", "ai_daily_sleep_hours", 8),
+        ("sleep_ac_on", "ai_sleep_ac_on", False),
+        ("daytime_ac_hours", "ai_daytime_ac_hours", 0),
+        ("restaurant_meals", "ai_restaurant_meals", 0),
+    ]
+    override = any(
+        st.session_state.get(field) != st.session_state.get(ai_field, default)
+        for field, ai_field, default in override_fields
+    )
+
+    st.session_state.human_override = override
     st.session_state.run_math = True
     st.session_state.has_calculated = True
+    st.session_state.show_missing_electricity_prompt = False
 
 
 def _set_random_persona() -> None:
-    """Set a random demo persona into the confessional."""
+    """Set a random demo persona with hardcoded values — zero LLM calls."""
     personas = [
-        (
-            "The Commuter: I drive about 30 km to the office in Andheri every weekday. "
-            "No flights. Eat out once a week at a local restaurant."
-        ),
-        (
-            "The Crypto Bro: I run 5 AC units 24/7 for my mining rig in Pune. "
-            "I eat out 3 times a day. I fly business class to Goa once a month."
-        ),
-        (
-            "The Corporate Jetsetter: I fly Delhi-Bangalore every week for work. "
-            "I take Ola everywhere (maybe 80 km a week). Eat out every day."
-        ),
-        ("The Eco-Warrior: I ride my bike to work. No AC. " "Eat out maybe once a month. No flights."),
-        (
-            "The Suburbanite: I drive an SUV about 60 km a day in Noida for errands. "
-            "Keep the AC blasted all summer. Fly to Kerala once a year for vacation."
-        ),
+        {
+            "name": "The Commuter",
+            "text": (
+                "The Commuter: I drive about 30 km to the office in Andheri every weekday. "
+                "No flights. Eat out once a week at a local restaurant."
+            ),
+            "car_km": 7800,
+            "flight_km": 0,
+            "transit_km": 0,
+            "daily_sleep_hours": 8,
+            "sleep_ac_on": False,
+            "daytime_ac_hours": 0,
+            "restaurant_meals": 52,
+        },
+        {
+            "name": "The Crypto Bro",
+            "text": (
+                "The Crypto Bro: I run 5 AC units 24/7 for my mining rig in Pune. "
+                "I eat out 3 times a day. I fly business class to Goa once a month."
+            ),
+            "car_km": 0,
+            "flight_km": 9600,
+            "transit_km": 0,
+            "daily_sleep_hours": 7,
+            "sleep_ac_on": True,
+            "daytime_ac_hours": 120,
+            "restaurant_meals": 1095,
+        },
+        {
+            "name": "The Corporate Jetsetter",
+            "text": (
+                "The Corporate Jetsetter: I fly Delhi-Bangalore every week for work. "
+                "I take Ola everywhere (maybe 80 km a week). Eat out every day."
+            ),
+            "car_km": 4160,
+            "flight_km": 145600,
+            "transit_km": 0,
+            "daily_sleep_hours": 6,
+            "sleep_ac_on": True,
+            "daytime_ac_hours": 4,
+            "restaurant_meals": 365,
+        },
+        {
+            "name": "The Eco-Warrior",
+            "text": ("The Eco-Warrior: I ride my bike to work. No AC. " "Eat out maybe once a month. No flights."),
+            "car_km": 0,
+            "flight_km": 0,
+            "transit_km": 2600,
+            "daily_sleep_hours": 8,
+            "sleep_ac_on": False,
+            "daytime_ac_hours": 0,
+            "restaurant_meals": 12,
+        },
+        {
+            "name": "The Suburbanite",
+            "text": (
+                "The Suburbanite: I drive an SUV about 60 km a day in Noida for errands. "
+                "Keep the AC blasted all summer. Fly to Kerala once a year for vacation."
+            ),
+            "car_km": 21900,
+            "flight_km": 2400,
+            "transit_km": 0,
+            "daily_sleep_hours": 8,
+            "sleep_ac_on": True,
+            "daytime_ac_hours": 8,
+            "restaurant_meals": 104,
+        },
     ]
-    st.session_state.confessional_input = random.choice(personas)
+    persona = random.choice(personas)
+    st.session_state.confessional_input = persona["text"]
+    for key in [
+        "car_km",
+        "flight_km",
+        "transit_km",
+        "daily_sleep_hours",
+        "sleep_ac_on",
+        "daytime_ac_hours",
+        "restaurant_meals",
+    ]:
+        st.session_state[key] = persona[key]
+    # Auto-trigger calculation — no LLM needed
+    st.session_state.run_math = True
+    st.session_state.has_calculated = True
+    st.session_state.show_missing_electricity_prompt = False
 
 
 def _toggle_rescue() -> None:
@@ -107,12 +200,86 @@ def _toggle_rescue() -> None:
 
 
 def _render_gamification_header(result, tier_info) -> None:
-    """Render the top gamification banner and tier image."""
+    """Render the top gamification banner, budget bar, and tier progress."""
+    if tier_info.tier == "Category 3 Catastrophe":
+        st.markdown(
+            """
+            <style>
+            .stApp {
+                background-color: #3b0000 !important;
+                color: #ffcccc !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
     st.markdown(
         f"<h1 style='text-align: center; color: {tier_info.color}; "
         f"font-size: 3.5em;' role='status' aria-live='polite'>{tier_info.message}</h1>",
         unsafe_allow_html=True,
     )
+
+    # --- Budget Bar: Daily Survival Allowance ---
+    daily_kg = result.yearly_co2_kg / 365.0
+    baseline_daily = 2500.0 / 365.0  # 6.8 kg/day
+    # Scale: 0 → baseline = green zone, baseline → 3x baseline = red zone
+    bar_ceiling = baseline_daily * 3.0  # ~20.5 kg/day = visual max
+    budget_pct = min(1.0, max(0.01, daily_kg / bar_ceiling))
+
+    if daily_kg <= baseline_daily:
+        bar_color = "#00cc66"  # green — under budget
+        bar_label = f"✅ {daily_kg:.1f} / {baseline_daily:.1f} kg — Within allowance"
+    elif daily_kg <= baseline_daily * 2:
+        bar_color = "#ffaa00"  # amber — over budget
+        bar_label = f"⚠️ {daily_kg:.1f} / {baseline_daily:.1f} kg — OVER allowance"
+    else:
+        bar_color = "#ff4b4b"  # red — catastrophic
+        bar_label = f"🔥 {daily_kg:.1f} / {baseline_daily:.1f} kg — CRITICAL OVERSHOOT"
+
+    st.markdown("#### ⏳ Daily Survival Allowance")
+    st.markdown(
+        f"<div style='background:#222;border-radius:8px;overflow:hidden;height:32px;width:100%;position:relative;'>"
+        f"<div style='background:{bar_color};width:{budget_pct*100:.1f}%;height:100%;border-radius:8px;"
+        f"transition:width 0.5s ease;'></div>"
+        f"<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
+        f"color:white;font-weight:bold;font-size:0.85em;white-space:nowrap;'>{bar_label}</span>"
+        f"</div>",
+        unsafe_allow_html=True,
+    )
+
+    # --- Tier Progress Bar: Current calculation ---
+    current_co2 = result.yearly_co2_kg
+    tier_max = 30000.0  # Category 3 threshold
+    tier_pct = min(1.0, max(0.01, current_co2 / tier_max))
+
+    # Determine tier color for progress bar
+    if current_co2 <= 9000:
+        tier_bar_color = "#00cc66"
+        tier_label_text = "Human"
+    elif current_co2 <= 15000:
+        tier_bar_color = "#ffd700"
+        tier_label_text = "Cat 1 Warning"
+    elif current_co2 <= 30000:
+        tier_bar_color = "#ffaa00"
+        tier_label_text = "Cat 2 Catastrophe"
+    else:
+        tier_bar_color = "#ff4b4b"
+        tier_label_text = "Cat 3 Catastrophe"
+
+    tier_bar_label = f"{tier_label_text} — {current_co2:,.0f} / {tier_max:,.0f} kg"
+    st.markdown("#### 📊 Session Tier Tracker")
+    st.markdown(
+        f"<div style='background:#222;border-radius:8px;overflow:hidden;height:32px;width:100%;"
+        f"position:relative;margin-bottom:8px;'>"
+        f"<div style='background:{tier_bar_color};width:{tier_pct*100:.1f}%;height:100%;border-radius:8px;"
+        f"transition:width 0.8s ease;'></div>"
+        f"<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
+        f"color:white;font-weight:bold;font-size:0.85em;white-space:nowrap;'>{tier_bar_label}</span>"
+        f"</div>",
+        unsafe_allow_html=True,
+    )
+
     if getattr(result, "is_anomaly", False):
         st.warning("ANOMALY DETECTED: Your recent input deviates significantly from your historical baseline!")
     if tier_info.image_path and os.path.exists(tier_info.image_path):
@@ -136,53 +303,61 @@ def _render_advisor_section(result, tier_info) -> None:
     daytime_ac = st.session_state.get("daytime_ac_hours", 0)
     r_meals = st.session_state.get("restaurant_meals", 0)
 
-    with st.spinner("Analyzing your financial doom..."):
-        rag_context = fetch_rag_context(st.session_state.get("confessional_input", ""))
-        kpis = fetch_historical_kpis(st.session_state.session_id)
-        advice = get_advisor_response(
-            result.yearly_co2_kg,
-            result.carbon_tax_inr,
-            c_km,
-            f_km,
-            t_km,
-            sleep_h,
-            sleep_ac,
-            daytime_ac,
-            r_meals,
-            tier_info.tier,
-            "Save the Planet",
-            kpis,
-            rag_context,
-        )
+    needs_new_advice = st.session_state.get("run_math", False) or "cached_advice" not in st.session_state
 
-        # Guilt Easing Component
-        st.info(f"🗣️ **Yeti Advisor asks:** {advice.guilt_easing_question}")
-        st.success(f"☀️ **Silver Lining:** {advice.silver_lining}")
-        st.error(f"🔥 **The Roast:** {advice.roast}")
-
-        # Feedback Loop Input
-        st.text_input(
-            "Confess more...",
-            key="reply_input",
-            on_change=_handle_reply,
-            placeholder="Type your response here and hit Enter...",
-            help="Continue the conversation with the Yeti Advisor. Your reply will be appended to the confessional.",
-        )
-
-        total_monthly_savings = sum(a.est_monthly_savings_inr for a in advice.alternatives)
-
-        if advice.alternatives:
-            st.markdown("#### Adapt These TODAY (Instant Gratification)")
-            alts_display = pd.DataFrame([a.model_dump() for a in advice.alternatives]).rename(
-                columns={
-                    "type": "Strategy",
-                    "alternative": "What To Do",
-                    "pros": "Pros",
-                    "cons": "Cons",
-                    "est_monthly_savings_inr": "Monthly Savings (INR)",
-                }
+    if needs_new_advice:
+        with st.spinner("Analyzing your financial doom..."):
+            rag_context = fetch_rag_context(st.session_state.get("confessional_input", ""))
+            kpis = fetch_historical_kpis(st.session_state.session_id)
+            advice = get_advisor_response(
+                result.yearly_co2_kg,
+                result.carbon_tax_inr,
+                c_km,
+                f_km,
+                t_km,
+                sleep_h,
+                sleep_ac,
+                daytime_ac,
+                r_meals,
+                tier_info.tier,
+                "Save the Planet",
+                kpis,
+                rag_context,
             )
-            st.table(alts_display.set_index("Strategy"))
+            st.session_state.cached_advice = advice
+            st.session_state.cached_rag_context = rag_context
+    else:
+        advice = st.session_state.cached_advice
+        rag_context = st.session_state.cached_rag_context
+
+    # Guilt Easing Component
+    st.info(f"🗣️ **Yeti Advisor asks:** {advice.guilt_easing_question}")
+    st.success(f"☀️ **Silver Lining:** {advice.silver_lining}")
+    st.error(f"🔥 **The Roast:** {advice.roast}")
+
+    # Feedback Loop Input
+    st.text_input(
+        "Confess more...",
+        key="reply_input",
+        on_change=_handle_reply,
+        placeholder="Type your response here and hit Enter...",
+        help="Continue the conversation with the Yeti Advisor. Your reply will be appended to the confessional.",
+    )
+
+    total_monthly_savings = sum(a.est_monthly_savings_inr for a in advice.alternatives)
+
+    if advice.alternatives:
+        st.markdown("#### Adapt These TODAY (Instant Gratification)")
+        alts_display = pd.DataFrame([a.model_dump() for a in advice.alternatives]).rename(
+            columns={
+                "type": "Strategy",
+                "alternative": "What To Do",
+                "pros": "Pros",
+                "cons": "Cons",
+                "est_monthly_savings_inr": "Monthly Savings (INR)",
+            }
+        )
+        st.table(alts_display.set_index("Strategy"))
 
     return total_monthly_savings
 
@@ -261,6 +436,11 @@ def _render_input_section() -> None:
             "Confess your lifestyle:",
             height=100,
             key="confessional_input",
+            placeholder=(
+                "e.g. I drove 15km to work today, ran the AC for about 4 hours "
+                "in the afternoon, and ate at a restaurant for dinner. "
+                "I usually sleep 8 hours with the AC off."
+            ),
             help=(
                 "Describe your daily habits in plain English. The AI will extract "
                 "transport distances, AC usage, and dining frequency automatically."
@@ -285,21 +465,25 @@ def _render_input_section() -> None:
 
     with col2:
         st.markdown("### 2. Human Verification")
-        st.info(
-            "The math engine ONLY uses these deterministic sliders. "
-            "Verify the AI extraction is correct before calculating."
+        st.caption(
+            "🏠 **Everyone starts at 2,500 kg CO₂/year** (India baseline). "
+            "The sliders track how much *more* your lifestyle adds on top."
         )
 
         if st.session_state.get("show_missing_electricity_prompt", False):
-            st.warning(
-                "🔌 **Yeti Advisor:** How long do you sleep? Do you sleep with the AC on? "
-                "What about daytime AC usage? Verify or adjust your hours below."
+            st.info(
+                "🔌 **Yeti extracted your data.** Verify the AC and sleep "
+                "hours below — adjust if the AI missed anything."
             )
+
+        if st.session_state.get("is_extracting", False):
+            st.toast("Yeti extracted your data successfully!", icon="✅")
+            st.session_state.is_extracting = False
 
         c_max, f_max, t_max, r_max = 50000, 100000, 50000, 1095
 
         st.slider(
-            "Car Kilometers (Yearly)",
+            "Combustion Toll (Car KM)",
             0,
             max(c_max, st.session_state.car_km),
             key="car_km",
@@ -334,9 +518,9 @@ def _render_input_section() -> None:
             help="Do you leave the AC or cooler running while you sleep?",
         )
         st.slider(
-            "Daily Daytime AC Hours",
+            "Grid Drain (Daytime AC Hours)",
             0,
-            16,
+            max(24, st.session_state.get("daytime_ac_hours", 0) * 2),
             st.session_state.get("daytime_ac_hours", 0),
             key="daytime_ac_hours",
             help="Average hours of AC/cooler usage during the day while awake.",
@@ -387,6 +571,8 @@ def _render_results_section() -> None:
     if st.session_state.get("run_math", False):
         if st.session_state.pop("auto_extracted", False):
             st.success("✅ Auto-extracted your new text!")
+        if st.session_state.pop("human_override", False):
+            st.success("👨‍💻 Human Override Accepted. AI telemetry corrected.")
 
     result = run_duckdb_math(
         st.session_state.get("car_km", 0),
@@ -408,10 +594,13 @@ def _render_results_section() -> None:
             result.yearly_co2_kg / 365.0,
             tier_info.tier,
         )
-        st.session_state.run_math = False
 
     total_monthly_savings = _render_advisor_section(result, tier_info)
     _render_financial_dashboard(result, total_monthly_savings)
+
+    # Reset the flag AFTER all sub-sections have used it to determine if they should run API calls
+    if st.session_state.get("run_math", False):
+        st.session_state.run_math = False
 
 
 def main() -> None:

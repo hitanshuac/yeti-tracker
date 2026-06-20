@@ -11,8 +11,11 @@ import re
 import time
 from typing import Any
 
+from dotenv import load_dotenv
 from groq import Groq, GroqError
 from pydantic import BaseModel, Field
+
+load_dotenv(".secrets/.env")
 
 # ---------------------------------------------------------------------------
 # Pydantic response schemas (enforced, not decorative)
@@ -27,7 +30,7 @@ class ParsedPersonalData(BaseModel):
     transit_km: int = Field(ge=0, default=0)
     daily_sleep_hours: int = Field(ge=0, le=24, default=8)
     sleep_ac_on: bool = Field(default=False)
-    daytime_ac_hours: int = Field(ge=0, le=24, default=0)
+    daytime_ac_hours: int = Field(ge=0, default=0)
     restaurant_meals: int = Field(ge=0, default=0)
 
 
@@ -107,7 +110,7 @@ The user's primary goal today is: {goal}. YOU MUST TAILOR YOUR ADVICE SPECIFICAL
 You must output a strict JSON object matching this schema:
 {{
   "silver_lining": "One sentence praising the user for a sustainable choice they made or at least acknowledging their honesty.",
-  "roast": "One witty, aggressive observation calling out their massive forecast and their history.",
+  "roast": "One witty, aggressive observation calling out their massive forecast. DO NOT use abstract kg measurements. INVENT a unique, highly specific Indian analogy based EXACTLY on their worst habit (e.g. if they flew, talk about aviation fuel over Mumbai; if they used AC, talk about collapsing the local grid). NEVER repeat the same analogy twice.",
   "guilt_easing_question": "A friendly, harmless-sounding follow up question that subtly encourages them to confess another bad habit (e.g., 'Do you have any fun weekend trips planned?').",
   "alternatives": [
     {{
@@ -221,6 +224,7 @@ def _attempt_groq_extraction(client: Any, prompt: str) -> dict | None:
             model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.0,
+            max_tokens=200,
             response_format={"type": "json_object"},
         )
         content = response.choices[0].message.content
@@ -228,6 +232,8 @@ def _attempt_groq_extraction(client: Any, prompt: str) -> dict | None:
     except GroqError as e:
         error_str = str(e)
         _log_llm_error(type(e).__name__, "parse_confession", error_str)
+        if getattr(e, "status_code", 200) == 429 or "rate limit" in error_str.lower():
+            return {"rate_limit": True}
         return _handle_groq_error(error_str)
     except Exception as e:  # pylint: disable=broad-exception-caught
         error_str = str(e)
@@ -292,6 +298,8 @@ def parse_confession(text: str) -> ParsedPersonalData:
 
     for _attempt in range(3):
         result = _attempt_groq_extraction(client, prompt)
+        if result and "rate_limit" in result:
+            break  # Fast-fail on rate limits instead of burning retries
         if result:
             return _parse_groq_result(result)
         time.sleep(1)
@@ -310,15 +318,24 @@ def _build_advisor_prompt(
     sleep_ac_on: bool,
     daytime_ac_hours: int,
     restaurant_meals: int,
+    tier: str,
     goal: str,
     kpis: str,
     rag_context: str,
 ) -> str:
     """Helper to build the complex advisor prompt."""
-    if carbon > 15000:
+    if tier == "Category 3 Catastrophe" or carbon > 15000:
         system_msg = "You are a ruthless climate auditor. The user is actively destroying the planet."
-    elif carbon > 8000:
-        system_msg = "You are a strict, disappointed advisor. The user is careless."
+    elif tier == "Category 2 Catastrophe" or carbon > 8000:
+        system_msg = (
+            "You are a strict, disappointed advisor. The user is careless. "
+            "CRITICAL INSTRUCTION: You MUST include a 'Near Miss' roast mentioning "
+            "that they were extremely close to staying in Tier 1. Make them regret a "
+            "specific action from today (e.g. 'If you had turned off the Daytime AC "
+            "45 minutes earlier, you would have survived.')."
+        )
+    elif abs(carbon - 2500) < 100:
+        system_msg = "System Error: No bloat detected. The Yeti is starving. You lived like a monk today. Act shocked."
     else:
         system_msg = "You are a friendly environmental scientist. The user's footprint is okay, but could be better."
 
@@ -352,7 +369,7 @@ def get_advisor_response(
     sleep_ac_on: bool,
     daytime_ac_hours: int,
     restaurant_meals: int,
-    tier: str,  # pylint: disable=unused-argument
+    tier: str,
     goal: str,
     kpis: str,
     rag_context: str = "",
@@ -372,6 +389,7 @@ def get_advisor_response(
         sleep_ac_on,
         daytime_ac_hours,
         restaurant_meals,
+        tier,
         goal,
         kpis,
         rag_context,
@@ -383,6 +401,7 @@ def get_advisor_response(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "system", "content": prompt}],
             temperature=0.7,
+            max_tokens=800,
             response_format={"type": "json_object"},
         )
         data = json.loads(response.choices[0].message.content)

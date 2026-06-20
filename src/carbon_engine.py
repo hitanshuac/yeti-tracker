@@ -183,7 +183,7 @@ def classify_tier(yearly_co2: float) -> TierClassification:
         return TierClassification(
             tier="Category 3 Catastrophe",
             color="#ff4b4b",
-            message=f"CATEGORY 3 CATASTROPHE ({monthly:,.0f} kg / mo)",
+            message="You didn't just leave a footprint today, you left a crater. The Yeti is obese.",
             image_path="data/assets/tier3.jpg",
         )
     if yearly_co2 > 15000:

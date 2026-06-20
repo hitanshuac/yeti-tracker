@@ -19,25 +19,38 @@ class AppState(BaseModel):
 
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
 
-    # Slider values (yearly integers)
+    # Slider values (yearly integers/values)
     car_km: int = 0
     flight_km: int = 0
     transit_km: int = 0
-    ac_hours: int = 0
+    daily_sleep_hours: int = 8
+    sleep_ac_on: bool = False
+    daytime_ac_hours: int = 0
     restaurant_meals: int = 0
 
+    # AI Parsed Baselines (for override detection)
+    ai_car_km: int = 0
+    ai_flight_km: int = 0
+    ai_transit_km: int = 0
+    ai_daily_sleep_hours: int = 8
+    ai_sleep_ac_on: bool = False
+    ai_daytime_ac_hours: int = 0
+    ai_restaurant_meals: int = 0
+
     # Confessional text
-    confessional_input: str = (
-        "I drove about 60 km round trip for work. " "Ate out at a restaurant for lunch. " "Left the AC on for 10 hours."
-    )
+    confessional_input: str = ""
     last_extracted_text: str = ""
 
     # Control flags
     has_calculated: bool = False
     run_math: bool = False
     auto_extracted: bool = False
+    is_extracting: bool = False
+    human_override: bool = False
     show_rescue: bool = False
+    show_missing_electricity_prompt: bool = False
     history_seeded: bool = False
+    peak_yearly_co2: float = 0.0
 
 
 # ---------------------------------------------------------------------------

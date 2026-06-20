@@ -145,5 +145,271 @@
     "message": "Missing GROQ_API_KEY.",
     "status": "UNRESOLVED",
     "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"car_km\": 200 * 1,\\n   \"flight_km\": 0,\\n   \"transit_km\": 0,\\n   \"daily_sleep_hours\": 8,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 0,\\n   \"restaurant_meals\": 0\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "ValueError",
+    "component": "carbon_engine",
+    "message": "Simulated engine crash",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "ValueError",
+    "component": "carbon_engine",
+    "message": "Simulated engine crash",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "ValueError",
+    "component": "carbon_engine",
+    "message": "Simulated engine crash",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "ValueError",
+    "component": "carbon_engine",
+    "message": "Simulated engine crash",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "ValueError",
+    "component": "carbon_engine",
+    "message": "Simulated engine crash",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "ValueError",
+    "component": "carbon_engine",
+    "message": "Simulated engine crash",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
   }
 ]

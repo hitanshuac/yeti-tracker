@@ -15,7 +15,9 @@ def test_run_duckdb_math():
         car_km=100,
         flight_km=500,
         transit_km=50,
-        ac_hours=10,
+        daily_sleep_hours=8,
+        sleep_ac_on=True,
+        daytime_ac_hours=2,
         restaurant_meals=2,
         dataset_path=FIXTURE_PATH,
     )
@@ -26,13 +28,15 @@ def test_run_duckdb_math():
         car_km=0,
         flight_km=0,
         transit_km=0,
-        ac_hours=0,
+        daily_sleep_hours=8,
+        sleep_ac_on=False,
+        daytime_ac_hours=0,
         restaurant_meals=0,
         dataset_path=FIXTURE_PATH,
     )
-    # With 0 lifestyle inputs, only the 1500 kg baseline should remain
-    assert result_zero.yearly_co2_kg == 1500.0
-    assert result_zero.carbon_tax_inr == 1500.0 * 15.80
+    # With 0 lifestyle inputs, only the 2500 kg baseline should remain
+    assert result_zero.yearly_co2_kg == 2500.0
+    assert result_zero.carbon_tax_inr == 2500.0 * 15.80
 
 
 def test_parse_confession_fallback():
@@ -43,7 +47,8 @@ def test_parse_confession_fallback():
 
     result = parse_confession("I drove 20 km today")
     assert result.car_km == 0
-    assert result.ac_hours == 0
+    assert result.daily_sleep_hours == 8
+    assert result.sleep_ac_on is False
     assert result.restaurant_meals == 0
 
     if original_key:

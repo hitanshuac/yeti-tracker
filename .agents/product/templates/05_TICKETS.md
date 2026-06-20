@@ -31,3 +31,8 @@ All tickets for the Yeti-Tracker Hack2Skill project have been completed.
   - Transition from USD/miles to INR/km based on the ₹15.80/kg Social Cost of Carbon (SCC).
   - Modify LLM extraction parsing layer to recover from mathematical expressions (Regex Evaluator).
   - Force Continuous Confession loop, updating UUID session state natively.
+
+- `[x]` **TICKET-009: Behavioral Variation Tracker Pivot**
+  - Anchor baseline statically to World Bank 2500 kg to prevent double-counting of survival electricity.
+  - Implement Sleep-based gamification logic for electricity footprint (Sleep vs Awake vs Daytime AC).
+  - Expose DuckDB `PERCENTILE_CONT(0.9)` anomaly detection math directly in the UI.

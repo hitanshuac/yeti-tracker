@@ -40,9 +40,13 @@ def _handle_extract() -> None:
     parsed = parse_confession(messy)
     st.session_state.car_km = parsed.car_km
     st.session_state.flight_km = parsed.flight_km
-    st.session_state.transit_km = parsed.transit_km
-    st.session_state.ac_hours = parsed.ac_hours
-    st.session_state.restaurant_meals = parsed.restaurant_meals
+    st.session_state.transit_km = getattr(parsed, "transit_km", 0)
+    st.session_state.daily_sleep_hours = getattr(parsed, "daily_sleep_hours", 8)
+    st.session_state.sleep_ac_on = getattr(parsed, "sleep_ac_on", False)
+    st.session_state.daytime_ac_hours = getattr(parsed, "daytime_ac_hours", 0)
+    st.session_state.restaurant_meals = getattr(parsed, "restaurant_meals", 0)
+
+    st.session_state.show_missing_electricity_prompt = True
 
 
 def _handle_reply() -> None:
@@ -124,11 +128,13 @@ def _render_advisor_section(result, tier_info) -> None:
     st.markdown("---")
     st.markdown("### 🎙️ The Smart Advisor")
 
-    c_km = st.session_state.car_km
-    f_km = st.session_state.flight_km
-    t_km = st.session_state.transit_km
-    a_hours = st.session_state.ac_hours
-    r_meals = st.session_state.restaurant_meals
+    c_km = st.session_state.get("car_km", 0)
+    f_km = st.session_state.get("flight_km", 0)
+    t_km = st.session_state.get("transit_km", 0)
+    sleep_h = st.session_state.get("daily_sleep_hours", 8)
+    sleep_ac = st.session_state.get("sleep_ac_on", False)
+    daytime_ac = st.session_state.get("daytime_ac_hours", 0)
+    r_meals = st.session_state.get("restaurant_meals", 0)
 
     with st.spinner("Analyzing your financial doom..."):
         rag_context = fetch_rag_context(st.session_state.get("confessional_input", ""))
@@ -139,7 +145,9 @@ def _render_advisor_section(result, tier_info) -> None:
             c_km,
             f_km,
             t_km,
-            a_hours,
+            sleep_h,
+            sleep_ac,
+            daytime_ac,
             r_meals,
             tier_info.tier,
             "Save the Planet",
@@ -211,9 +219,16 @@ def _render_financial_dashboard(result, total_monthly_savings) -> None:
                 "**Why is there a baseline?** Every person has an inescapable carbon "
                 "footprint from basic survival: home-cooked meals, shelter electricity "
                 "(lights, fridge, fans), water supply, and shared infrastructure. "
-                "India's per capita average is approximately **1,500 kg CO2/year** "
-                "(ISEC study). The sliders above track your **additional** lifestyle "
+                "India's per capita average is a factual **2,500 kg CO2/year** "
+                "(World Bank). The sliders above track your **additional** lifestyle "
                 "impact on top of this baseline."
+            )
+            st.markdown("---")
+            st.markdown(
+                "**How are Spikes Calculated?**\n"
+                "Spikes are calculated strictly mathematically using a **90th Percentile** window function "
+                "over your last 30 days of data in DuckDB (`PERCENTILE_CONT(0.9)`). "
+                "No AI hallucination—just pure statistics."
             )
             st.markdown("---")
             st.markdown("**Your Breakdown:**")
@@ -275,7 +290,13 @@ def _render_input_section() -> None:
             "Verify the AI extraction is correct before calculating."
         )
 
-        c_max, f_max, t_max, a_max, r_max = 50000, 100000, 50000, 8760, 1095
+        if st.session_state.get("show_missing_electricity_prompt", False):
+            st.warning(
+                "🔌 **Yeti Advisor:** How long do you sleep? Do you sleep with the AC on? "
+                "What about daytime AC usage? Verify or adjust your hours below."
+            )
+
+        c_max, f_max, t_max, r_max = 50000, 100000, 50000, 1095
 
         st.slider(
             "Car Kilometers (Yearly)",
@@ -299,11 +320,26 @@ def _render_input_section() -> None:
             help="Total km by bus, train, or metro per year.",
         )
         st.slider(
-            "AC / Heating Hours (Yearly)",
+            "Daily Sleep Hours",
             0,
-            max(a_max, st.session_state.ac_hours),
-            key="ac_hours",
-            help="Total hours of air conditioning per year. 8 hrs/day for 6 months = ~1,460 hrs.",
+            24,
+            st.session_state.get("daily_sleep_hours", 8),
+            key="daily_sleep_hours",
+            help="Average hours of sleep per night. We use this to calculate your minimum baseline.",
+        )
+        st.checkbox(
+            "Sleep with AC/Cooler on?",
+            value=st.session_state.get("sleep_ac_on", False),
+            key="sleep_ac_on",
+            help="Do you leave the AC or cooler running while you sleep?",
+        )
+        st.slider(
+            "Daily Daytime AC Hours",
+            0,
+            16,
+            st.session_state.get("daytime_ac_hours", 0),
+            key="daytime_ac_hours",
+            help="Average hours of AC/cooler usage during the day while awake.",
         )
         st.slider(
             "Restaurant Meals (Yearly)",
@@ -353,11 +389,13 @@ def _render_results_section() -> None:
             st.success("✅ Auto-extracted your new text!")
 
     result = run_duckdb_math(
-        st.session_state.car_km,
-        st.session_state.flight_km,
-        st.session_state.transit_km,
-        st.session_state.ac_hours,
-        st.session_state.restaurant_meals,
+        st.session_state.get("car_km", 0),
+        st.session_state.get("flight_km", 0),
+        st.session_state.get("transit_km", 0),
+        st.session_state.get("daily_sleep_hours", 8),
+        st.session_state.get("sleep_ac_on", False),
+        st.session_state.get("daytime_ac_hours", 0),
+        st.session_state.get("restaurant_meals", 0),
         session_id=st.session_state.session_id,
     )
     tier_info = classify_tier(result.yearly_co2_kg)
@@ -386,7 +424,7 @@ def main() -> None:
     st.title("Yeti-Tracker: Know Your Footprint")
     st.caption(
         "A hybrid AI + deterministic math engine that tracks your personal carbon "
-        "footprint against India's per capita baseline of 1,500 kg CO2/year."
+        "footprint against India's factual per capita baseline of 2,500 kg CO2/year (World Bank)."
     )
 
     # Initialize typed state

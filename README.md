@@ -6,19 +6,19 @@
 ![DuckDB](https://img.shields.io/badge/duckdb-embedded-yellow.svg)
 ![Streamlit](https://img.shields.io/badge/streamlit-UI-red.svg)
 
-## Overview: Gamified Indian Carbon Footprint Engine
+## Overview: Behavioral Variation & Anomaly Tracker
 
-Yeti-Tracker is an AI-powered personal carbon footprint platform that completely reimagines how individuals understand their environmental impact. Rather than a boring calculator, Yeti-Tracker is an emotional, gamified, cognitive mirror that classifies your daily habits into visceral visual metaphors, specifically tailored for the Indian demographic.
+Yeti-Tracker is an AI-powered personal observability platform that pivots away from a generic carbon calculator into a dynamic variation tracker. It monitors daily behavioral habits against a mathematically rigorous deterministic floor (World Bank 2,500 kg baseline) and uses SRE-grade percentile logic to flag anomalies.
 
 To solve the inherent conflict between **AI Hallucinations** (non-determinism) and **Scientific Data Integrity** (idempotent mathematics), Yeti-Tracker implements the **Hybrid Pipeline** (Split-Plane Architecture):
 
 1. **The Confessional (LLM Ingestion)**: Users paste a messy, natural language diary entry.
 2. **The Verification Gate**: The LLM *only* populates explicit UI sliders using 5 integers (now strictly using **kilometers**). The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
-3. **Deterministic Math Engine**: A local DuckDB instance takes the verified seed and deterministically calculates the carbon cost and localized financial impact in **INR (₹)** based on a ₹15.80/kg Social Cost of Carbon (SCC).
-4. **Machine Learning Anomaly Detection**: `src/anomaly_detector.py` uses an Isolation Forest (scikit-learn) to dynamically infer your yearly baseline based on your history, enforcing an infrastructure minimum floor of 1,500 kg CO2/year.
+3. **Deterministic Math Engine**: A local DuckDB instance takes the verified seed and deterministically calculates the carbon cost and localized financial impact in **INR (₹)**. It completely isolates basic survival electricity (2,500 kg baseline) from discretionary usage (Sleep/Daytime AC) using gamified metrics.
+4. **Machine Learning Anomaly Detection**: The DuckDB engine natively calculates the 90th percentile (`PERCENTILE_CONT(0.9)`) over your historical sessions to flag statistical behavioral spikes.
 5. **The Catastrophe Tiers Gamification**: If the footprint crosses certain thresholds, users are placed into Catastrophe Categories (e.g., Category 3) and presented with aggressive visual and textual roasting to gamify footprint reduction.
-5. **Continuous Confession Loop**: A recursive input pattern where user responses are appended to their "confessional," enabling an addictive feedback loop that tracks history per-session via secure UUIDs.
-6. **The Smart Advisor**: Generates hyper-specific "Instant Gratification" alternatives (Convenience vs. Maximum Impact) to guarantee a 20% reduction, ensuring advice is contextual and never redundant.
+6. **Continuous Confession Loop**: A recursive input pattern where user responses are appended to their "confessional," enabling an addictive feedback loop that tracks history per-session via secure UUIDs.
+7. **The Smart Advisor**: Generates hyper-specific "Instant Gratification" alternatives (Convenience vs. Maximum Impact) to guarantee a 20% reduction, ensuring advice is contextual and never redundant.
 
 **UX Integrity**: The entire ingestion pipeline is governed by Streamlit caching (`@st.cache_data`) and state management to completely eliminate UI reset glitches during button interactions.
 
@@ -61,9 +61,8 @@ Yeti-Tracker enforces strict engineering standards via the `.agents` framework. 
 - `app.py`: Thin Streamlit UI Orchestrator (~250 lines).
 - `src/`: Core service modules orchestrating business logic:
   - `state_manager.py`: Pydantic AppState management.
-  - `carbon_engine.py`: Deterministic DuckDB math.
+  - `carbon_engine.py`: Deterministic DuckDB math & percentile anomaly detection.
   - `llm_service.py`: Groq extraction and Advisor interactions.
-  - `anomaly_detector.py`: Scikit-learn Isolation Forest for baseline inference.
   - `rag_service.py`: Context retrieval.
   - `chart_factory.py`: Plotly visualizations.
   - `history.py`: DuckDB connection pooling and telemetry.

@@ -11,8 +11,6 @@ import os
 import duckdb
 from pydantic import BaseModel, Field
 
-from src.anomaly_detector import detect_anomaly_and_baseline
-
 
 class CarbonResult(BaseModel):
     """Typed return value from the carbon calculation engine."""
@@ -58,11 +56,41 @@ def _load_factors(dataset_path: str) -> dict[str, dict[str, float]]:
         conn.close()
 
 
+def _detect_anomaly(session_id: str, daily_co2_kg: float, db_path: str = "data/yeti.duckdb") -> bool:
+    """Detects if the given daily carbon footprint is > 90th percentile of last 30 days using DuckDB."""
+    try:
+        conn = duckdb.connect(db_path)
+        query = """
+            SELECT quantile_cont(daily_carbon_kg, 0.90)
+            FROM (
+                SELECT daily_carbon_kg
+                FROM user_history
+                WHERE session_id = ?
+                ORDER BY timestamp DESC
+                LIMIT 30
+            )
+        """
+        result = conn.execute(query, [session_id]).fetchone()
+        conn.close()
+
+        if result and result[0] is not None:
+            p90 = result[0]
+            return daily_co2_kg > p90
+        return False
+    except duckdb.CatalogException:
+        return False
+    except Exception as e:
+        _log_engine_error(e)
+        return False
+
+
 def run_duckdb_math(
     car_km: int,
     flight_km: int,
     transit_km: int,
-    ac_hours: int,
+    daily_sleep_hours: int,
+    sleep_ac_on: bool,
+    daytime_ac_hours: int,
     restaurant_meals: int,
     dataset_path: str = "data/carbon_factors.csv",
     session_id: str | None = None,
@@ -73,7 +101,9 @@ def run_duckdb_math(
         car_km: Yearly car kilometers.
         flight_km: Yearly flight kilometers.
         transit_km: Yearly public transit kilometers.
-        ac_hours: Yearly AC/heating hours.
+        daily_sleep_hours: Average daily sleep hours.
+        sleep_ac_on: Whether the user sleeps with AC/cooler on.
+        daytime_ac_hours: Average daily hours of AC/cooler usage while awake.
         restaurant_meals: Yearly restaurant meals.
         dataset_path: Path to the emission factors CSV.
         session_id: Optional session ID for dynamic baseline inference.
@@ -86,31 +116,40 @@ def run_duckdb_math(
     def _get(activity: str, key: str, default: float) -> float:
         return factors.get(activity, {}).get(key, default)
 
-    if session_id:
-        baseline_kg, is_anomaly = detect_anomaly_and_baseline(session_id)
-    else:
-        baseline_kg, is_anomaly = 1500.0, False
-
-    BASELINE_FOOTPRINT_KG = baseline_kg
+    # World Bank Static Baseline for India: 2500 kg total
+    # As requested, keeping the factual 2500 kg without subtracting.
+    BASELINE_FOOTPRINT_KG = 2500.0
     SCC_INR_PER_KG = 15.80
 
     yearly_car_co2 = car_km * _get("car_km", "co2", 0.15)
     yearly_flight_co2 = flight_km * _get("flight_km", "co2", 0.115)
     yearly_transit_co2 = transit_km * _get("train_km", "co2", 0.01)
-    yearly_ac_co2 = ac_hours * _get("ac_hours", "co2", 1.12)
+
+    ac_factor = _get("ac_hours", "co2", 1.12)
+
+    yearly_sleep_ac = (daily_sleep_hours * 365) * ac_factor if sleep_ac_on else 0
+    yearly_daytime_ac = (daytime_ac_hours * 365) * ac_factor
+    yearly_ac = yearly_sleep_ac + yearly_daytime_ac
+
     yearly_restaurant_co2 = restaurant_meals * _get("restaurant_meal", "co2", 3.5)
 
-    yearly_transport = yearly_car_co2 + yearly_flight_co2 + yearly_transit_co2
-    yearly_ac = yearly_ac_co2
+    yearly_transport = yearly_car_co2 + yearly_transit_co2
+    yearly_flight = yearly_flight_co2
     yearly_restaurant = yearly_restaurant_co2
 
-    yearly_co2 = yearly_transport + yearly_ac + yearly_restaurant + BASELINE_FOOTPRINT_KG
+    yearly_co2 = yearly_transport + yearly_flight + yearly_ac + yearly_restaurant + BASELINE_FOOTPRINT_KG
+
+    is_anomaly = False
+    if session_id:
+        daily_co2 = yearly_co2 / 365.0
+        is_anomaly = _detect_anomaly(session_id, daily_co2)
 
     carbon_tax = yearly_co2 * SCC_INR_PER_KG
 
     breakdown = {
         "🏠 Basic Living (Home Meals, Shelter, Grid)": BASELINE_FOOTPRINT_KG,
-        "🚗 Car, Flights & Transit": yearly_transport,
+        "🚗 Car & Transit": yearly_transport,
+        "✈️ Flights": yearly_flight,
         "❄️ AC / Heating": yearly_ac,
         "🍽️ Dining Out (Above Home Cooking)": yearly_restaurant,
     }

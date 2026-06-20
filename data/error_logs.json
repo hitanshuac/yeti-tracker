@@ -75,5 +75,75 @@
     "message": "Missing GROQ_API_KEY.",
     "status": "UNRESOLVED",
     "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
   }
 ]

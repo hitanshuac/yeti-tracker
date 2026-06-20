@@ -9,4 +9,3 @@ pydantic
 pyarrow
 python-dotenv
 groq
-scikit-learn>=1.9.0

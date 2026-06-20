@@ -25,7 +25,9 @@ class ParsedPersonalData(BaseModel):
     car_km: int = Field(ge=0, default=0)
     flight_km: int = Field(ge=0, default=0)
     transit_km: int = Field(ge=0, default=0)
-    ac_hours: int = Field(ge=0, default=0)
+    daily_sleep_hours: int = Field(ge=0, le=24, default=8)
+    sleep_ac_on: bool = Field(default=False)
+    daytime_ac_hours: int = Field(ge=0, le=24, default=0)
     restaurant_meals: int = Field(ge=0, default=0)
 
 
@@ -81,12 +83,17 @@ DO NOT output formulas (e.g., no '260 * 10'). The JSON values MUST be raw intege
 All distances MUST be in kilometers (km). If specific locations are mentioned without distances
 (e.g. "from Kandivali to Sakinaka"), you MUST estimate the real-world distance between them
 in km based on your geographic knowledge.
+For 'daily_sleep_hours', extract the average number of hours they sleep per night.
+For 'sleep_ac_on', extract whether they mention sleeping with the AC or cooler on (true/false).
+For 'daytime_ac_hours', extract the average number of hours they use the AC or cooler during the day while awake.
 You MUST output a strict JSON object exactly matching this format:
 {{
   "car_km": 0,
   "flight_km": 0,
   "transit_km": 0,
-  "ac_hours": 0,
+  "daily_sleep_hours": 8,
+  "sleep_ac_on": false,
+  "daytime_ac_hours": 0,
   "restaurant_meals": 0
 }}
 Text: {safe_text}"""
@@ -299,7 +306,9 @@ def _build_advisor_prompt(
     car_km: int,
     flight_km: int,
     transit_km: int,
-    ac: int,
+    daily_sleep_hours: int,
+    sleep_ac_on: bool,
+    daytime_ac_hours: int,
     restaurant_meals: int,
     goal: str,
     kpis: str,
@@ -318,7 +327,9 @@ def _build_advisor_prompt(
         f"(Tax Debt) of INR {tax:,.2f} (calculated at INR 15.80 per kg CO2).\n"
         f"This year, they will travel {car_km} km by car, {flight_km} km by plane, "
         f"and {transit_km} km by train/bus.\n"
-        f"They will use the AC for {ac} hours, and eat out at restaurants {restaurant_meals} times."
+        f"They sleep {daily_sleep_hours} hours a day (AC on: {sleep_ac_on}), "
+        f"use {daytime_ac_hours} hours of AC during the day, "
+        f"and eat out at restaurants {restaurant_meals} times."
     )
 
     return PROMPT_WRATH_SWITCH.format(
@@ -337,7 +348,9 @@ def get_advisor_response(
     car_km: int,
     flight_km: int,
     transit_km: int,
-    ac: int,
+    daily_sleep_hours: int,
+    sleep_ac_on: bool,
+    daytime_ac_hours: int,
     restaurant_meals: int,
     tier: str,  # pylint: disable=unused-argument
     goal: str,
@@ -350,7 +363,18 @@ def get_advisor_response(
         return AdvisorResponse()
 
     prompt = _build_advisor_prompt(
-        carbon, tax, car_km, flight_km, transit_km, ac, restaurant_meals, goal, kpis, rag_context
+        carbon,
+        tax,
+        car_km,
+        flight_km,
+        transit_km,
+        daily_sleep_hours,
+        sleep_ac_on,
+        daytime_ac_hours,
+        restaurant_meals,
+        goal,
+        kpis,
+        rag_context,
     )
 
     client = Groq(api_key=api_key)

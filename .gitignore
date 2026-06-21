@@ -1,5 +1,5 @@
 data/raw_transactions/
-data/
+data/*
 !data/carbon_factors.csv
 !data/assets/
 !data/assets/**

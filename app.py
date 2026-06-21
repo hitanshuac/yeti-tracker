@@ -203,9 +203,46 @@ def _set_random_persona() -> None:
             "daytime_ac_hours": 8,
             "restaurant_meals": 104,
         },
+        {
+            "name": "The Last-Mile Addict",
+            "text": (
+                "The Last-Mile Addict: I order groceries from Zepto 3 times a day and buy fast fashion on Myntra weekly. "
+                "I also take auto-rickshaws for about 5km every day to the metro station."
+            ),
+            "car_km": 0,
+            "two_wheeler_km": 0,
+            "auto_rickshaw_km": 1825,
+            "flight_km": 0,
+            "bus_km": 0,
+            "train_metro_km": 1825,
+            "daily_sleep_hours": 8,
+            "sleep_ac_on": False,
+            "daytime_ac_hours": 0,
+            "restaurant_meals": 0,
+            "untracked_activities": ["Zepto grocery deliveries 3x daily", "Myntra fast fashion weekly"],
+        },
+        {
+            "name": "The Home Chef",
+            "text": (
+                "The Home Chef: I cook all my meals at home using an LPG cylinder and barely travel. "
+                "I run the AC for about 4 hours every afternoon."
+            ),
+            "car_km": 0,
+            "two_wheeler_km": 0,
+            "auto_rickshaw_km": 0,
+            "flight_km": 0,
+            "bus_km": 0,
+            "train_metro_km": 0,
+            "daily_sleep_hours": 8,
+            "sleep_ac_on": False,
+            "daytime_ac_hours": 4,
+            "restaurant_meals": 0,
+            "untracked_activities": ["LPG cylinder for daily cooking"],
+        },
     ]
     persona = random.choice(personas)
     st.session_state.confessional_input = persona["text"]
+    st.session_state.last_extracted_text = persona["text"]
     for key in [
         "car_km",
         "two_wheeler_km",
@@ -219,6 +256,8 @@ def _set_random_persona() -> None:
         "restaurant_meals",
     ]:
         st.session_state[key] = persona[key]
+
+    st.session_state["untracked_activities"] = persona.get("untracked_activities", [])
     # Auto-trigger calculation — no LLM needed
     st.session_state.run_math = True
     st.session_state.has_calculated = True

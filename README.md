@@ -53,16 +53,17 @@ run_server.bat
 
 Yeti-Tracker enforces strict engineering standards via the `.agents` framework. This is a dynamic inventory based on the current stable checkpoint:
 
-- **Rules (19 Active)**: Includes the Tier 0 `00-deterministic-guardrails.md` (which enforces strict XML boundaries and non-probabilistic commands), plus `defensive-programming.md`, `code-quality-standards.md`, `sre-sop.md`, and `12-factor-rules.md`.
+- **Rules (24 Active)**: Includes the Tier 0 `defensive-programming.md` and `data-validation.md` (which enforce schema-first data contracts and verified dataset mandates), plus `code-quality-standards.md`, `sre-sop.md`, and `12-factor-rules.md`.
 - **Python APIs**: Built with Streamlit, Plotly, DuckDB, and Pydantic with idempotent I/O and strict error observability.
 - **Product Templates (5 Active)**: Fully populated `01_PRD.md`, `02_TAD.md`, `03_SECURITY.md`, `04_FRONTEND.md`, and `05_TICKETS.md`.
 - **Skills (5 Active)**: Diagram Generator, DuckDB Optimizer, LLM-Council, Pipeline Architect, Universal Ingestion.
-- **Workflows (23 Active)**: Including `master-sync.md`, `test-automation.md`, and `update-docs.md`.
-- **Architecture Decision Records (3 Active)**: Latest is ADR-0003 for the Master Sync Checkpoint.
+- **Workflows (24 Active)**: Including `master-sync.md`, `test-automation.md`, and `update-docs.md`.
+- **Architecture Decision Records (6 Active)**: Covering schema migration, data validation, and master sync checkpoints.
+- **Demo Personas (7 Active)**: Including "The Last-Mile Addict" and "The Home Chef" which trigger the Out-of-Bounds Catcher for unverified lifestyle activities.
 
 ## Directory Structure
 
-- `app.py`: Thin Streamlit UI Orchestrator (~250 lines).
+- `app.py`: Thin Streamlit UI Orchestrator (~776 lines).
 - `src/`: Core service modules orchestrating business logic:
   - `state_manager.py`: Pydantic AppState management.
   - `carbon_engine.py`: Deterministic DuckDB math & percentile anomaly detection.
@@ -86,7 +87,7 @@ To inject the Agentic Brain into other projects, simply copy the `.agents/` dire
 
 
 ### Code Flow Diagram
-`mermaid
+```mermaid
 graph TD;
     A[app.py] -->|1. LLM Ingestion| B(llm_service.py);
     B -->|2. Parse Integers| C{Verification Gate};
@@ -95,4 +96,4 @@ graph TD;
     E -->|5. Anomalies & Percentiles| D;
     D -->|6. Gamified Metrics| F(chart_factory.py);
     F -->|7. UI Rendering| A;
-`
+```

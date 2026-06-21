@@ -27,6 +27,7 @@ This document codifies the strict requirements for achieving a perfect maintaina
   - **No inline imports**: Never `import` inside a function.
   - **No mutable defaults**: Change `def func(arg: dict = None):` to `def func(arg: Optional[dict] = None):`.
   - **No pointless re-raises**: Avoid using `raise e` inside an except block without adding context.
+  - **Zero Hacks**: NEVER use `# pylint: disable` or `# noqa` suppression comments. You must natively fix the underlying AST violation to pass structural AI evaluators.
 
 ## 3.5 Structured Error Handling (12-Factor XI: Logs)
 - **Rule**: Exception handlers must NEVER swallow errors with generic static messages.

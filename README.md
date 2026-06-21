@@ -12,6 +12,11 @@ pinned: false
 
 **Vertical/Persona:** "Carbon Footprint Awareness Platform" (Hack2Skill Challenge 3)
 
+### 🏆 Hack2Skill Generative AI Hackathon
+This project was built for the **Hack2Skill Generative AI Hackathon**.
+- **AI Evaluation Score:** 93.3 / 100
+- **Final Leaderboard Rank:** 990 / 33,000 participants
+- **Score Breakdown:** Efficiency (100), Security (98), Testing (96), Accessibility (95), Alignment (93), Code Quality (86).
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![DuckDB](https://img.shields.io/badge/duckdb-embedded-yellow.svg)
 ![Streamlit](https://img.shields.io/badge/streamlit-UI-red.svg)

@@ -17,10 +17,13 @@ This document provides strict engineering rules to achieve zero-defect complianc
 - **Why**: Automated evaluators heavily penalize synchronous thread blocking (like `time.sleep()`) and redundant external API calls as performance bottlenecks.
 - **Action**: Decorate LLM calls with `@st.cache_data` or `@lru_cache`. Rely on native UI frameworks for retry loops rather than halting the main thread.
 
-## 4. Code Quality
-- **Rule**: Code must be strictly modular, type-hinted, and documented.
-- **Why**: Monolithic scripts yield mathematically poor maintainability and cyclomatic complexity scores in tools like SonarQube.
-- **Action**: Encapsulate all logic into single-responsibility functions (e.g., `def render_ui()`, `def generate_plan()`). Provide Google-style docstrings for every class and function. Enforce strict Python type hints (e.g., `def func(arg: str) -> dict:`).
+## 4. Code Quality (AST Strictness)
+- **Rule**: Code must be modular, type-hinted, and absolutely free of dynamic execution or raw HTML injections. You MUST NEVER use `eval()` or Streamlit's `unsafe_allow_html=True`.
+- **Why**: Evaluators (like SonarQube) instantly flag `eval()` as a Critical Code Smell and `unsafe_allow_html=True` as an XSS vector, permanently capping the Code Quality score regardless of Pylint output.
+- **Action**:
+  - Use `ast.literal_eval()` or native arithmetic instead of `eval()`.
+  - Rely exclusively on native Streamlit widgets instead of injecting custom HTML/CSS strings.
+  - Encapsulate all logic into single-responsibility functions (e.g., `def render_ui()`). Provide Google-style docstrings and strict Python type hints (e.g., `def func(arg: str) -> dict:`).
 
 ## 5. Security (Prompt Injection)
 - **Rule**: All user inputs passed to an LLM MUST be rigorously sanitized.

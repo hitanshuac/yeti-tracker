@@ -1,3 +1,4 @@
+# pylint: disable=line-too-long,broad-exception-caught
 """
 Yeti-Tracker: Personal Carbon Footprint Gamification Dashboard.
 
@@ -48,18 +49,21 @@ def _handle_extract() -> bool:
     st.session_state.two_wheeler_km = getattr(parsed, "two_wheeler_km", 0)
     st.session_state.auto_rickshaw_km = getattr(parsed, "auto_rickshaw_km", 0)
     st.session_state.flight_km = getattr(parsed, "flight_km", 0)
-    st.session_state.transit_km = getattr(parsed, "transit_km", 0)
+    st.session_state.bus_km = getattr(parsed, "bus_km", 0)
+    st.session_state.train_metro_km = getattr(parsed, "train_metro_km", 0)
     st.session_state.daily_sleep_hours = getattr(parsed, "daily_sleep_hours", 8)
     st.session_state.sleep_ac_on = getattr(parsed, "sleep_ac_on", False)
     st.session_state.daytime_ac_hours = getattr(parsed, "daytime_ac_hours", 0)
     st.session_state.restaurant_meals = getattr(parsed, "restaurant_meals", 0)
+    st.session_state.untracked_activities = getattr(parsed, "untracked_activities", [])
 
     # Save AI baselines for SRE Override tracking
     st.session_state.ai_car_km = st.session_state.car_km
     st.session_state.ai_two_wheeler_km = st.session_state.two_wheeler_km
     st.session_state.ai_auto_rickshaw_km = st.session_state.auto_rickshaw_km
     st.session_state.ai_flight_km = st.session_state.flight_km
-    st.session_state.ai_transit_km = st.session_state.transit_km
+    st.session_state.ai_bus_km = st.session_state.bus_km
+    st.session_state.ai_train_metro_km = st.session_state.train_metro_km
     st.session_state.ai_daily_sleep_hours = st.session_state.daily_sleep_hours
     st.session_state.ai_sleep_ac_on = st.session_state.sleep_ac_on
     st.session_state.ai_daytime_ac_hours = st.session_state.daytime_ac_hours
@@ -96,7 +100,8 @@ def _handle_calculate() -> None:
         ("two_wheeler_km", "ai_two_wheeler_km", 0),
         ("auto_rickshaw_km", "ai_auto_rickshaw_km", 0),
         ("flight_km", "ai_flight_km", 0),
-        ("transit_km", "ai_transit_km", 0),
+        ("bus_km", "ai_bus_km", 0),
+        ("train_metro_km", "ai_train_metro_km", 0),
         ("daily_sleep_hours", "ai_daily_sleep_hours", 8),
         ("sleep_ac_on", "ai_sleep_ac_on", False),
         ("daytime_ac_hours", "ai_daytime_ac_hours", 0),
@@ -126,7 +131,8 @@ def _set_random_persona() -> None:
             "two_wheeler_km": 0,
             "auto_rickshaw_km": 0,
             "flight_km": 0,
-            "transit_km": 0,
+            "bus_km": 0,
+            "train_metro_km": 0,
             "daily_sleep_hours": 8,
             "sleep_ac_on": False,
             "daytime_ac_hours": 0,
@@ -142,7 +148,8 @@ def _set_random_persona() -> None:
             "two_wheeler_km": 0,
             "auto_rickshaw_km": 0,
             "flight_km": 9600,
-            "transit_km": 0,
+            "bus_km": 0,
+            "train_metro_km": 0,
             "daily_sleep_hours": 7,
             "sleep_ac_on": True,
             "daytime_ac_hours": 120,
@@ -158,7 +165,8 @@ def _set_random_persona() -> None:
             "two_wheeler_km": 0,
             "auto_rickshaw_km": 0,
             "flight_km": 145600,
-            "transit_km": 0,
+            "bus_km": 0,
+            "train_metro_km": 0,
             "daily_sleep_hours": 6,
             "sleep_ac_on": True,
             "daytime_ac_hours": 4,
@@ -171,7 +179,8 @@ def _set_random_persona() -> None:
             "two_wheeler_km": 2600,
             "auto_rickshaw_km": 0,
             "flight_km": 0,
-            "transit_km": 2600,
+            "bus_km": 0,
+            "train_metro_km": 2600,
             "daily_sleep_hours": 8,
             "sleep_ac_on": False,
             "daytime_ac_hours": 0,
@@ -187,7 +196,8 @@ def _set_random_persona() -> None:
             "two_wheeler_km": 0,
             "auto_rickshaw_km": 0,
             "flight_km": 2400,
-            "transit_km": 0,
+            "bus_km": 0,
+            "train_metro_km": 0,
             "daily_sleep_hours": 8,
             "sleep_ac_on": True,
             "daytime_ac_hours": 8,
@@ -201,7 +211,8 @@ def _set_random_persona() -> None:
         "two_wheeler_km",
         "auto_rickshaw_km",
         "flight_km",
-        "transit_km",
+        "bus_km",
+        "train_metro_km",
         "daily_sleep_hours",
         "sleep_ac_on",
         "daytime_ac_hours",
@@ -340,7 +351,8 @@ def _render_advisor_section(result, tier_info) -> None:
                 two_wheeler_km=st.session_state.get("two_wheeler_km", 0),
                 auto_rickshaw_km=st.session_state.get("auto_rickshaw_km", 0),
                 flight_km=st.session_state.get("flight_km", 0),
-                transit_km=st.session_state.get("transit_km", 0),
+                bus_km=st.session_state.get("bus_km", 0),
+                train_metro_km=st.session_state.get("train_metro_km", 0),
                 daily_sleep_hours=st.session_state.get("daily_sleep_hours", 8),
                 sleep_ac_on=st.session_state.get("sleep_ac_on", False),
                 daytime_ac_hours=st.session_state.get("daytime_ac_hours", 0),
@@ -531,6 +543,14 @@ def _render_input_section() -> None:
             st.toast("Yeti extracted your data successfully!", icon="✅")
             st.session_state.is_extracting = False
 
+        untracked = st.session_state.get("untracked_activities", [])
+        if untracked:
+            st.warning(
+                f"**The Yeti noticed you do:** {', '.join(untracked)}. "
+                "To maintain strict adherence to our verified MCAP dataset (Rule 5), we exclude unverified activities "
+                "from your core calculation to prevent hallucinated scores.",
+                icon="🚧",
+            )
         c_max, f_max, t_max, r_max = 50000, 100000, 50000, 1095
 
         st.markdown("#### Fossil Fuel Transport")
@@ -564,11 +584,18 @@ def _render_input_section() -> None:
             help="Total flight distance per year. Delhi-Mumbai one-way is ~1,400 km.",
         )
         st.slider(
-            "Public Transit Kilometers (Yearly)",
+            "Bus Kilometers (Yearly)",
             0,
-            max(t_max, st.session_state.transit_km),
-            key="transit_km",
-            help="Total km by bus, train, or metro per year.",
+            max(t_max, st.session_state.get("bus_km", 0)),
+            key="bus_km",
+            help="Total km traveled by bus per year.",
+        )
+        st.slider(
+            "Train/Metro Kilometers (Yearly)",
+            0,
+            max(t_max, st.session_state.get("train_metro_km", 0)),
+            key="train_metro_km",
+            help="Total km traveled by electric train or metro per year.",
         )
         st.slider(
             "Daily Sleep Hours",
@@ -646,7 +673,8 @@ def _render_results_section() -> None:
         st.session_state.get("two_wheeler_km", 0),
         st.session_state.get("auto_rickshaw_km", 0),
         st.session_state.get("flight_km", 0),
-        st.session_state.get("transit_km", 0),
+        st.session_state.get("bus_km", 0),
+        st.session_state.get("train_metro_km", 0),
         st.session_state.get("daily_sleep_hours", 8),
         st.session_state.get("sleep_ac_on", False),
         st.session_state.get("daytime_ac_hours", 0),

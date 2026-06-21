@@ -1,10 +1,23 @@
 activity,category,co2_kg_per_unit,social_cost_inr_per_kg,source_agency,description
-car_km,transport,0.15,15.80,CarbonCrux,Average mid-size petrol car emissions per km in India
-two_wheeler_km,transport,0.04,15.80,CarbonCrux,Average petrol scooter/motorcycle per km in India
+car_km,transport,0.15,15.80,WRI India GHG,Average mid-size petrol car emissions per km in India
+two_wheeler_km,transport,0.04,15.80,WRI India GHG,Average petrol scooter/motorcycle per km in India
 flight_km,transport,0.115,15.80,ICAO,Average domestic flight per passenger km
-train_km,transport,0.01,15.80,IndianRailways,Average Indian Railways electric traction per passenger km
-bus_km,transport,0.06,15.80,CSTEP,Average Indian public bus per passenger km
-ac_hours,energy,1.12,15.80,CEA,1.4kW avg AC unit at 0.8 kg CO2/kWh Indian grid intensity
+train_km,transport,0.01,15.80,Mumbai Local / WRI,Average Mumbai Local electric traction per passenger km
+bus_km,transport,0.06,15.80,MCAP BEST Avg,Average Mumbai BEST public bus per passenger km
+auto_rickshaw_km,transport,0.08,15.80,MCAP CNG Auto,Average CNG auto-rickshaw per km in Mumbai
+ac_hours,energy,1.12,15.80,CEA Maharashtra,1.4kW avg AC unit at 0.82 kg CO2/kWh Maharashtra grid intensity
+fan_hours,energy,0.06,15.80,CEA Maharashtra,75W ceiling fan at 0.82 kg CO2/kWh Maharashtra grid intensity
+geyser_minutes,energy,0.027,15.80,CEA,2kW water heater at 0.8 kg CO2/kWh divided by 60 minutes
+cooking_lpg_cylinders,energy,42.0,15.80,IPCC,14.2 kg LPG cylinder complete combustion
 restaurant_meal,diet,3.5,15.80,ISEC,Average Indian restaurant meal including vegetarian options
+nonveg_meal,diet,6.0,15.80,ISEC,Average non-vegetarian meal with mutton or chicken in India
 bottled_water_liter,diet,0.15,15.80,UNEP,PET plastic bottle manufacturing and transport
+online_order,consumption,4.0,15.80,GreenStory,Average e-commerce order including packaging and last-mile delivery
+streaming_hours,digital,0.036,15.80,IEA,Data center and network energy per hour of HD video streaming
+clothes_purchase,consumption,10.0,15.80,WRAP,Average fast fashion garment production and transport
+milk_liter,diet,1.4,15.80,FAO,Average dairy milk production emissions per liter in India
+rice_kg,diet,2.7,15.80,IRRI,Paddy rice cultivation including methane from flooded fields
+petrol_liter,transport,2.31,15.80,IPCC,Direct combustion emissions per liter of petrol
+diesel_liter,transport,2.68,15.80,IPCC,Direct combustion emissions per liter of diesel
+electricity_kwh,energy,0.82,15.80,CEA,Indian national grid average emission factor 2024
 mock_keyword_test,test,9.99,15.80,TEST,This is a mock keyword for RAG testing

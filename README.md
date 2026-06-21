@@ -12,14 +12,17 @@ Yeti-Tracker is an AI-powered personal observability platform that pivots away f
 
 To solve the inherent conflict between **AI Hallucinations** (non-determinism) and **Scientific Data Integrity** (idempotent mathematics), Yeti-Tracker implements the **Hybrid Pipeline** (Split-Plane Architecture):
 
+![Yeti-Tracker Hybrid Pipeline Architecture](docs/assets/auto_architecture_showcase.webp)
+
 1. **The Confessional (LLM Ingestion)**: Users paste a messy, natural language diary entry.
-2. **The Verification Gate**: The LLM *only* populates explicit UI sliders (including granular modes like two-wheelers and auto-rickshaws vs cars). The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
-3. **Deterministic Math Engine**: A local DuckDB instance takes the verified seed and deterministically calculates the carbon cost and localized financial impact in **INR (₹)**. It isolates basic survival electricity (2,500 kg baseline) from discretionary usage (Sleep/Daytime AC) using gamified metrics.
-4. **Scientific Transparency Dashboard**: The UI directly displays the `carbon_factors.csv` rendering, exposing the exact Emission Agencies (CSTEP, CEA) and metrics used for math, eliminating black-box hallucination.
-5. **Machine Learning Anomaly Detection**: The DuckDB engine natively calculates the 90th percentile (`PERCENTILE_CONT(0.9)`) over your historical sessions to flag statistical behavioral spikes.
-6. **The Catastrophe Tiers Gamification**: If the footprint crosses certain thresholds, users are placed into Catastrophe Categories (e.g., Category 3) and presented with aggressive visual and textual roasting to gamify footprint reduction.
-7. **Continuous Confession Loop**: A recursive input pattern where user responses are appended to their "confessional," enabling an addictive feedback loop that tracks history per-session via secure UUIDs.
-8. **The Smart Advisor**: Generates hyper-specific "Instant Gratification" alternatives (Convenience vs. Maximum Impact) to guarantee a 20% reduction, ensuring advice is contextual and never redundant.
+2. **The Out-of-Bounds Catcher**: The LLM isolates unstructured edge-cases (e.g., eating beef, flying helicopters) into an `untracked_activities` array, preventing them from contaminating the mathematical pipeline while exposing them to the user via UI transparency warnings.
+3. **The Verification Gate**: The LLM *only* populates explicit UI sliders (including granular modes like bus and train/metro vs cars). The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
+4. **Deterministic Math Engine**: A local DuckDB instance (protected by a strict `PRAGMA table_info` self-healing schema migrator) takes the verified seed and deterministically calculates the carbon cost and localized financial impact in **INR (₹)**. It isolates basic survival electricity (2,500 kg baseline) from discretionary usage (Sleep/Daytime AC) using gamified metrics.
+5. **Scientific Transparency Dashboard**: The UI directly displays the `carbon_factors.csv` rendering, exposing the exact Emission Agencies (CSTEP, CEA) and metrics used for math, eliminating black-box hallucination.
+6. **Machine Learning Anomaly Detection**: The DuckDB engine natively calculates the 90th percentile (`PERCENTILE_CONT(0.9)`) over your historical sessions to flag statistical behavioral spikes.
+7. **The Catastrophe Tiers Gamification**: If the footprint crosses certain thresholds, users are placed into Catastrophe Categories (e.g., Category 3) and presented with aggressive visual and textual roasting to gamify footprint reduction.
+8. **Continuous Confession Loop**: A recursive input pattern where user responses are appended to their "confessional," enabling an addictive feedback loop that tracks history per-session via secure UUIDs.
+9. **The Smart Advisor**: Generates hyper-specific "Instant Gratification" alternatives (Convenience vs. Maximum Impact) to guarantee a 20% reduction, ensuring advice is contextual and never redundant.
 
 **UX Integrity**: The entire ingestion pipeline is governed by Streamlit caching (`@st.cache_data`) and state management to completely eliminate UI reset glitches during button interactions.
 
@@ -80,3 +83,16 @@ To inject the Agentic Brain into other projects, simply copy the `.agents/` dire
 </p>
 <p align="center">
     </p>
+
+
+### Code Flow Diagram
+`mermaid
+graph TD;
+    A[app.py] -->|1. LLM Ingestion| B(llm_service.py);
+    B -->|2. Parse Integers| C{Verification Gate};
+    C -->|3. Verified Inputs| D(carbon_engine.py);
+    D -->|4. OLAP Queries| E[DuckDB Instance];
+    E -->|5. Anomalies & Percentiles| D;
+    D -->|6. Gamified Metrics| F(chart_factory.py);
+    F -->|7. UI Rendering| A;
+`

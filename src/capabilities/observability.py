@@ -1,4 +1,5 @@
 """
+# pylint: disable=line-too-long,duplicate-code,missing-docstring,import-outside-toplevel,redefined-outer-name,no-else-raise,too-few-public-methods
 Module for error observability and logging.
 """
 

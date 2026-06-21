@@ -21,8 +21,11 @@ class AppState(BaseModel):
 
     # Slider values (yearly integers/values)
     car_km: int = 0
+    two_wheeler_km: int = 0
+    auto_rickshaw_km: int = 0
     flight_km: int = 0
-    transit_km: int = 0
+    bus_km: int = 0
+    train_metro_km: int = 0
     daily_sleep_hours: int = 8
     sleep_ac_on: bool = False
     daytime_ac_hours: int = 0
@@ -30,8 +33,11 @@ class AppState(BaseModel):
 
     # AI Parsed Baselines (for override detection)
     ai_car_km: int = 0
+    ai_two_wheeler_km: int = 0
+    ai_auto_rickshaw_km: int = 0
     ai_flight_km: int = 0
-    ai_transit_km: int = 0
+    ai_bus_km: int = 0
+    ai_train_metro_km: int = 0
     ai_daily_sleep_hours: int = 8
     ai_sleep_ac_on: bool = False
     ai_daytime_ac_hours: int = 0

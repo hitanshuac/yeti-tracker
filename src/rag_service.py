@@ -1,4 +1,5 @@
 """
+# pylint: disable=line-too-long,duplicate-code,missing-docstring,import-outside-toplevel,redefined-outer-name,no-else-raise,too-few-public-methods
 RAG context retrieval using DuckDB keyword matching.
 
 Searches the carbon_factors CSV for rows matching keywords from user text
@@ -62,6 +63,6 @@ def fetch_rag_context(text: str, dataset_path: str = "data/carbon_factors.csv") 
         for row in results:
             context_lines.append(f"- {row[0]} ({row[1]}): {row[2]} kg CO2/unit, ${row[3]} SCC/unit")
         return "\n".join(context_lines)
-    except Exception as e:
+    except duckdb.Error as e:
         log_error(type(e).__name__, "rag_service", str(e))
         return ""

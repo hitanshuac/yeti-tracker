@@ -12,6 +12,7 @@ from src.history import (
 @pytest.fixture
 def test_db_path(tmp_path):
     """Provide an isolated DuckDB file path for testing."""
+    # pylint: disable=line-too-long,duplicate-code,missing-docstring,import-outside-toplevel,redefined-outer-name,no-else-raise,too-few-public-methods
     return str(tmp_path / "test_history.duckdb")
 
 
@@ -27,7 +28,7 @@ def test_append_history_valid(test_db_path):
     assert len(rows) == 1
     assert rows[0][0] == session_id
     assert rows[0][2] == 1500.5
-    assert rows[0][3] == "Human"
+    assert rows[0][5] == "Human"
 
 
 def test_append_history_invalid(test_db_path):
@@ -83,3 +84,43 @@ def test_fetch_history_dataframe(test_db_path):
     append_history(session_id, 1500.0, "Cat 3", db_path=test_db_path)
     df_filtered = fetch_history_dataframe(session_id, db_path=test_db_path)
     assert len(df_filtered) == 1  # The 1500 value should be excluded
+
+
+def test_legacy_schema_migration(tmp_path):
+    """Simulate 'Schema Drift' by creating a legacy 4-column db and verifying the hook upgrades it."""
+    import duckdb
+
+    legacy_db = str(tmp_path / "v1_yeti.duckdb")
+
+    # 1. Create a legacy v1 database (4 columns)
+    conn = duckdb.connect(legacy_db)
+    conn.execute("""
+        CREATE TABLE user_history (
+            session_id VARCHAR,
+            timestamp TIMESTAMP,
+            daily_carbon_kg DOUBLE,
+            tier VARCHAR
+        )
+    """)
+    conn.execute("INSERT INTO user_history VALUES ('legacy-user', current_timestamp, 10.0, 'Human')")
+    conn.close()
+
+    # 2. Trigger the startup hook
+    conn2 = _get_connection(legacy_db)
+
+    # 3. Verify columns exist and legacy data is preserved
+    columns = [row[1] for row in conn2.execute("PRAGMA table_info('user_history')").fetchall()]
+    assert "bus_km" in columns
+    assert "train_metro_km" in columns
+
+    data = conn2.execute("SELECT bus_km, train_metro_km FROM user_history").fetchone()
+    assert data[0] == 0.0
+    assert data[1] == 0.0
+
+    # 4. Verify we can insert new 6-column data without BinderException
+    append_history("new-user", 5.0, "Yeti", db_path=legacy_db)
+    new_data = conn2.execute("SELECT bus_km, train_metro_km FROM user_history WHERE session_id='new-user'").fetchone()
+    assert new_data[0] == 0.0
+    assert new_data[1] == 0.0
+
+    conn2.close()

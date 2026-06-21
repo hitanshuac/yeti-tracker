@@ -1,4 +1,5 @@
 """
+# pylint: disable=line-too-long,duplicate-code,missing-docstring,import-outside-toplevel,redefined-outer-name,no-else-raise,too-few-public-methods
 History persistence layer using DuckDB.
 
 Manages the user_history table: init, append, query, and demo seeding.
@@ -21,7 +22,7 @@ _DB_PATH = "data/yeti.duckdb"
 
 
 def _get_connection(db_path: str | None = None) -> duckdb.DuckDBPyConnection:
-    """Get a DuckDB connection and ensure the history table exists.
+    """Get a DuckDB connection and ensure the history table exists and is up-to-date.
 
     Args:
         db_path: Override path for testing. Defaults to ``data/yeti.duckdb``.
@@ -31,14 +32,30 @@ def _get_connection(db_path: str | None = None) -> duckdb.DuckDBPyConnection:
     """
     path = db_path or _DB_PATH
     conn = duckdb.connect(path)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS user_history (
-            session_id VARCHAR,
-            timestamp TIMESTAMP,
-            daily_carbon_kg DOUBLE,
-            tier VARCHAR
-        )
-    """)
+
+    # Check if table exists
+    tables = conn.execute("SELECT * FROM information_schema.tables WHERE table_name='user_history'").fetchall()
+
+    if not tables:
+        # Initial schema creation
+        conn.execute("""
+            CREATE TABLE user_history (
+                session_id VARCHAR,
+                timestamp TIMESTAMP,
+                daily_carbon_kg DOUBLE,
+                bus_km DOUBLE,
+                train_metro_km DOUBLE,
+                tier VARCHAR
+            )
+        """)
+    else:
+        # Startup Migration Hook: check for missing columns (Schema Drift)
+        columns = [row[1] for row in conn.execute("PRAGMA table_info('user_history')").fetchall()]
+        if "bus_km" not in columns:
+            conn.execute("ALTER TABLE user_history ADD COLUMN bus_km DOUBLE DEFAULT 0.0")
+        if "train_metro_km" not in columns:
+            conn.execute("ALTER TABLE user_history ADD COLUMN train_metro_km DOUBLE DEFAULT 0.0")
+
     return conn
 
 
@@ -68,8 +85,8 @@ def append_history(
 
     conn = _get_connection(db_path)
     conn.execute(
-        "INSERT INTO user_history VALUES (?, ?, ?, ?)",
-        [session_id, datetime.datetime.now(), daily_carbon_kg, tier],
+        "INSERT INTO user_history (session_id, timestamp, daily_carbon_kg, bus_km, train_metro_km, tier) VALUES (?, ?, ?, ?, ?, ?)",
+        [session_id, datetime.datetime.now(), daily_carbon_kg, 0.0, 0.0, tier],
     )
     conn.close()
 
@@ -91,8 +108,8 @@ def seed_demo_history(session_id: str, db_path: str | None = None) -> None:
         d_val = base + random.uniform(-0.5, 2.0)
         d_val = max(0.0, d_val)  # Prevent negative daily footprints
         conn.execute(
-            "INSERT INTO user_history VALUES (?, ?, ?, ?)",
-            [session_id, curr, d_val, "Human"],
+            "INSERT INTO user_history (session_id, timestamp, daily_carbon_kg, bus_km, train_metro_km, tier) VALUES (?, ?, ?, ?, ?, ?)",
+            [session_id, curr, d_val, 0.0, 0.0, "Human"],
         )
         curr += datetime.timedelta(days=1)
 

@@ -26,3 +26,11 @@ This rule governs the data validation layer using Pydantic, focusing on fault to
   - Deserialize file content THROUGH the Pydantic model. If validation fails, route the error to the observability layer (`error-observability.md`) using the same quarantine pattern as Rule 2.
   - This rule applies even when the persistence layer is "just a JSON file." Treat it with the same rigor as DuckDB.
   - Reference: `defensive-programming.md` Rule 1, `rule-conflict-resolution.md` (Tier 0 Safety overrides Tier 3 Compliance).
+
+## 5. Source Baseline Verification vs. Hallucinated Precision
+- **Rule**: Never build highly specific tracking logic (e.g., splitting "Transit" into "CNG Bus", "Electric Bus", "AC Metro") unless the underlying reference dataset contains explicit, verified baseline KPIs for those exact sub-categories.
+- **Why**: An idempotent system with mathematically robust logic is still generating a hallucination if the source baseline is unverified. Pretending to track carbon at a highly granular level using estimated or averaged baseline data destroys the integrity of the tracking application.
+- **Action**:
+  - Before expanding data models or Pydantic schemas to track granular habits, verify the source of truth (`data/emissions_factors.csv`, etc.).
+  - If the dataset only contains generic `bus_km` (0.06 kg/km), do NOT split the UI/schema into `cng_bus` and `electric_bus` until verified metrics are obtained.
+  - Grouping variables is acceptable if their baseline variance is minimal (< 10-20%). If variance is high but verified data is absent, flag it as a data dependency blocker rather than hallucinating an average.

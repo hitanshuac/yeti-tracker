@@ -1,4 +1,5 @@
 """
+# pylint: disable=line-too-long
 Deterministic carbon math engine using DuckDB.
 
 All financial and CO2 calculations live here — no LLM, no UI.
@@ -49,7 +50,7 @@ def _load_factors(dataset_path: str) -> dict[str, dict[str, float]]:
         query = f"SELECT activity, co2_kg_per_unit, social_cost_inr_per_kg FROM read_csv_auto('{dataset_path}')"
         results = conn.execute(query).fetchall()
         return {row[0]: {"co2": float(row[1]), "scc": float(row[2])} for row in results}
-    except Exception as e:
+    except duckdb.Error as e:
         log_error(type(e).__name__, "carbon_engine", str(e))
         return {}
     finally:
@@ -79,17 +80,24 @@ def _detect_anomaly(session_id: str, daily_co2_kg: float, db_path: str = "data/y
         return False
     except duckdb.CatalogException:
         return False
-    except Exception as e:
+    except duckdb.Error as e:
         log_error(type(e).__name__, "carbon_engine", str(e))
         return False
 
 
-def run_duckdb_math(
+def _calculate_worst_habit(breakdown: dict[str, float]) -> str:
+    """Identify the worst discretionary habit from the breakdown."""
+    discretionary = {k: v for k, v in breakdown.items() if "Basic Living" not in k}
+    return max(discretionary, key=discretionary.get) if discretionary else "Unknown"
+
+
+def run_duckdb_math(  # pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
     car_km: int,
     two_wheeler_km: int,
     auto_rickshaw_km: int,
     flight_km: int,
-    transit_km: int,
+    bus_km: int,
+    train_metro_km: int,
     daily_sleep_hours: int,
     sleep_ac_on: bool,
     daytime_ac_hours: int,
@@ -104,7 +112,8 @@ def run_duckdb_math(
         two_wheeler_km: Yearly two-wheeler/bike kilometers.
         auto_rickshaw_km: Yearly auto-rickshaw/cab kilometers.
         flight_km: Yearly flight kilometers.
-        transit_km: Yearly public transit kilometers.
+        bus_km: Yearly bus kilometers.
+        train_metro_km: Yearly train/metro kilometers.
         daily_sleep_hours: Average daily sleep hours.
         sleep_ac_on: Whether the user sleeps with AC/cooler on.
         daytime_ac_hours: Average daily hours of AC/cooler usage while awake.
@@ -122,14 +131,15 @@ def run_duckdb_math(
 
     # World Bank Static Baseline for India: 2500 kg total
     # As requested, keeping the factual 2500 kg without subtracting.
-    BASELINE_FOOTPRINT_KG = 2500.0
-    SCC_INR_PER_KG = 15.80
+    baseline_footprint_kg = 2500.0
+    scc_inr_per_kg = 15.80
 
     yearly_car_co2 = car_km * _get("car_km", "co2", 0.15)
     yearly_two_wheeler_co2 = two_wheeler_km * _get("two_wheeler_km", "co2", 0.04)
     yearly_auto_rickshaw_co2 = auto_rickshaw_km * _get("auto_rickshaw_km", "co2", 0.08)
     yearly_flight_co2 = flight_km * _get("flight_km", "co2", 0.115)
-    yearly_transit_co2 = transit_km * _get("train_km", "co2", 0.01)
+    yearly_bus_co2 = bus_km * _get("bus_km", "co2", 0.08)
+    yearly_train_co2 = train_metro_km * _get("train_km", "co2", 0.01)
 
     ac_factor = _get("ac_hours", "co2", 1.12)
 
@@ -139,29 +149,30 @@ def run_duckdb_math(
 
     yearly_restaurant_co2 = restaurant_meals * _get("restaurant_meal", "co2", 3.5)
 
-    yearly_transport = yearly_car_co2 + yearly_two_wheeler_co2 + yearly_auto_rickshaw_co2 + yearly_transit_co2
+    yearly_transport = (
+        yearly_car_co2 + yearly_two_wheeler_co2 + yearly_auto_rickshaw_co2 + yearly_bus_co2 + yearly_train_co2
+    )
     yearly_flight = yearly_flight_co2
     yearly_restaurant = yearly_restaurant_co2
 
-    yearly_co2 = yearly_transport + yearly_flight + yearly_ac + yearly_restaurant + BASELINE_FOOTPRINT_KG
+    yearly_co2 = yearly_transport + yearly_flight + yearly_ac + yearly_restaurant + baseline_footprint_kg
 
     is_anomaly = False
     if session_id:
         daily_co2 = yearly_co2 / 365.0
         is_anomaly = _detect_anomaly(session_id, daily_co2)
 
-    carbon_tax = yearly_co2 * SCC_INR_PER_KG
+    carbon_tax = yearly_co2 * scc_inr_per_kg
 
     breakdown = {
-        "🏠 Basic Living (Home Meals, Shelter, Grid)": BASELINE_FOOTPRINT_KG,
+        "🏠 Basic Living (Home Meals, Shelter, Grid)": baseline_footprint_kg,
         "🚗 Car & Transit": yearly_transport,
         "✈️ Flights": yearly_flight,
         "❄️ AC / Heating": yearly_ac,
         "🍽️ Dining Out (Above Home Cooking)": yearly_restaurant,
     }
 
-    discretionary = {k: v for k, v in breakdown.items() if "Basic Living" not in k}
-    worst_habit = max(discretionary, key=discretionary.get) if discretionary else "Unknown"
+    worst_habit = _calculate_worst_habit(breakdown)
 
     return CarbonResult(
         yearly_co2_kg=yearly_co2,

@@ -1,4 +1,5 @@
 """
+# pylint: disable=line-too-long,duplicate-code,missing-docstring,import-outside-toplevel,redefined-outer-name,no-else-raise,too-few-public-methods
 Centralized error observability layer.
 
 Enforces defensive programming standards with schema-validated file I/O operations.
@@ -22,6 +23,27 @@ class ErrorLogEntry(BaseModel):
     resolution_strategy: str | None = None
 
 
+def _validate_log_inputs(error_type: str, component: str) -> None:
+    if not error_type or not isinstance(error_type, str):
+        raise ValueError(f"error_type must be a non-empty string, got: {error_type!r}")
+    if not component or not isinstance(component, str):
+        raise ValueError(f"component must be a non-empty string, got: {component!r}")
+
+
+def _load_existing_logs(log_file: str) -> list[ErrorLogEntry]:
+    logs: list[ErrorLogEntry] = []
+    if os.path.exists(log_file):
+        with open(log_file, encoding="utf-8") as f:
+            try:
+                data = json.load(f)
+                if not isinstance(data, list):
+                    raise ValueError(f"Schema mismatch: Expected list, got {type(data).__name__}")
+                logs = [ErrorLogEntry.model_validate(item) for item in data]
+            except (json.JSONDecodeError, ValidationError) as e:
+                raise ValueError(f"Schema mismatch in {log_file}: {e}") from e
+    return logs
+
+
 def log_error(error_type: str, component: str, message: str, log_file: str = "data/error_logs.json") -> None:
     """Log an error to the JSON file with atomic writes and schema validation.
 
@@ -35,23 +57,9 @@ def log_error(error_type: str, component: str, message: str, log_file: str = "da
         ValueError: If input parameters are invalid or schema mismatch occurs.
         RuntimeError: If data corruption is detected post-write.
     """
-    if not error_type or not isinstance(error_type, str):
-        raise ValueError(f"error_type must be a non-empty string, got: {error_type!r}")
-    if not component or not isinstance(component, str):
-        raise ValueError(f"component must be a non-empty string, got: {component!r}")
-
+    _validate_log_inputs(error_type, component)
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
-
-    logs: list[ErrorLogEntry] = []
-    if os.path.exists(log_file):
-        with open(log_file, encoding="utf-8") as f:
-            try:
-                data = json.load(f)
-                if not isinstance(data, list):
-                    raise ValueError(f"Schema mismatch: Expected list, got {type(data).__name__}")
-                logs = [ErrorLogEntry.model_validate(item) for item in data]
-            except (json.JSONDecodeError, ValidationError) as e:
-                raise ValueError(f"Schema mismatch in {log_file}: {e}") from e
+    logs = _load_existing_logs(log_file)
 
     before_len = len(logs)
 

@@ -422,5 +422,237 @@
     "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 25 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. The user doesn\\'t have AC or a cooler at home, so sleep_ac_on is false. Assuming a normal sleep schedule, daily_sleep_hours will be around 7-8 hours, so we\\'ll use 7.5, but since we need a whole number, we\\'ll round to 8 for simplicity.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 25 * 2 * 260,\\n   \"daily_sleep_hours\": 8,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
     "status": "UNRESOLVED",
     "resolution_strategy": "Updated regex in _recover_failed_generation to parse float numbers in math expressions and injected strict NO MATH prompt instructions."
+  },
+  {
+    "timestamp": 1782024647.5764625,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024648.4467611,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024648.4606516,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024738.5741959,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024739.394144,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024739.4094183,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024743.594886,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024744.481302,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024744.496879,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024929.2601287,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024930.3102949,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782024930.327254,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025035.5364614,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 25 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. The user doesn\\'t have AC at home, so sleep_ac_on is false. Assuming a standard 8 hours of sleep, daily_sleep_hours will be 8.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 25 * 2 * 365,\\n   \"daily_sleep_hours\": 8,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025183.4205568,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025183.4360218,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025297.3253634,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 20 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, which translates to 2 * 365 = 730 restaurant meals per year. The user does not mention any car or auto-rickshaw usage, and flight usage is not mentioned at all.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 20 * 2 * 365,\\n   \"daily_sleep_hours\": 0,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025704.630482,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025705.1028156,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025767.7270603,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025768.8470807,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025793.008606,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025793.9005213,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782025793.914583,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782026302.5097873,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782026303.354066,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782026303.3687751,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782026396.1065774,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782026396.9547782,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782026396.9703214,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
   }
 ]

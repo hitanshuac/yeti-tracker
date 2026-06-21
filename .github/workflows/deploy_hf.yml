@@ -14,4 +14,6 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_SPACE_REPO: ${{ secrets.HF_SPACE_REPO }}
-        run: git push https://user:$HF_TOKEN@huggingface.co/spaces/$HF_SPACE_REPO main -f
+        run: |
+          pip install huggingface_hub
+          huggingface-cli upload $HF_SPACE_REPO . . --repo-type space

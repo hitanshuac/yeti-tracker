@@ -9,6 +9,7 @@ and returns a formatted context string for LLM prompt injection.
 import re
 
 import duckdb
+from pathlib import Path
 
 from src.observability import log_error
 
@@ -28,7 +29,10 @@ def _build_rag_query(text: str, dataset_path: str) -> str | None:
     if not keywords:
         return None
 
-    conditions = [f"LOWER(description) LIKE '%{kw}%' OR LOWER(activity) LIKE '%{kw}%'" for kw in keywords]
+    conditions = [
+        f"LOWER(description) LIKE '%{kw}%' OR LOWER(activity) LIKE '%{kw}%'"
+        for kw in keywords
+    ]
     where_clause = " OR ".join(conditions)
     return (
         f"SELECT activity, description, co2_kg_per_unit, social_cost_inr_per_kg "
@@ -37,7 +41,12 @@ def _build_rag_query(text: str, dataset_path: str) -> str | None:
     )
 
 
-def fetch_rag_context(text: str, dataset_path: str = "data/carbon_factors.csv") -> str:
+def fetch_rag_context(
+    text: str,
+    dataset_path: str = str(
+        Path(__file__).parent.parent.resolve() / "data" / "carbon_factors.csv"
+    ),
+) -> str:
     """Use DuckDB to extract context rows from the emissions dataset.
 
     Args:
@@ -61,7 +70,9 @@ def fetch_rag_context(text: str, dataset_path: str = "data/carbon_factors.csv") 
 
         context_lines = ["RAG CONTEXT (Carbon Factors from Database):"]
         for row in results:
-            context_lines.append(f"- {row[0]} ({row[1]}): {row[2]} kg CO2/unit, ${row[3]} SCC/unit")
+            context_lines.append(
+                f"- {row[0]} ({row[1]}): {row[2]} kg CO2/unit, ${row[3]} SCC/unit"
+            )
         return "\n".join(context_lines)
     except duckdb.Error as e:
         log_error(type(e).__name__, "rag_service", str(e))

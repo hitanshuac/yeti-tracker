@@ -7,6 +7,7 @@ The engine reads emission factors from a CSV and returns typed results.
 """
 
 import duckdb
+from pathlib import Path
 from pydantic import BaseModel, Field
 
 from src.observability import log_error
@@ -102,7 +103,9 @@ def run_duckdb_math(  # pylint: disable=too-many-arguments,too-many-positional-a
     train_metro_km: int,
     ac_hours: int,
     restaurant_meals: int,
-    dataset_path: str = "data/carbon_factors.csv",
+    dataset_path: str = str(
+        Path(__file__).parent.parent.resolve() / "data" / "carbon_factors.csv"
+    ),
     session_id: str | None = None,
 ) -> CarbonResult:
     """Calculate forecasted carbon footprint and financial cost using DuckDB.
@@ -205,32 +208,34 @@ def classify_tier(yearly_co2: float) -> TierClassification:
     """
     monthly = yearly_co2 / 12.0
 
+    base_dir = Path(__file__).parent.parent.resolve()
+
     if yearly_co2 > 30000:
         return TierClassification(
             tier="Category 3 Catastrophe",
             color="#ff4b4b",
-            message="You didn't just leave a footprint today, you left a crater. The Yeti is obese.",
-            image_path="data/assets/tier3.jpg",
+            message="You didn't just leave a footprint today, you left a crater.",
+            image_path=str(base_dir / "data" / "assets" / "tier3.jpg"),
         )
     if yearly_co2 > 15000:
         return TierClassification(
             tier="Category 2 Catastrophe",
             color="#ffaa00",
             message=f"CATEGORY 2 CATASTROPHE ({monthly:,.0f} kg / mo)",
-            image_path="data/assets/tier2.jpg",
+            image_path=str(base_dir / "data" / "assets" / "tier2.jpg"),
         )
     if yearly_co2 > 9000:
         return TierClassification(
             tier="Category 1 Warning",
             color="#ffd700",
             message=f"CATEGORY 1 WARNING ({monthly:,.0f} kg / mo)",
-            image_path="data/assets/tier1.jpg",
+            image_path=str(base_dir / "data" / "assets" / "tier1.jpg"),
         )
     return TierClassification(
         tier="Human",
         color="#00cc66",
         message=f"ACCEPTABLE IMPACT ({monthly:,.0f} kg / mo)",
-        image_path="data/assets/tier_human.png",
+        image_path=str(base_dir / "data" / "assets" / "tier_human.jpg"),
     )
 
 

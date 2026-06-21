@@ -1,13 +1,30 @@
+"""
+Streamlit UI component renderers for the Yeti-Tracker dashboard.
+
+Thin presentation-layer functions that render widgets, progress bars,
+sliders, and historical charts. All business logic is delegated to
+the ``src/`` domain modules.
+"""
+
 import os
+from pathlib import Path
+from typing import Callable
 
 import pandas as pd
 import streamlit as st
 
+from src.carbon_engine import CarbonResult, TierClassification
 from src.chart_factory import create_history_chart
 from src.history import fetch_history_dataframe
+from src.observability import log_error
 
 
-def _render_budget_bar(result) -> None:
+def _render_budget_bar(result: CarbonResult) -> None:
+    """Render the daily survival allowance progress bar.
+
+    Args:
+        result: Validated carbon calculation result from the math engine.
+    """
     daily_kg = result.yearly_co2_kg / 365.0
     baseline_daily = 2500.0 / 365.0
     bar_ceiling = baseline_daily * 3.0
@@ -27,17 +44,22 @@ def _render_budget_bar(result) -> None:
     st.markdown(
         f"<div title=' Everyone starts at 2,500 kg CO/year (India baseline). "
         f"The sliders track how much more your lifestyle adds on top.' "
-        f"style='background:#222;border-radius:8px;overflow:hidden;height:32px;width:100%;position:relative;'>"
+        f"style='background:rgba(128,128,128,0.2);border-radius:8px;overflow:hidden;height:32px;width:100%;position:relative;'>"
         f"<div style='background:{bar_color};width:{budget_pct * 100:.1f}%;height:100%;border-radius:8px;"
         f"transition:width 0.5s ease;'></div>"
         f"<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
-        f"color:white;font-weight:bold;font-size:0.85em;white-space:nowrap;'>{bar_label}</span>"
+        f"color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.8);font-weight:bold;font-size:0.85em;white-space:nowrap;'>{bar_label}</span>"
         f"</div>",
         unsafe_allow_html=True,
     )
 
 
-def _render_tier_bar(result) -> None:
+def _render_tier_bar(result: CarbonResult) -> None:
+    """Render the session tier progress bar.
+
+    Args:
+        result: Validated carbon calculation result from the math engine.
+    """
     current_co2 = result.yearly_co2_kg
     tier_max = 30000.0
     tier_pct = min(1.0, max(0.01, current_co2 / tier_max))
@@ -60,19 +82,26 @@ def _render_tier_bar(result) -> None:
     st.markdown(
         f"<div title='This bar tracks your total footprint. "
         f"Over 9,000 kg pushes you out of the Human tier into Catastrophes.' "
-        f"style='background:#222;border-radius:8px;overflow:hidden;height:32px;width:100%;"
+        f"style='background:rgba(128,128,128,0.2);border-radius:8px;overflow:hidden;height:32px;width:100%;"
         f"position:relative;margin-bottom:8px;'>"
         f"<div style='background:{tier_bar_color};width:{tier_pct * 100:.1f}%;height:100%;border-radius:8px;"
         f"transition:width 0.8s ease;'></div>"
         f"<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
-        f"color:white;font-weight:bold;font-size:0.85em;white-space:nowrap;'>{tier_bar_label}</span>"
+        f"color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.8);font-weight:bold;font-size:0.85em;white-space:nowrap;'>{tier_bar_label}</span>"
         f"</div>",
         unsafe_allow_html=True,
     )
 
 
-def _render_top_progress_bars(result, tier_info) -> None:
-    """Render the top gamification banner, budget bar, and tier progress."""
+def _render_top_progress_bars(
+    result: CarbonResult, tier_info: TierClassification
+) -> None:
+    """Render the top gamification banner, budget bar, and tier progress.
+
+    Args:
+        result: Validated carbon calculation result from the math engine.
+        tier_info: Gamification tier classification for the current session.
+    """
     if tier_info.tier == "Category 3 Catastrophe":
         st.markdown(
             """
@@ -101,29 +130,32 @@ def _render_top_progress_bars(result, tier_info) -> None:
         )
 
 
-def _render_asset_image(tier_info) -> None:
-    """Render the Yeti/Godzilla image."""
-    st.markdown("###  Tier Status")
+def _render_asset_image(tier_info: TierClassification) -> None:
+    """Render the Yeti/Godzilla tier image asset.
+
+    Args:
+        tier_info: Gamification tier classification containing the image path.
+    """
+    st.markdown("###  Tier Status", help=tier_info.message)
     if tier_info.image_path and os.path.exists(tier_info.image_path):
-        if "Catastrophe" in tier_info.tier or "Warning" in tier_info.tier:
-            with st.expander(" Reveal Catastrophe", expanded=False):
-                st.image(
-                    tier_info.image_path,
-                    use_container_width=True,
-                    caption=f"Tier: {tier_info.tier}",
-                )
-        else:
-            st.image(
-                tier_info.image_path,
-                use_container_width=True,
-                caption=f"Tier: {tier_info.tier}",
-            )
+        st.image(
+            tier_info.image_path,
+            use_container_width=True,
+            caption=f"Tier: {tier_info.tier}",
+        )
     else:
         st.info("No asset available for this tier.")
 
 
-def _render_sliders(on_calculate) -> None:
-    """Render the human verification sliders."""
+def _render_sliders(
+    on_calculate: Callable[[], None], on_slider_change: Callable[[], None]
+) -> None:
+    """Render the human verification sliders and calculate button.
+
+    Args:
+        on_calculate: Callback function triggered when the user clicks Calculate.
+        on_slider_change: Callback function triggered when a slider is moved.
+    """
     st.markdown(
         "<h3 title='This tracks your variance above the 2,500kg India survival baseline.'>"
         "2. Human Verification</h3>",
@@ -157,6 +189,7 @@ def _render_sliders(on_calculate) -> None:
             0,
             max(c_max, int(st.session_state.get("car_km", 0))),
             key="car_km",
+            on_change=on_slider_change,
             help="Total kilometers driven in a petrol/diesel car per year.",
         )
         st.slider(
@@ -164,6 +197,7 @@ def _render_sliders(on_calculate) -> None:
             0,
             max(c_max, int(st.session_state.get("two_wheeler_km", 0))),
             key="two_wheeler_km",
+            on_change=on_slider_change,
             help="Total kilometers ridden on a scooter or motorcycle per year.",
         )
         st.slider(
@@ -171,6 +205,7 @@ def _render_sliders(on_calculate) -> None:
             0,
             max(c_max, int(st.session_state.get("auto_rickshaw_km", 0))),
             key="auto_rickshaw_km",
+            on_change=on_slider_change,
             help="Total kilometers in an auto-rickshaw or taxi cab per year.",
         )
 
@@ -179,6 +214,7 @@ def _render_sliders(on_calculate) -> None:
             0,
             max(f_max, int(st.session_state.get("flight_km", 0))),
             key="flight_km",
+            on_change=on_slider_change,
             help="Total flight distance per year. Delhi-Mumbai one-way is ~1,400 km.",
         )
 
@@ -188,6 +224,7 @@ def _render_sliders(on_calculate) -> None:
             0,
             max(t_max, int(st.session_state.get("bus_km", 0))),
             key="bus_km",
+            on_change=on_slider_change,
             help="Total km traveled by bus per year.",
         )
         st.slider(
@@ -195,13 +232,15 @@ def _render_sliders(on_calculate) -> None:
             0,
             max(t_max, int(st.session_state.get("train_metro_km", 0))),
             key="train_metro_km",
+            on_change=on_slider_change,
             help="Total km traveled by electric train or metro per year.",
         )
         st.slider(
             "Grid Drain (AC Hours)",
             0,
-            max(24, int(st.session_state.get("ac_hours", 0)) * 2),
+            max(240, int(st.session_state.get("ac_hours", 0))),
             key="ac_hours",
+            on_change=on_slider_change,
             help="Average hours of AC/cooler usage during the day and night.",
         )
         st.slider(
@@ -209,6 +248,7 @@ def _render_sliders(on_calculate) -> None:
             0,
             max(r_max, int(st.session_state.get("restaurant_meals", 0))),
             key="restaurant_meals",
+            on_change=on_slider_change,
             help=(
                 "Number of restaurant/takeaway meals per year. "
                 "This tracks EXTRA impact above your home-cooked baseline."
@@ -225,7 +265,7 @@ def _render_sliders(on_calculate) -> None:
 
 
 def _render_history_section() -> None:
-    """Render the confession history chart."""
+    """Render the confession history chart with error observability."""
     st.markdown("---")
     st.markdown("##  Your Confession History")
 
@@ -236,12 +276,19 @@ def _render_history_section() -> None:
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No historical data yet. Confess your lifestyle to start tracking!")
-    except Exception:
+    except (OSError, ValueError) as e:
+        # RULE OVERRIDE: defensive-programming.md Rule 2 (Tier 0) requires
+        # real error logging. Bare except with no logging is FORBIDDEN.
+        log_error(type(e).__name__, "history_section", str(e))
         st.info("Historical tracking will appear after your first confession.")
 
 
-def _render_calculation_expander(result) -> None:
-    """Render the calculation methodology in a full-width expander."""
+def _render_calculation_expander(result: CarbonResult) -> None:
+    """Render the calculation methodology in a full-width expander.
+
+    Args:
+        result: Validated carbon calculation result from the math engine.
+    """
     monthly_tax = result.carbon_tax_inr / 12.0
     with st.expander("How is this calculated?"):
         ex_col1, ex_col2 = st.columns([1, 1.5])
@@ -298,7 +345,13 @@ def _render_calculation_expander(result) -> None:
             "This tool uses verified regional data sources to ensure a deterministic math engine."
         )
         try:
-            factors_df = pd.read_csv("data/carbon_factors.csv")
+            factors_df = pd.read_csv(
+                str(
+                    Path(__file__).parent.parent.parent.resolve()
+                    / "data"
+                    / "carbon_factors.csv"
+                )
+            )
             display_df = factors_df[
                 ["activity", "co2_kg_per_unit", "source_agency", "description"]
             ]
@@ -308,8 +361,15 @@ def _render_calculation_expander(result) -> None:
             st.warning("Could not load carbon factors table.")
 
 
-def _render_confessional(on_extract, on_demo) -> None:
-    """Render the confessional input box and buttons."""
+def _render_confessional(
+    on_extract: Callable[[], None], on_demo: Callable[[], None]
+) -> None:
+    """Render the confessional input box and action buttons.
+
+    Args:
+        on_extract: Callback triggered when the user clicks Extract Data.
+        on_demo: Callback triggered when the user clicks Try a Demo Persona.
+    """
     st.markdown(
         "<h3 title='The AI extracts unstructured text into exact integers for the math engine.'>"
         "1. The Confessional (LLM Auto-Fill)</h3>",

@@ -16,4 +16,13 @@ jobs:
           HF_SPACE_REPO: ${{ secrets.HF_SPACE_REPO }}
         run: |
           pip install huggingface_hub
-          huggingface-cli upload $HF_SPACE_REPO . . --repo-type space
+          python -c "
+          import os
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ.get('HF_TOKEN'))
+          api.upload_folder(
+              folder_path='.',
+              repo_id=os.environ.get('HF_SPACE_REPO'),
+              repo_type='space'
+          )
+          "

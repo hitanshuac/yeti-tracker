@@ -67,7 +67,7 @@ Yeti-Tracker enforces strict engineering standards via the `.agents` framework. 
 - **Python APIs**: Built with Streamlit, Plotly, DuckDB, and Pydantic with idempotent I/O and strict error observability.
 - **Product Templates (5 Active)**: Fully populated `01_PRD.md`, `02_TAD.md`, `03_SECURITY.md`, `04_FRONTEND.md`, and `05_TICKETS.md`.
 - **Skills (5 Active)**: Diagram Generator, DuckDB Optimizer, LLM-Council, Pipeline Architect, Universal Ingestion.
-- **Workflows (24 Active)**: Including `master-sync.md`, `test-automation.md`, and `update-docs.md`.
+- **Workflows (25 Active)**: Including `deploy-streamlit-production.md`, `master-sync.md`, `test-automation.md`, and `update-docs.md`.
 - **Architecture Decision Records (6 Active)**: Covering schema migration, data validation, and master sync checkpoints.
 - **Demo Personas (7 Active)**: Including "The Last-Mile Addict" and "The Home Chef" which trigger the Out-of-Bounds Catcher for unverified lifestyle activities.
 

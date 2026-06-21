@@ -6,9 +6,11 @@ description: Universal Master workflow to deploy ANY codebase as a Docker contai
 
 This workflow orchestrates the deployment pipeline. It is entirely language-agnostic and relies on Hugging Face Docker Spaces to deploy arbitrary environments (Node.js, Go, Rust, Python, etc.) via native Git commands.
 
-## Step 1: Pre-Flight Credential Provisioning
+## Step 1: Pre-Flight Credential & Asset Provisioning
 1. Execute the `.agents/workflows/setup-secrets.md` workflow.
 2. Ensure `HF_TOKEN` and `HF_SPACE_REPO` are securely pushed to GitHub Actions via the `gh` CLI.
+3. **IMAGE CHECK (CRITICAL)**: Scan the repository for any `*.jpg`, `*.png`, or `*.webp` files. If any binary image files exist in the repository (e.g., in `data/assets/`), Hugging Face Spaces will silently fail to clone the repository without Git LFS configured.
+   - **Action**: If images exist, **HALT** this workflow immediately and execute `.agents/workflows/deploy-streamlit-production.md` instead. Do not proceed with HF Deployment.
 
 ## Step 2: Stack Detection & Dockerization
 To deploy a generic repository to Hugging Face Spaces, it MUST use a Docker Space.

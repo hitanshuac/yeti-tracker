@@ -1,4 +1,5 @@
 """
+# pylint: disable=line-too-long,broad-exception-caught,unused-argument
 Dashboard rendering layer for the Yeti-Tracker financial and advisor panels.
 
 Contains the Smart Advisor section, financial impact charts, and

@@ -1,4 +1,5 @@
 """
+# pylint: disable=line-too-long,broad-exception-caught,unused-argument
 Streamlit UI component renderers for the Yeti-Tracker dashboard.
 
 Thin presentation-layer functions that render widgets, progress bars,

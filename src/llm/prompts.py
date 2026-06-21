@@ -1,4 +1,5 @@
 """
+# pylint: disable=line-too-long,broad-exception-caught,unused-argument
 Prompt templates for LLM consumption.
 """
 

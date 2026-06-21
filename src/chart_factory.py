@@ -1,7 +1,7 @@
 """
 Plotly chart factory for the Yeti-Tracker dashboard.
 
-All chart creation logic is centralized here — pure functions that
+All chart creation logic is centralized here  pure functions that
 accept data and return Plotly Figure objects.  No Streamlit, no DB, no LLM.
 """
 
@@ -56,14 +56,14 @@ def create_gauge_chart(value: float, max_value: float, title: str) -> go.Figure:
     fig.update_layout(
         paper_bgcolor=_BG,
         font=_FONT,
-        height=250,
+        height=380,
         margin={"l": 20, "r": 20, "b": 20, "t": 50},
     )
     return fig
 
 
 def create_savings_waterfall(monthly_tax: float, savings: float) -> go.Figure:
-    """Waterfall chart: Current Tax → Savings → Optimized Tax.
+    """Waterfall chart: Current Tax  Savings  Optimized Tax.
 
     Args:
         monthly_tax: Monthly carbon tax in INR.
@@ -84,9 +84,9 @@ def create_savings_waterfall(monthly_tax: float, savings: float) -> go.Figure:
             x=["Your Monthly Tax", "AI Savings Plan", "After Rescue"],
             y=[monthly_tax, -savings, optimized],
             text=[
-                f"₹{monthly_tax:,.0f}",
-                f"-₹{savings:,.0f}",
-                f"₹{optimized:,.0f}",
+                f"{monthly_tax:,.0f}",
+                f"-{savings:,.0f}",
+                f"{optimized:,.0f}",
             ],
             textposition="outside",
             connector={"line": {"color": "#555"}},
@@ -99,8 +99,8 @@ def create_savings_waterfall(monthly_tax: float, savings: float) -> go.Figure:
     fig.update_layout(
         title={
             "text": (
-                f"You save ₹{weekly_saved:,.0f}/wk · ₹{savings:,.0f}/mo "
-                f"· ₹{quarterly_saved:,.0f}/qtr ({pct:.0f}% reduction)"
+                f"You save {weekly_saved:,.0f}/wk  {savings:,.0f}/mo "
+                f" {quarterly_saved:,.0f}/qtr ({pct:.0f}% reduction)"
             ),
             "font": {"color": "#00cc66", "size": 14},
         },
@@ -127,7 +127,7 @@ def create_doom_vs_rescue(monthly_tax: float, savings: float) -> go.Figure:
     """
     months = [f"Month {i}" for i in range(1, 13)]
     doom = [monthly_tax * i for i in range(1, 13)]
-    optimized_monthly = max(0, monthly_tax - savings)
+    optimized_monthly = monthly_tax - savings
     rescue = [optimized_monthly * i for i in range(1, 13)]
     cumulative_saved = [(monthly_tax - optimized_monthly) * i for i in range(1, 13)]
 
@@ -137,7 +137,7 @@ def create_doom_vs_rescue(monthly_tax: float, savings: float) -> go.Figure:
             x=months,
             y=doom,
             mode="lines+markers",
-            name="💀 Current Path",
+            name=" Current Path",
             line={"color": "#ff4b4b", "width": 3},
             fill=None,
         )
@@ -147,7 +147,7 @@ def create_doom_vs_rescue(monthly_tax: float, savings: float) -> go.Figure:
             x=months,
             y=rescue,
             mode="lines+markers",
-            name="🛡️ After Rescue",
+            name=" After Rescue",
             line={"color": "#00cc66", "width": 3},
         )
     )
@@ -155,7 +155,7 @@ def create_doom_vs_rescue(monthly_tax: float, savings: float) -> go.Figure:
         go.Bar(
             x=months,
             y=cumulative_saved,
-            name="💰 Cumulative Saved",
+            name=" Cumulative Saved",
             marker_color="rgba(59, 130, 246, 0.4)",
         )
     )
@@ -183,7 +183,9 @@ def create_history_chart(history_df: "pd.DataFrame") -> go.Figure:
     Returns:
         A Plotly Figure.
     """
-    history_df["7_day_MA"] = history_df["daily_carbon_kg"].rolling(window=7, min_periods=1).mean()
+    history_df["7_day_MA"] = (
+        history_df["daily_carbon_kg"].rolling(window=7, min_periods=1).mean()
+    )
 
     fig = go.Figure()
     fig.add_trace(
@@ -209,13 +211,13 @@ def create_history_chart(history_df: "pd.DataFrame") -> go.Figure:
         y=30000 / 365,
         line_dash="dash",
         line_color="red",
-        annotation_text="⚠️ Category 3",
+        annotation_text=" Category 3",
     )
     fig.add_hline(
         y=15000 / 365,
         line_dash="dash",
         line_color="orange",
-        annotation_text="⚠️ Category 2",
+        annotation_text=" Category 2",
     )
     fig.add_hline(
         y=9000 / 365,

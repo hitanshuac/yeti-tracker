@@ -2,7 +2,7 @@
 # pylint: disable=line-too-long
 Deterministic carbon math engine using DuckDB.
 
-All financial and CO2 calculations live here — no LLM, no UI.
+All financial and CO2 calculations live here  no LLM, no UI.
 The engine reads emission factors from a CSV and returns typed results.
 """
 
@@ -57,7 +57,9 @@ def _load_factors(dataset_path: str) -> dict[str, dict[str, float]]:
         conn.close()
 
 
-def _detect_anomaly(session_id: str, daily_co2_kg: float, db_path: str = "data/yeti.duckdb") -> bool:
+def _detect_anomaly(
+    session_id: str, daily_co2_kg: float, db_path: str = "data/yeti.duckdb"
+) -> bool:
     """Detects if the given daily carbon footprint is > 90th percentile of last 30 days using DuckDB."""
     try:
         conn = duckdb.connect(db_path)
@@ -98,9 +100,7 @@ def run_duckdb_math(  # pylint: disable=too-many-arguments,too-many-positional-a
     flight_km: int,
     bus_km: int,
     train_metro_km: int,
-    daily_sleep_hours: int,
-    sleep_ac_on: bool,
-    daytime_ac_hours: int,
+    ac_hours: int,
     restaurant_meals: int,
     dataset_path: str = "data/carbon_factors.csv",
     session_id: str | None = None,
@@ -114,9 +114,7 @@ def run_duckdb_math(  # pylint: disable=too-many-arguments,too-many-positional-a
         flight_km: Yearly flight kilometers.
         bus_km: Yearly bus kilometers.
         train_metro_km: Yearly train/metro kilometers.
-        daily_sleep_hours: Average daily sleep hours.
-        sleep_ac_on: Whether the user sleeps with AC/cooler on.
-        daytime_ac_hours: Average daily hours of AC/cooler usage while awake.
+        ac_hours: Average daily hours of AC/cooler usage.
         restaurant_meals: Yearly restaurant meals.
         dataset_path: Path to the emission factors CSV.
         session_id: Optional session ID for dynamic baseline inference.
@@ -142,20 +140,27 @@ def run_duckdb_math(  # pylint: disable=too-many-arguments,too-many-positional-a
     yearly_train_co2 = train_metro_km * _get("train_km", "co2", 0.01)
 
     ac_factor = _get("ac_hours", "co2", 1.12)
-
-    yearly_sleep_ac = (daily_sleep_hours * 365) * ac_factor if sleep_ac_on else 0
-    yearly_daytime_ac = (daytime_ac_hours * 365) * ac_factor
-    yearly_ac = yearly_sleep_ac + yearly_daytime_ac
+    yearly_ac = (ac_hours * 365) * ac_factor
 
     yearly_restaurant_co2 = restaurant_meals * _get("restaurant_meal", "co2", 3.5)
 
     yearly_transport = (
-        yearly_car_co2 + yearly_two_wheeler_co2 + yearly_auto_rickshaw_co2 + yearly_bus_co2 + yearly_train_co2
+        yearly_car_co2
+        + yearly_two_wheeler_co2
+        + yearly_auto_rickshaw_co2
+        + yearly_bus_co2
+        + yearly_train_co2
     )
     yearly_flight = yearly_flight_co2
     yearly_restaurant = yearly_restaurant_co2
 
-    yearly_co2 = yearly_transport + yearly_flight + yearly_ac + yearly_restaurant + baseline_footprint_kg
+    yearly_co2 = (
+        yearly_transport
+        + yearly_flight
+        + yearly_ac
+        + yearly_restaurant
+        + baseline_footprint_kg
+    )
 
     is_anomaly = False
     if session_id:
@@ -165,11 +170,11 @@ def run_duckdb_math(  # pylint: disable=too-many-arguments,too-many-positional-a
     carbon_tax = yearly_co2 * scc_inr_per_kg
 
     breakdown = {
-        "🏠 Basic Living (Home Meals, Shelter, Grid)": baseline_footprint_kg,
-        "🚗 Car & Transit": yearly_transport,
-        "✈️ Flights": yearly_flight,
-        "❄️ AC / Heating": yearly_ac,
-        "🍽️ Dining Out (Above Home Cooking)": yearly_restaurant,
+        " Basic Living (Home Meals, Shelter, Grid)": baseline_footprint_kg,
+        " Car & Transit": yearly_transport,
+        " Flights": yearly_flight,
+        " AC / Heating": yearly_ac,
+        " Dining Out (Above Home Cooking)": yearly_restaurant,
     }
 
     worst_habit = _calculate_worst_habit(breakdown)
@@ -225,7 +230,7 @@ def classify_tier(yearly_co2: float) -> TierClassification:
         tier="Human",
         color="#00cc66",
         message=f"ACCEPTABLE IMPACT ({monthly:,.0f} kg / mo)",
-        image_path=None,
+        image_path="data/assets/tier_human.png",
     )
 
 

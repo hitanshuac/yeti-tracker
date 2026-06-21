@@ -36,9 +36,7 @@ class ParsedPersonalData(BaseModel):
     flight_km: int = Field(ge=0, default=0)
     bus_km: int = Field(ge=0, default=0)
     train_metro_km: int = Field(ge=0, default=0)
-    daily_sleep_hours: int = Field(ge=0, le=24, default=8)
-    sleep_ac_on: bool = Field(default=False)
-    daytime_ac_hours: int = Field(ge=0, default=0)
+    ac_hours: int = Field(ge=0, le=24, default=0)
     restaurant_meals: int = Field(ge=0, default=0)
     untracked_activities: list[str] = Field(
         default_factory=list,
@@ -71,9 +69,11 @@ class AdvisorResponse(BaseModel):
     """Typed schema for the Yeti Advisor output."""
 
     analysis: str = "System Override: No analysis provided."
-    silver_lining: str = "You're being honest about your habits — that's the first step."
+    silver_lining: str = "You're being honest about your habits  that's the first step."
     roast: str = "But let's see if we can do better, shall we?"
-    guilt_easing_question: str = "Tell me more about your daily routine — any hidden habits?"
+    guilt_easing_question: str = (
+        "Tell me more about your daily routine  any hidden habits?"
+    )
     alternatives: list[AdvisorAlternative] = Field(
         default_factory=lambda: [
             AdvisorAlternative(
@@ -105,9 +105,7 @@ class AdvisorRequest(BaseModel):
     flight_km: int
     bus_km: int
     train_metro_km: int
-    daily_sleep_hours: int
-    sleep_ac_on: bool
-    daytime_ac_hours: int
+    ac_hours: int
     restaurant_meals: int
     tier: str
     goal: str
@@ -128,7 +126,7 @@ Act like a friendly lifestyle blogger just capturing their day.
 
 CRITICAL DIRECTIVE ON MATH AND VALIDATION:
 1. You MUST calculate the YEARLY total for transportation (car_km, two_wheeler_km, auto_rickshaw_km, flight_km, bus_km, train_metro_km) and restaurant_meals. If they say 'every workday', you multiply by 260. If they say 'every day', multiply by 365.
-2. You MUST extract the DAILY average (A NUMBER BETWEEN 0 AND 24) for 'daily_sleep_hours' and 'daytime_ac_hours'. NEVER multiply daily hours by 365.
+2. You MUST extract the DAILY average (A NUMBER BETWEEN 0 AND 24) for 'ac_hours'. NEVER multiply daily hours by 365.
 3. THE BOUNCER RULE: If the user inputs physically impossible data (e.g., >24 hours of AC/sleep in a day, sleeping 1 hour a year, 365 flights a year), you MUST set `is_valid` to false and provide a sarcastic `rejection_reason`. Set all integers to 0.
 4. FOR ALL YEARLY METRICS: If the user provides a daily or weekly value, you MUST output a string containing the math expression (e.g. "2 * 365" or "10 * 52"). DO NOT evaluate the math yourself! Our system will calculate it securely.
 5. THE OUT-OF-BOUNDS CATCHER: If the user mentions any high-carbon activities that do NOT fit into our exact numerical sliders (e.g. eating beef, helicopters, buying fast fashion), you MUST extract them into a list of strings in the `untracked_activities` array. DO NOT hallucinate numerical proxies for them.
@@ -146,9 +144,7 @@ You MUST output a strict JSON object exactly matching this format. Always write 
   "flight_km": 0,
   "bus_km": "10 * 260",
   "train_metro_km": 0,
-  "daytime_ac_hours": 4,
-  "daily_sleep_hours": 8,
-  "sleep_ac_on": true,
+  "ac_hours": 4,
   "restaurant_meals": "2 * 52",
   "untracked_activities": ["eating beef", "helicopter commute"]
 }}
@@ -184,7 +180,7 @@ You must output a strict JSON object matching this schema:
   ]
 }}
 CRITICAL INSTRUCTION: You MUST provide exactly two alternatives (one 'Convenience' and one 'Maximum Impact'). Together, these alternatives MUST reduce their total Social Cost of Carbon by AT LEAST 20%.
-LOGIC DIRECTIVE: Your alternatives MUST be hyper-specific to the exact categories driving their footprint. If their footprint comes entirely from AC, DO NOT suggest they stop driving. If they already use public transit, DO NOT suggest public transit—instead suggest they WFH or tackle their AC/Diet. DO NOT give redundant advice.
+LOGIC DIRECTIVE: Your alternatives MUST be hyper-specific to the exact categories driving their footprint. If their footprint comes entirely from AC, DO NOT suggest they stop driving. If they already use public transit, DO NOT suggest public transitinstead suggest they WFH or tackle their AC/Diet. DO NOT give redundant advice.
 DO NOT be insulting to their identity, attack the behavior. OUTPUT ONLY VALID JSON. No extra text."""
 
 
@@ -244,7 +240,10 @@ def _recover_failed_generation(error_msg: str) -> dict | None:
 
     try:
         data = json.loads(fixed_json)
-        return {k: int(float(v)) if isinstance(v, int | float) else v for k, v in data.items()}
+        return {
+            k: int(float(v)) if isinstance(v, int | float) else v
+            for k, v in data.items()
+        }
     except (json.JSONDecodeError, ValueError):
         return None
 
@@ -313,7 +312,9 @@ def _apply_fuzzy_value(mk: str, v: Any, fallback_data: dict) -> None:
         pass
 
 
-def _fuzzy_match_key(lower_k: str, v: Any, model_keys: list[str], fallback_data: dict) -> bool:
+def _fuzzy_match_key(
+    lower_k: str, v: Any, model_keys: list[str], fallback_data: dict
+) -> bool:
     """Helper to perform fuzzy key matching for fallback parsing."""
     for mk in model_keys:
         if lower_k == mk.lower() or lower_k.replace(" ", "_") == mk.lower():
@@ -373,13 +374,25 @@ def parse_confession(text: str) -> ParsedPersonalData:
     )
 
 
+def _is_severe_catastrophe(req: AdvisorRequest) -> bool:
+    return req.tier == "Category 3 Catastrophe" or req.carbon > 15000
+
+
+def _is_moderate_catastrophe(req: AdvisorRequest) -> bool:
+    return req.tier == "Category 2 Catastrophe" or req.carbon > 8000
+
+
 def _get_advisor_system_message(req: AdvisorRequest) -> str:
-    if req.tier == "Category 3 Catastrophe" or req.carbon > 15000:
-        return "You are a witty, pragmatic behavioral economist. Use dry, observational sarcasm to highlight their massive impact, but NEVER attack them. Immediately validate their lifestyle to ease their guilt."
-    if req.tier == "Category 2 Catastrophe" or req.carbon > 8000:
+    if _is_severe_catastrophe(req):
         return (
-            "You are a sarcastic but supportive lifestyle coach. Point out their specific actions with witty humor, "
-            "but keep the tone light and encouraging. "
+            "You are a witty, pragmatic behavioral economist. Use dry, observational sarcasm "
+            "to highlight their massive impact, but NEVER attack them. "
+            "Immediately validate their lifestyle to ease their guilt."
+        )
+    if _is_moderate_catastrophe(req):
+        return (
+            "You are a sarcastic but supportive lifestyle coach. Point out their specific actions "
+            "with witty humor, but keep the tone light and encouraging. "
             "CRITICAL INSTRUCTION: You MUST include a 'Near Miss' roast mentioning "
             "that they were extremely close to staying in Tier 1. Make them laugh about "
             "a specific action from today."
@@ -400,13 +413,18 @@ def _build_advisor_prompt(req: AdvisorRequest) -> str:
         f"This year, they will travel {req.car_km} km by car, {req.two_wheeler_km} km by two-wheeler, "
         f"{req.auto_rickshaw_km} km by auto-rickshaw/cab, {req.flight_km} km by plane, "
         f"and {req.bus_km} km by bus, {req.train_metro_km} km by train/metro.\n"
-        f"They sleep {req.daily_sleep_hours} hours a day (AC on: {req.sleep_ac_on}), "
-        f"use {req.daytime_ac_hours} hours of AC during the day, "
+        f"They use {req.ac_hours} hours of AC daily, "
         f"and eat out at restaurants {req.restaurant_meals} times.\n\n"
         f"USER'S RAW CONFESSION: '{req.raw_text}'\n"
-        f"CRITICAL DIRECTIVE: You MUST read the raw confession. If the user explicitly states they cannot control a habit (e.g., 'office AC', 'no AC at home'), DO NOT suggest alternatives for it. Pivot your advice to habits they CAN control (like meals or transit).\n"
-        f"AC MITIGATION RULE: When suggesting AC reductions (especially for offices), NEVER suggest turning it off entirely, as that makes others suffer. Instead, suggest optimizing the temperature to 24°C, regular maintenance, or a hybrid fan/AC approach.\n"
-        f"PRAGMATISM RULE: All alternatives MUST be realistic 'Baby Steps' achievable within 30-60 days. NEVER suggest impossible geography (e.g., taking a train across an ocean to Iceland). Acknowledge that some things are necessary, and provide highly practical workarounds (e.g., if they must fly, suggest direct economy flights)."
+        f"CRITICAL DIRECTIVE: You MUST read the raw confession. If the user explicitly states they cannot "
+        f"control a habit (e.g., 'office AC', 'no AC at home'), DO NOT suggest alternatives for it. "
+        f"Pivot your advice to habits they CAN control (like meals or transit).\n"
+        f"AC MITIGATION RULE: When suggesting AC reductions (especially for offices), NEVER suggest turning it "
+        f"off entirely, as that makes others suffer. Instead, suggest optimizing the temperature to 24C, "
+        f"regular maintenance, or a hybrid fan/AC approach.\n"
+        f"PRAGMATISM RULE: All alternatives MUST be realistic 'Baby Steps' achievable within 30-60 days. "
+        f"NEVER suggest impossible geography (e.g., taking a train across an ocean to Iceland). "
+        f"Acknowledge that some things are necessary, and provide highly practical workarounds."
     )
 
     return PROMPT_WRATH_SWITCH.format(
@@ -426,7 +444,9 @@ def _parse_advisor_response(data: dict) -> AdvisorResponse:
             analysis=data.get("analysis", AdvisorResponse().analysis),
             silver_lining=data.get("silver_lining", AdvisorResponse().silver_lining),
             roast=data.get("roast", AdvisorResponse().roast),
-            guilt_easing_question=data.get("guilt_easing_question", AdvisorResponse().guilt_easing_question),
+            guilt_easing_question=data.get(
+                "guilt_easing_question", AdvisorResponse().guilt_easing_question
+            ),
             alternatives=[AdvisorAlternative(**a) for a in data.get("alternatives", [])]
             or AdvisorResponse().alternatives,
         )

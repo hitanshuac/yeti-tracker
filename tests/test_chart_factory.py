@@ -1,1 +1,0 @@
-# pylint: disable=missing-module-docstring,redefined-outer-name,line-too-long,duplicate-code,import-outside-toplevel,no-else-raise,too-few-public-methods,unused-argument,inconsistent-return-statements,missing-class-docstring,missing-function-docstring

@@ -26,9 +26,7 @@ class AppState(BaseModel):
     flight_km: int = 0
     bus_km: int = 0
     train_metro_km: int = 0
-    daily_sleep_hours: int = 8
-    sleep_ac_on: bool = False
-    daytime_ac_hours: int = 0
+    ac_hours: int = 0
     restaurant_meals: int = 0
 
     # AI Parsed Baselines (for override detection)
@@ -38,9 +36,7 @@ class AppState(BaseModel):
     ai_flight_km: int = 0
     ai_bus_km: int = 0
     ai_train_metro_km: int = 0
-    ai_daily_sleep_hours: int = 8
-    ai_sleep_ac_on: bool = False
-    ai_daytime_ac_hours: int = 0
+    ai_ac_hours: int = 0
     ai_restaurant_meals: int = 0
 
     # Confessional text
@@ -82,7 +78,10 @@ def init_state(st_session_state: dict) -> None:
             st_session_state[field_name] = value
 
     # Sync last_extracted_text to confessional default
-    if "last_extracted_text" not in st_session_state or not st_session_state["last_extracted_text"]:
+    if (
+        "last_extracted_text" not in st_session_state
+        or not st_session_state["last_extracted_text"]
+    ):
         st_session_state["last_extracted_text"] = st_session_state["confessional_input"]
 
     st_session_state[_STATE_KEY] = True

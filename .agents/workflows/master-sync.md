@@ -9,9 +9,10 @@ description: A master orchestration workflow that sequentially validates, docume
 This is the **top-level orchestrator** for synchronizing the entire codebase. It calls sub-workflows in strict sequential order. Do NOT skip phases.
 
 ## Phase 1: Pre-flight Checks
-1. Verify that `.agents/product/templates/` contains all 5 product templates (`01_PRD.md` through `05_TICKETS.md`).
-2. If any template is missing, halt and execute `.agents/workflows/generate-product-docs.md` to populate them.
-3. Run `ruff check .` to verify the codebase passes linting.
+1. **Repository Sanitation**: Scan the project root directory for rogue scratchpad scripts or temporary files (e.g., orphaned `*.py` or `*.txt` files used for testing logic). Delete any files that do not belong in the core production bundle to strictly enforce Code Quality and SRE hygiene rules.
+2. Verify that `.agents/product/templates/` contains all 5 product templates (`01_PRD.md` through `05_TICKETS.md`).
+3. If any template is missing, halt and execute `.agents/workflows/generate-product-docs.md` to populate them.
+4. Run `ruff check .` to verify the codebase passes linting.
 
 ## Phase 2: Test Automation Gate
 1. Execute `.agents/workflows/test-automation.md`.

@@ -34,7 +34,9 @@ def _get_connection(db_path: str | None = None) -> duckdb.DuckDBPyConnection:
     conn = duckdb.connect(path)
 
     # Check if table exists
-    tables = conn.execute("SELECT * FROM information_schema.tables WHERE table_name='user_history'").fetchall()
+    tables = conn.execute(
+        "SELECT * FROM information_schema.tables WHERE table_name='user_history'"
+    ).fetchall()
 
     if not tables:
         # Initial schema creation
@@ -49,14 +51,22 @@ def _get_connection(db_path: str | None = None) -> duckdb.DuckDBPyConnection:
             )
         """)
     else:
-        # Startup Migration Hook: check for missing columns (Schema Drift)
-        columns = [row[1] for row in conn.execute("PRAGMA table_info('user_history')").fetchall()]
-        if "bus_km" not in columns:
-            conn.execute("ALTER TABLE user_history ADD COLUMN bus_km DOUBLE DEFAULT 0.0")
-        if "train_metro_km" not in columns:
-            conn.execute("ALTER TABLE user_history ADD COLUMN train_metro_km DOUBLE DEFAULT 0.0")
+        _run_migrations(conn)
 
     return conn
+
+
+def _run_migrations(conn: duckdb.DuckDBPyConnection) -> None:
+    """Startup Migration Hook: check for missing columns (Schema Drift)."""
+    columns = [
+        row[1] for row in conn.execute("PRAGMA table_info('user_history')").fetchall()
+    ]
+    if "bus_km" not in columns:
+        conn.execute("ALTER TABLE user_history ADD COLUMN bus_km DOUBLE DEFAULT 0.0")
+    if "train_metro_km" not in columns:
+        conn.execute(
+            "ALTER TABLE user_history ADD COLUMN train_metro_km DOUBLE DEFAULT 0.0"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -143,7 +153,9 @@ def fetch_historical_kpis(session_id: str, db_path: str | None = None) -> str:
     return "This is the user's first confession."
 
 
-def fetch_history_dataframe(session_id: str, db_path: str | None = None) -> pd.DataFrame:
+def fetch_history_dataframe(
+    session_id: str, db_path: str | None = None
+) -> pd.DataFrame:
     """Fetch the full history for charting.
 
     Args:

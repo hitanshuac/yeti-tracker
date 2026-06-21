@@ -1214,5 +1214,21 @@
     "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
     "status": "UNRESOLVED",
     "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782065799.726048,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782065800.4985988,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
   }
 ]

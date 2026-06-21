@@ -14,7 +14,7 @@ from src.carbon_engine import classify_tier, run_duckdb_math
 from src.history import (
     append_history,
 )
-from src.llm_service import AdvisorRequest, get_advisor_response, parse_confession
+from src.llm import AdvisorRequest, get_advisor_response, parse_confession
 from src.security import sanitize_input
 from src.state_manager import init_state
 from src.ui.components import (
@@ -112,6 +112,12 @@ def _handle_calculate() -> None:
     st.session_state.show_missing_electricity_prompt = False
 
 
+def _handle_slider_change() -> None:
+    """Reset calculation state on slider movement to prevent API spam."""
+    st.session_state.has_calculated = False
+    st.session_state.run_math = False
+
+
 def _set_random_persona() -> None:
     """Set a random demo persona with hardcoded values  zero LLM calls."""
     personas = [
@@ -142,7 +148,7 @@ def _set_random_persona() -> None:
             "flight_km": 9600,
             "bus_km": 0,
             "train_metro_km": 0,
-            "ac_hours": 24,
+            "ac_hours": 120,
             "restaurant_meals": 1095,
         },
         {
@@ -157,7 +163,7 @@ def _set_random_persona() -> None:
             "flight_km": 145600,
             "bus_km": 0,
             "train_metro_km": 0,
-            "ac_hours": 10,
+            "ac_hours": 0,
             "restaurant_meals": 365,
         },
         {
@@ -319,14 +325,14 @@ def main() -> None:
     with col_left:
         with st.container(border=True):
             _render_confessional(_handle_extract, _set_random_persona)
-            _render_top_progress_bars(result, tier_info)
 
             if st.session_state.get("has_calculated", False):
+                _render_top_progress_bars(result, tier_info)
                 _render_asset_image(tier_info)
 
     with col_right:
         with st.container(border=True):
-            _render_sliders(_handle_calculate)
+            _render_sliders(_handle_calculate, _handle_slider_change)
 
             total_monthly_savings = 0
             if st.session_state.get("has_calculated", False):

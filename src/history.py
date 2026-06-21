@@ -7,8 +7,6 @@ Uses a module-level connection getter for connection reuse.
 """
 
 import datetime
-import json
-import os
 import random
 
 import duckdb
@@ -174,37 +172,3 @@ def fetch_history_dataframe(
     df = conn.execute(query, [session_id]).fetchdf()
     conn.close()
     return df
-
-
-# ---------------------------------------------------------------------------
-# Internal error logging
-# ---------------------------------------------------------------------------
-
-
-def _log_history_error(error: Exception) -> None:
-    """Minimal error logger for history operations."""
-    log_file = "data/error_logs.json"
-    os.makedirs(os.path.dirname(log_file), exist_ok=True)
-
-    try:
-        with open(log_file, encoding="utf-8") as f:
-            logs = json.load(f)
-            if not isinstance(logs, list):
-                logs = []
-    except (FileNotFoundError, json.JSONDecodeError):
-        logs = []
-
-    logs.append(
-        {
-            "error_type": type(error).__name__,
-            "component": "history",
-            "message": str(error),
-            "status": "UNRESOLVED",
-            "resolution_strategy": None,
-        }
-    )
-
-    temp_file = f"{log_file}.tmp"
-    with open(temp_file, "w", encoding="utf-8") as f:
-        json.dump(logs, f, indent=2)
-    os.replace(temp_file, log_file)

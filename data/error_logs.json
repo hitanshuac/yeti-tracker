@@ -654,5 +654,565 @@
     "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
     "status": "UNRESOLVED",
     "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782050777.4313772,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782050778.1757753,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782050806.213961,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782050806.9666853,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782050935.1140416,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782050935.8550143,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782051097.204403,
+    "error_type": "ParserError",
+    "component": "terminal",
+    "message": "The token && is not a valid statement separator in this version.",
+    "status": "RESOLVED",
+    "resolution_strategy": "Removed && and ran commands sequentially."
+  },
+  {
+    "timestamp": 1782051097.204403,
+    "error_type": "LinterError",
+    "component": "tests/test_carbon_engine.py",
+    "message": "F401 pytest imported but unused",
+    "status": "RESOLVED",
+    "resolution_strategy": "Removed unused pytest import."
+  },
+  {
+    "timestamp": 1782055761.1147873,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782055761.8331635,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782055914.0700455,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99086, Requested 1431. Please try again in 7m26.688s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782055918.5801327,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99080, Requested 1416. Please try again in 7m8.544s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782055924.3701088,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99074, Requested 1433. Please try again in 7m18.048s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782055927.8466957,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99070, Requested 1336. Please try again in 5m50.784s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056000.4769166,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98986, Requested 1416. Please try again in 5m47.328s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056008.9640005,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98976, Requested 1454. Please try again in 6m11.52s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056011.2352297,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98973, Requested 1306. Please try again in 4m1.055999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056013.3088515,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98971, Requested 1437. Please try again in 5m52.512s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056015.7408078,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98968, Requested 1329. Please try again in 4m16.608s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056161.2781045,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056162.0149963,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056232.29616,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98717, Requested 1767. Please try again in 6m58.176s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056263.241102,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98681, Requested 1717. Please try again in 5m43.872s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056274.129832,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98669, Requested 1717. Please try again in 5m33.504s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056283.6694403,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98658, Requested 1767. Please try again in 6m7.2s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056319.485187,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98616, Requested 1717. Please try again in 4m47.712s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056323.7126696,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98611, Requested 1694. Please try again in 4m23.52s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056325.1140022,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98610, Requested 1694. Please try again in 4m22.656s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056327.810566,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98607, Requested 1784. Please try again in 5m37.824s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056328.7870376,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98606, Requested 1767. Please try again in 5m22.272s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056330.1566436,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98604, Requested 1717. Please try again in 4m37.344s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056423.9901335,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056424.7556202,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056914.1062615,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782056914.8299263,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782057194.6768117,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782057195.3902736,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782057584.91276,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782057585.6507013,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782057761.491638,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99007, Requested 1258. Please try again in 3m48.96s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782057820.288548,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782057821.0154831,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782058373.8391533,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782058374.57276,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060094.1785712,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060094.8992472,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060171.1528437,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060171.9075785,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060314.9095485,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060315.6348107,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060767.105914,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060767.8440955,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060885.0822105,
+    "error_type": "EnvironmentError",
+    "component": "get_advisor_response",
+    "message": "Missing GROQ_API_KEY",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060943.532433,
+    "error_type": "EnvironmentError",
+    "component": "get_advisor_response",
+    "message": "Missing GROQ_API_KEY",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782060962.1336417,
+    "error_type": "EnvironmentError",
+    "component": "get_advisor_response",
+    "message": "Missing GROQ_API_KEY",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782061015.172979,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782061015.9231594,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782061100.5587192,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98912, Requested 1551. Please try again in 6m40.032s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782061129.108761,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98879, Requested 1429. Please try again in 4m26.111999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782061224.9834814,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782061225.7060907,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782061517.0209713,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782061517.7769363,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782062165.5276756,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782062166.2508795,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782062484.7909005,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782062485.5150623,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782062552.3051648,
+    "error_type": "RateLimitError",
+    "component": "get_advisor_response",
+    "message": "Model llama-3.3-70b-versatile failed: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kradn8affsc89pxwjqj1w53s` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98972, Requested 1426. Please try again in 5m43.872s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782065280.9497554,
+    "error_type": "IOException",
+    "component": "carbon_engine",
+    "message": "IO Error: No files found that match the pattern \"nonexistent_path.csv\"",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782065281.6840477,
+    "error_type": "ValidationError",
+    "component": "parse_groq_result",
+    "message": "2 validation errors for ParsedPersonalData\ncar_km\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='not_a_number', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing\nflight_km\n  Input should be greater than or equal to 0 [type=greater_than_equal, input_value=-100, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/greater_than_equal",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
   }
 ]

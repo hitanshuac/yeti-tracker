@@ -20,11 +20,11 @@ Before writing any code, the agent MUST read the target files and map the curren
 
 *Deliverable:* The agent MUST generate a clear representation (textual, bulleted, or diagrammatic) of the exact "As-Is" data flow to visualize the entanglement.
 
-## Phase 2: Issue Identification & Severity Mapping
-The agent must list the identified architectural flaws explicitly and assign them severities:
-- 🔴 **High**: Data integrity risks (e.g., race conditions, side-effects in render loops, untyped shared state).
-- 🟡 **Medium**: Performance bottlenecks, synchronous blocking calls, resource churn.
-- 🟢 **Low**: Pure maintainability or stylistic issues.
+## Phase 2: Issue Identification & Severity Mapping (Rule Traceability)
+The agent must list the identified architectural flaws explicitly and assign them severities based on Rule Traceability. Every identified flaw MUST cite the specific `.agents/rules/` file and Tier level it violates:
+- 🔴 **High (Tier 0-1)**: Data integrity and security risks (e.g., `defensive-programming.md` Rule 1 violations, side-effects in render loops, CWE-74).
+- 🟡 **Medium (Tier 2)**: Correctness, performance bottlenecks, missing test coverage, or validation bypasses.
+- 🟢 **Low (Tier 3-4)**: Compliance, pure maintainability, styling, or documentation issues.
 
 ## Phase 3: Layered Decomposition (To-Be)
 The agent must formulate a new architecture adhering strictly to the **Separation of Concerns (SoC)**. The proposed architecture MUST explicitly define these layers (if applicable to the stack):
@@ -46,8 +46,11 @@ The agent must draft a precise, actionable execution plan marking specific file 
 
 ## Phase 5: Verification & Safety Gates
 Before executing the plan, the agent MUST:
-1. Generate an `implementation_plan.md` artifact incorporating Phases 1-5.
-2. Explicitly ask for human approval before proceeding (especially regarding any `[DELETE]` actions).
-3. Ensure the test suite (if present) is mapped to be updated alongside the refactor.
+1. **Deterministic Decoupling Check**: Before proposing any `[DELETE]` action for phantom architecture or unused modules, the agent MUST execute programmatic `grep_search` operations to mathematically prove zero downstream dependencies exist in the codebase.
+2. Generate an `implementation_plan.md` artifact incorporating Phases 1-5.
+3. Explicitly ask for human approval before proceeding.
+4. Ensure the test suite is mapped to be updated alongside the refactor.
+
+**Post-Execution Import Gate**: After refactoring, the agent MUST run programmatic import assertions via terminal (e.g., `python -c "from src.module import function; print('OK')"`) to prove the application graph and dependencies are not broken.
 
 **Execution begins ONLY after user approval.**

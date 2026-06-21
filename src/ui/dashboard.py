@@ -1,19 +1,43 @@
+"""
+Dashboard rendering layer for the Yeti-Tracker financial and advisor panels.
+
+Contains the Smart Advisor section, financial impact charts, and
+alternatives table. Delegates all chart creation to ``chart_factory``
+and all LLM interactions to ``llm_service``.
+"""
+
 import json
+from typing import Callable
 
 import pandas as pd
 import streamlit as st
 
+from src.carbon_engine import CarbonResult, TierClassification
 from src.chart_factory import (
     create_doom_vs_rescue,
     create_gauge_chart,
     create_savings_waterfall,
 )
 from src.history import fetch_historical_kpis
-from src.llm_service import AdvisorRequest, AdvisorResponse
+from src.llm import AdvisorRequest, AdvisorResponse
 from src.rag_service import fetch_rag_context
 
 
-def _fetch_new_advice(result, tier_info, on_advisor_call):
+def _fetch_new_advice(
+    result: CarbonResult,
+    tier_info: TierClassification,
+    on_advisor_call: Callable[[str], str],
+) -> tuple[AdvisorResponse, str]:
+    """Fetch fresh advisor advice from the LLM service.
+
+    Args:
+        result: Validated carbon calculation result.
+        tier_info: Current gamification tier classification.
+        on_advisor_call: Memoized callback wrapping the LLM advisor call.
+
+    Returns:
+        A tuple of (AdvisorResponse, rag_context_string).
+    """
     rag_context = fetch_rag_context(st.session_state.get("confessional_input", ""))
     kpis = fetch_historical_kpis(st.session_state.session_id)
     req = AdvisorRequest(
@@ -44,9 +68,22 @@ def _fetch_new_advice(result, tier_info, on_advisor_call):
 
 
 def _render_bottom_advisor_dashboard(
-    result, tier_info, on_reply, on_advisor_call
+    result: CarbonResult,
+    tier_info: TierClassification,
+    on_reply: Callable[[], None],
+    on_advisor_call: Callable[[str], str],
 ) -> float:
-    """Render the Smart Advisor section with advice and alternatives."""
+    """Render the Smart Advisor section with advice and alternatives.
+
+    Args:
+        result: Validated carbon calculation result.
+        tier_info: Current gamification tier classification.
+        on_reply: Callback for user reply submissions.
+        on_advisor_call: Memoized callback wrapping the LLM advisor call.
+
+    Returns:
+        Total monthly savings in INR from suggested alternatives.
+    """
     st.markdown("###  The Smart Advisor")
 
     needs_new_advice = (
@@ -70,7 +107,18 @@ def _render_bottom_advisor_dashboard(
     return total_monthly_savings
 
 
-def _render_feedback_ui(advice, tier_info, on_reply):
+def _render_feedback_ui(
+    advice: AdvisorResponse,
+    tier_info: TierClassification,
+    on_reply: Callable[[], None],
+) -> None:
+    """Render the advisor feedback interaction area.
+
+    Args:
+        advice: The current advisor response to display.
+        tier_info: Current gamification tier classification.
+        on_reply: Callback for user reply submissions.
+    """
     st.info(f" **Yeti Advisor asks:** {advice.guilt_easing_question}")
 
     st.text_input(
@@ -82,7 +130,12 @@ def _render_feedback_ui(advice, tier_info, on_reply):
     )
 
 
-def _render_alternatives_table(alternatives):
+def _render_alternatives_table(alternatives: list) -> None:
+    """Render the actionable alternatives as a styled table.
+
+    Args:
+        alternatives: List of AdvisorAlternative instances to display.
+    """
     st.markdown("#### Adapt These TODAY (Instant Gratification)")
     alts_display = pd.DataFrame([a.model_dump() for a in alternatives]).rename(
         columns={
@@ -100,9 +153,17 @@ def _render_alternatives_table(alternatives):
 
 
 def _render_financial_dashboard(
-    result, total_monthly_savings, on_toggle_rescue
+    result: CarbonResult,
+    total_monthly_savings: float,
+    on_toggle_rescue: Callable[[], None],
 ) -> None:
-    """Render the financial impact dashboard with stacked charts."""
+    """Render the financial impact dashboard with stacked charts.
+
+    Args:
+        result: Validated carbon calculation result.
+        total_monthly_savings: Total monthly savings from suggested alternatives.
+        on_toggle_rescue: Callback to toggle between doom and rescue chart views.
+    """
     monthly_tax = result.carbon_tax_inr / 12.0
 
     st.markdown("###  Financial Impact")

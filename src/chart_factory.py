@@ -12,9 +12,7 @@ import plotly.graph_objects as go
 # Shared theme constants
 # ---------------------------------------------------------------------------
 
-_BG = "#0e1117"
-_FONT = {"color": "white", "family": "Arial"}
-_GRID = "#333333"
+# Removed hardcoded _BG, _FONT, and _GRID constants to allow Streamlit native theme injection.
 
 
 # ---------------------------------------------------------------------------
@@ -38,11 +36,11 @@ def create_gauge_chart(value: float, max_value: float, title: str) -> go.Figure:
             mode="gauge+number",
             value=value,
             domain={"x": [0, 1], "y": [0, 1]},
-            title={"text": title, "font": {"color": "white"}},
+            title={"text": title},
             gauge={
-                "axis": {"range": [None, max_value], "tickcolor": "white"},
+                "axis": {"range": [None, max_value]},
                 "bar": {"color": "#ff4b4b"},
-                "bgcolor": "white",
+                "bgcolor": "rgba(128,128,128,0.1)",
                 "borderwidth": 2,
                 "bordercolor": "gray",
                 "steps": [
@@ -54,8 +52,6 @@ def create_gauge_chart(value: float, max_value: float, title: str) -> go.Figure:
         )
     )
     fig.update_layout(
-        paper_bgcolor=_BG,
-        font=_FONT,
         height=380,
         margin={"l": 20, "r": 20, "b": 20, "t": 50},
     )
@@ -104,14 +100,11 @@ def create_savings_waterfall(monthly_tax: float, savings: float) -> go.Figure:
             ),
             "font": {"color": "#00cc66", "size": 14},
         },
-        paper_bgcolor=_BG,
-        plot_bgcolor=_BG,
-        font=_FONT,
         height=380,
         margin={"l": 20, "r": 20, "b": 20, "t": 60},
         showlegend=False,
     )
-    fig.update_yaxes(gridcolor=_GRID, title="INR / Month")
+    fig.update_yaxes(title="INR / Month")
     return fig
 
 
@@ -160,17 +153,13 @@ def create_doom_vs_rescue(monthly_tax: float, savings: float) -> go.Figure:
         )
     )
     fig.update_layout(
-        title={"text": "12-Month Financial Trajectory", "font": {"color": "white"}},
-        paper_bgcolor=_BG,
-        plot_bgcolor=_BG,
-        font=_FONT,
+        title={"text": "12-Month Financial Trajectory"},
         height=380,
         margin={"l": 20, "r": 20, "b": 20, "t": 50},
         yaxis_title="Cumulative INR",
         barmode="overlay",
         legend={"orientation": "h", "y": -0.15},
     )
-    fig.update_yaxes(gridcolor=_GRID)
     return fig
 
 
@@ -227,14 +216,10 @@ def create_history_chart(history_df: "pd.DataFrame") -> go.Figure:
     )
 
     fig.update_layout(
-        paper_bgcolor=_BG,
-        plot_bgcolor=_BG,
-        font=_FONT,
         height=400,
         margin={"l": 20, "r": 20, "b": 20, "t": 50},
         xaxis_title="Date",
         yaxis_title="Daily Carbon (kg)",
         legend={"orientation": "h", "y": -0.15},
     )
-    fig.update_yaxes(gridcolor=_GRID)
     return fig

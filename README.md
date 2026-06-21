@@ -13,12 +13,13 @@ Yeti-Tracker is an AI-powered personal observability platform that pivots away f
 To solve the inherent conflict between **AI Hallucinations** (non-determinism) and **Scientific Data Integrity** (idempotent mathematics), Yeti-Tracker implements the **Hybrid Pipeline** (Split-Plane Architecture):
 
 1. **The Confessional (LLM Ingestion)**: Users paste a messy, natural language diary entry.
-2. **The Verification Gate**: The LLM *only* populates explicit UI sliders using 5 integers (now strictly using **kilometers**). The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
-3. **Deterministic Math Engine**: A local DuckDB instance takes the verified seed and deterministically calculates the carbon cost and localized financial impact in **INR (₹)**. It completely isolates basic survival electricity (2,500 kg baseline) from discretionary usage (Sleep/Daytime AC) using gamified metrics.
-4. **Machine Learning Anomaly Detection**: The DuckDB engine natively calculates the 90th percentile (`PERCENTILE_CONT(0.9)`) over your historical sessions to flag statistical behavioral spikes.
-5. **The Catastrophe Tiers Gamification**: If the footprint crosses certain thresholds, users are placed into Catastrophe Categories (e.g., Category 3) and presented with aggressive visual and textual roasting to gamify footprint reduction.
-6. **Continuous Confession Loop**: A recursive input pattern where user responses are appended to their "confessional," enabling an addictive feedback loop that tracks history per-session via secure UUIDs.
-7. **The Smart Advisor**: Generates hyper-specific "Instant Gratification" alternatives (Convenience vs. Maximum Impact) to guarantee a 20% reduction, ensuring advice is contextual and never redundant.
+2. **The Verification Gate**: The LLM *only* populates explicit UI sliders (including granular modes like two-wheelers and auto-rickshaws vs cars). The human verifies the extracted integers, guaranteeing the AI cannot break the downstream math.
+3. **Deterministic Math Engine**: A local DuckDB instance takes the verified seed and deterministically calculates the carbon cost and localized financial impact in **INR (₹)**. It isolates basic survival electricity (2,500 kg baseline) from discretionary usage (Sleep/Daytime AC) using gamified metrics.
+4. **Scientific Transparency Dashboard**: The UI directly displays the `carbon_factors.csv` rendering, exposing the exact Emission Agencies (CSTEP, CEA) and metrics used for math, eliminating black-box hallucination.
+5. **Machine Learning Anomaly Detection**: The DuckDB engine natively calculates the 90th percentile (`PERCENTILE_CONT(0.9)`) over your historical sessions to flag statistical behavioral spikes.
+6. **The Catastrophe Tiers Gamification**: If the footprint crosses certain thresholds, users are placed into Catastrophe Categories (e.g., Category 3) and presented with aggressive visual and textual roasting to gamify footprint reduction.
+7. **Continuous Confession Loop**: A recursive input pattern where user responses are appended to their "confessional," enabling an addictive feedback loop that tracks history per-session via secure UUIDs.
+8. **The Smart Advisor**: Generates hyper-specific "Instant Gratification" alternatives (Convenience vs. Maximum Impact) to guarantee a 20% reduction, ensuring advice is contextual and never redundant.
 
 **UX Integrity**: The entire ingestion pipeline is governed by Streamlit caching (`@st.cache_data`) and state management to completely eliminate UI reset glitches during button interactions.
 

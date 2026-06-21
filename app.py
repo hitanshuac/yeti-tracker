@@ -5,6 +5,7 @@ This file is a **thin UI orchestrator** — it defines the Streamlit layout,
 widgets, and callbacks but delegates all business logic to the ``src/`` modules.
 """
 
+import json
 import os
 import random
 
@@ -24,7 +25,7 @@ from src.history import (
     fetch_history_dataframe,
     seed_demo_history,
 )
-from src.llm_service import get_advisor_response, parse_confession
+from src.llm_service import AdvisorRequest, AdvisorResponse, get_advisor_response, parse_confession
 from src.rag_service import fetch_rag_context
 from src.state_manager import init_state
 
@@ -33,13 +34,20 @@ from src.state_manager import init_state
 # ---------------------------------------------------------------------------
 
 
-def _handle_extract() -> None:
+def _handle_extract() -> bool:
     """Parse the confessional text and populate slider values."""
     messy = st.session_state.get("confessional_input", "")
     st.session_state.last_extracted_text = messy
     parsed = parse_confession(messy)
-    st.session_state.car_km = parsed.car_km
-    st.session_state.flight_km = parsed.flight_km
+
+    if not parsed.is_valid:
+        st.error(parsed.rejection_reason)
+        return False
+
+    st.session_state.car_km = getattr(parsed, "car_km", 0)
+    st.session_state.two_wheeler_km = getattr(parsed, "two_wheeler_km", 0)
+    st.session_state.auto_rickshaw_km = getattr(parsed, "auto_rickshaw_km", 0)
+    st.session_state.flight_km = getattr(parsed, "flight_km", 0)
     st.session_state.transit_km = getattr(parsed, "transit_km", 0)
     st.session_state.daily_sleep_hours = getattr(parsed, "daily_sleep_hours", 8)
     st.session_state.sleep_ac_on = getattr(parsed, "sleep_ac_on", False)
@@ -48,6 +56,8 @@ def _handle_extract() -> None:
 
     # Save AI baselines for SRE Override tracking
     st.session_state.ai_car_km = st.session_state.car_km
+    st.session_state.ai_two_wheeler_km = st.session_state.two_wheeler_km
+    st.session_state.ai_auto_rickshaw_km = st.session_state.auto_rickshaw_km
     st.session_state.ai_flight_km = st.session_state.flight_km
     st.session_state.ai_transit_km = st.session_state.transit_km
     st.session_state.ai_daily_sleep_hours = st.session_state.daily_sleep_hours
@@ -57,6 +67,7 @@ def _handle_extract() -> None:
 
     st.session_state.is_extracting = True
     st.session_state.show_missing_electricity_prompt = True
+    return True
 
 
 def _handle_reply() -> None:
@@ -65,8 +76,8 @@ def _handle_reply() -> None:
     if reply:
         st.session_state.confessional_input += f"\n\nYeti Advisor Response: {reply}"
         st.session_state.reply_input = ""
-        _handle_extract()
-        st.session_state.auto_extracted = True
+        if _handle_extract():
+            st.session_state.auto_extracted = True
         st.session_state.run_math = True
         st.session_state.has_calculated = True
 
@@ -76,12 +87,14 @@ def _handle_calculate() -> None:
     messy = st.session_state.get("confessional_input", "")
     last = st.session_state.get("last_extracted_text", "")
     if messy != last:
-        _handle_extract()
-        st.session_state.auto_extracted = True
+        if _handle_extract():
+            st.session_state.auto_extracted = True
 
     # Detect SRE Human Override
     override_fields = [
         ("car_km", "ai_car_km", 0),
+        ("two_wheeler_km", "ai_two_wheeler_km", 0),
+        ("auto_rickshaw_km", "ai_auto_rickshaw_km", 0),
         ("flight_km", "ai_flight_km", 0),
         ("transit_km", "ai_transit_km", 0),
         ("daily_sleep_hours", "ai_daily_sleep_hours", 8),
@@ -110,6 +123,8 @@ def _set_random_persona() -> None:
                 "No flights. Eat out once a week at a local restaurant."
             ),
             "car_km": 7800,
+            "two_wheeler_km": 0,
+            "auto_rickshaw_km": 0,
             "flight_km": 0,
             "transit_km": 0,
             "daily_sleep_hours": 8,
@@ -124,6 +139,8 @@ def _set_random_persona() -> None:
                 "I eat out 3 times a day. I fly business class to Goa once a month."
             ),
             "car_km": 0,
+            "two_wheeler_km": 0,
+            "auto_rickshaw_km": 0,
             "flight_km": 9600,
             "transit_km": 0,
             "daily_sleep_hours": 7,
@@ -138,6 +155,8 @@ def _set_random_persona() -> None:
                 "I take Ola everywhere (maybe 80 km a week). Eat out every day."
             ),
             "car_km": 4160,
+            "two_wheeler_km": 0,
+            "auto_rickshaw_km": 0,
             "flight_km": 145600,
             "transit_km": 0,
             "daily_sleep_hours": 6,
@@ -147,8 +166,10 @@ def _set_random_persona() -> None:
         },
         {
             "name": "The Eco-Warrior",
-            "text": ("The Eco-Warrior: I ride my bike to work. No AC. " "Eat out maybe once a month. No flights."),
+            "text": ("The Eco-Warrior: I ride my bike to work. No AC. Eat out maybe once a month. No flights."),
             "car_km": 0,
+            "two_wheeler_km": 2600,
+            "auto_rickshaw_km": 0,
             "flight_km": 0,
             "transit_km": 2600,
             "daily_sleep_hours": 8,
@@ -163,6 +184,8 @@ def _set_random_persona() -> None:
                 "Keep the AC blasted all summer. Fly to Kerala once a year for vacation."
             ),
             "car_km": 21900,
+            "two_wheeler_km": 0,
+            "auto_rickshaw_km": 0,
             "flight_km": 2400,
             "transit_km": 0,
             "daily_sleep_hours": 8,
@@ -175,6 +198,8 @@ def _set_random_persona() -> None:
     st.session_state.confessional_input = persona["text"]
     for key in [
         "car_km",
+        "two_wheeler_km",
+        "auto_rickshaw_km",
         "flight_km",
         "transit_km",
         "daily_sleep_hours",
@@ -240,7 +265,7 @@ def _render_gamification_header(result, tier_info) -> None:
     st.markdown("#### ⏳ Daily Survival Allowance")
     st.markdown(
         f"<div style='background:#222;border-radius:8px;overflow:hidden;height:32px;width:100%;position:relative;'>"
-        f"<div style='background:{bar_color};width:{budget_pct*100:.1f}%;height:100%;border-radius:8px;"
+        f"<div style='background:{bar_color};width:{budget_pct * 100:.1f}%;height:100%;border-radius:8px;"
         f"transition:width 0.5s ease;'></div>"
         f"<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
         f"color:white;font-weight:bold;font-size:0.85em;white-space:nowrap;'>{bar_label}</span>"
@@ -272,7 +297,7 @@ def _render_gamification_header(result, tier_info) -> None:
     st.markdown(
         f"<div style='background:#222;border-radius:8px;overflow:hidden;height:32px;width:100%;"
         f"position:relative;margin-bottom:8px;'>"
-        f"<div style='background:{tier_bar_color};width:{tier_pct*100:.1f}%;height:100%;border-radius:8px;"
+        f"<div style='background:{tier_bar_color};width:{tier_pct * 100:.1f}%;height:100%;border-radius:8px;"
         f"transition:width 0.8s ease;'></div>"
         f"<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
         f"color:white;font-weight:bold;font-size:0.85em;white-space:nowrap;'>{tier_bar_label}</span>"
@@ -290,18 +315,17 @@ def _render_gamification_header(result, tier_info) -> None:
         )
 
 
+@st.cache_data(show_spinner=False)
+def _cached_advisor_call(req_json: str) -> str:
+    """Memoize LLM calls to prevent thread blocking."""
+    req = AdvisorRequest.model_validate_json(req_json)
+    return get_advisor_response(req).model_dump_json()
+
+
 def _render_advisor_section(result, tier_info) -> None:
     """Render the Smart Advisor section with advice and alternatives."""
     st.markdown("---")
     st.markdown("### 🎙️ The Smart Advisor")
-
-    c_km = st.session_state.get("car_km", 0)
-    f_km = st.session_state.get("flight_km", 0)
-    t_km = st.session_state.get("transit_km", 0)
-    sleep_h = st.session_state.get("daily_sleep_hours", 8)
-    sleep_ac = st.session_state.get("sleep_ac_on", False)
-    daytime_ac = st.session_state.get("daytime_ac_hours", 0)
-    r_meals = st.session_state.get("restaurant_meals", 0)
 
     needs_new_advice = st.session_state.get("run_math", False) or "cached_advice" not in st.session_state
 
@@ -309,21 +333,29 @@ def _render_advisor_section(result, tier_info) -> None:
         with st.spinner("Analyzing your financial doom..."):
             rag_context = fetch_rag_context(st.session_state.get("confessional_input", ""))
             kpis = fetch_historical_kpis(st.session_state.session_id)
-            advice = get_advisor_response(
-                result.yearly_co2_kg,
-                result.carbon_tax_inr,
-                c_km,
-                f_km,
-                t_km,
-                sleep_h,
-                sleep_ac,
-                daytime_ac,
-                r_meals,
-                tier_info.tier,
-                "Save the Planet",
-                kpis,
-                rag_context,
+            req = AdvisorRequest(
+                carbon=result.yearly_co2_kg,
+                tax=result.carbon_tax_inr,
+                car_km=st.session_state.get("car_km", 0),
+                two_wheeler_km=st.session_state.get("two_wheeler_km", 0),
+                auto_rickshaw_km=st.session_state.get("auto_rickshaw_km", 0),
+                flight_km=st.session_state.get("flight_km", 0),
+                transit_km=st.session_state.get("transit_km", 0),
+                daily_sleep_hours=st.session_state.get("daily_sleep_hours", 8),
+                sleep_ac_on=st.session_state.get("sleep_ac_on", False),
+                daytime_ac_hours=st.session_state.get("daytime_ac_hours", 0),
+                restaurant_meals=st.session_state.get("restaurant_meals", 0),
+                tier=tier_info.tier,
+                goal="Save money and stop the Yeti",
+                kpis=json.dumps(kpis) if kpis else "No historical data.",
+                worst_habit=result.worst_habit,
+                rag_context=rag_context,
+                raw_text=st.session_state.get("confessional_input", ""),
             )
+
+            resp_json = _cached_advisor_call(req.model_dump_json())
+            advice = AdvisorResponse.model_validate_json(resp_json)
+
             st.session_state.cached_advice = advice
             st.session_state.cached_rag_context = rag_context
     else:
@@ -333,7 +365,10 @@ def _render_advisor_section(result, tier_info) -> None:
     # Guilt Easing Component
     st.info(f"🗣️ **Yeti Advisor asks:** {advice.guilt_easing_question}")
     st.success(f"☀️ **Silver Lining:** {advice.silver_lining}")
-    st.error(f"🔥 **The Roast:** {advice.roast}")
+
+    # Only trigger roasts if the user hits the upper tiers (not Human)
+    if tier_info.tier != "Human":
+        st.error(f"🔥 **The Roast:** {advice.roast}")
 
     # Feedback Loop Input
     st.text_input(
@@ -368,7 +403,7 @@ def _render_financial_dashboard(result, total_monthly_savings) -> None:
 
     st.markdown("---")
     st.markdown(
-        f"### 💸 You're burning **₹{monthly_tax:,.0f}/month** — "
+        f"### 💸 You're burning **₹{monthly_tax:,.0f}/month** *(±15% estimation variance)* — "
         f"but you could save **₹{total_monthly_savings:,.0f}/month** starting today."
     )
 
@@ -388,7 +423,23 @@ def _render_financial_dashboard(result, total_monthly_savings) -> None:
                 "**Social Cost of Carbon (SCC)** — a globally accepted metric "
                 "that estimates the economic damage caused by emitting 1 kg of CO2."
             )
-            st.info("**1 kg of CO2 = INR 15.80 in global climate damages** " "(Source: India GHG Platform, ISEC)")
+            st.info("**1 kg of CO2 = INR 15.80 in global climate damages** (Source: India GHG Platform, ISEC)")
+            st.markdown("---")
+            st.markdown("**Emission Sources & Agencies**")
+            st.markdown("This tool uses verified regional data sources to ensure a deterministic math engine.")
+            try:
+                factors_df = pd.read_csv("data/carbon_factors.csv")
+                display_df = factors_df[["activity", "co2_kg_per_unit", "source_agency", "description"]]
+                display_df.columns = ["Activity", "CO2 (kg/unit)", "Agency", "Description"]
+                st.dataframe(display_df, hide_index=True)
+            except (FileNotFoundError, KeyError):
+                st.warning("Could not load carbon factors table.")
+            st.markdown("---")
+            st.markdown(
+                "**Estimation Variance (±15%):** Carbon footprint modeling inherently carries variance due to "
+                "regional power grid mixes and specific hardware efficiency differences. While our DuckDB math engine "
+                "is strictly deterministic based on your inputs, the final values represent an average baseline estimation."
+            )
             st.markdown("---")
             st.markdown(
                 "**Why is there a baseline?** Every person has an inescapable carbon "
@@ -412,7 +463,7 @@ def _render_financial_dashboard(result, total_monthly_savings) -> None:
             st.markdown("---")
             st.write(f"**Total Yearly:** {result.yearly_co2_kg:,.0f} kg CO2")
             st.write(
-                f"**Yearly Tax:** {result.yearly_co2_kg:,.0f} kg x INR 15.80 = " f"**INR {result.carbon_tax_inr:,.2f}**"
+                f"**Yearly Tax:** {result.yearly_co2_kg:,.0f} kg x INR 15.80 = **INR {result.carbon_tax_inr:,.2f}**"
             )
             st.write(f"**Monthly Tax:** INR {result.carbon_tax_inr:,.2f} / 12 = **INR {monthly_tax:,.2f}**")
 
@@ -482,13 +533,29 @@ def _render_input_section() -> None:
 
         c_max, f_max, t_max, r_max = 50000, 100000, 50000, 1095
 
+        st.markdown("#### Fossil Fuel Transport")
         st.slider(
-            "Combustion Toll (Car KM)",
+            "Car (km/Yearly)",
             0,
             max(c_max, st.session_state.car_km),
             key="car_km",
-            help="Total km driven by private car per year. India avg: ~7,000 km.",
+            help="Total kilometers driven in a petrol/diesel car per year.",
         )
+        st.slider(
+            "Two-Wheeler / Bike (km/Yearly)",
+            0,
+            max(c_max, st.session_state.get("two_wheeler_km", 0)),
+            key="two_wheeler_km",
+            help="Total kilometers ridden on a scooter or motorcycle per year.",
+        )
+        st.slider(
+            "Auto-Rickshaw / Cab (km/Yearly)",
+            0,
+            max(c_max, st.session_state.get("auto_rickshaw_km", 0)),
+            key="auto_rickshaw_km",
+            help="Total kilometers in an auto-rickshaw or taxi cab per year.",
+        )
+        st.markdown("#### Other Transport")
         st.slider(
             "Flight Kilometers (Yearly)",
             0,
@@ -576,6 +643,8 @@ def _render_results_section() -> None:
 
     result = run_duckdb_math(
         st.session_state.get("car_km", 0),
+        st.session_state.get("two_wheeler_km", 0),
+        st.session_state.get("auto_rickshaw_km", 0),
         st.session_state.get("flight_km", 0),
         st.session_state.get("transit_km", 0),
         st.session_state.get("daily_sleep_hours", 8),

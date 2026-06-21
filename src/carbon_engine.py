@@ -5,11 +5,10 @@ All financial and CO2 calculations live here — no LLM, no UI.
 The engine reads emission factors from a CSV and returns typed results.
 """
 
-import json
-import os
-
 import duckdb
 from pydantic import BaseModel, Field
+
+from src.observability import log_error
 
 
 class CarbonResult(BaseModel):
@@ -19,6 +18,7 @@ class CarbonResult(BaseModel):
     carbon_tax_inr: float = Field(ge=0)
     breakdown: dict[str, float] = Field(default_factory=dict)
     is_anomaly: bool = Field(default=False)
+    worst_habit: str = Field(default="")
 
 
 class TierClassification(BaseModel):
@@ -46,11 +46,11 @@ def _load_factors(dataset_path: str) -> dict[str, dict[str, float]]:
     """
     conn = duckdb.connect()
     try:
-        query = f"SELECT activity, co2_kg_per_unit, social_cost_inr_per_kg " f"FROM read_csv_auto('{dataset_path}')"
+        query = f"SELECT activity, co2_kg_per_unit, social_cost_inr_per_kg FROM read_csv_auto('{dataset_path}')"
         results = conn.execute(query).fetchall()
         return {row[0]: {"co2": float(row[1]), "scc": float(row[2])} for row in results}
     except Exception as e:
-        _log_engine_error(e)
+        log_error(type(e).__name__, "carbon_engine", str(e))
         return {}
     finally:
         conn.close()
@@ -80,12 +80,14 @@ def _detect_anomaly(session_id: str, daily_co2_kg: float, db_path: str = "data/y
     except duckdb.CatalogException:
         return False
     except Exception as e:
-        _log_engine_error(e)
+        log_error(type(e).__name__, "carbon_engine", str(e))
         return False
 
 
 def run_duckdb_math(
     car_km: int,
+    two_wheeler_km: int,
+    auto_rickshaw_km: int,
     flight_km: int,
     transit_km: int,
     daily_sleep_hours: int,
@@ -99,6 +101,8 @@ def run_duckdb_math(
 
     Args:
         car_km: Yearly car kilometers.
+        two_wheeler_km: Yearly two-wheeler/bike kilometers.
+        auto_rickshaw_km: Yearly auto-rickshaw/cab kilometers.
         flight_km: Yearly flight kilometers.
         transit_km: Yearly public transit kilometers.
         daily_sleep_hours: Average daily sleep hours.
@@ -122,6 +126,8 @@ def run_duckdb_math(
     SCC_INR_PER_KG = 15.80
 
     yearly_car_co2 = car_km * _get("car_km", "co2", 0.15)
+    yearly_two_wheeler_co2 = two_wheeler_km * _get("two_wheeler_km", "co2", 0.04)
+    yearly_auto_rickshaw_co2 = auto_rickshaw_km * _get("auto_rickshaw_km", "co2", 0.08)
     yearly_flight_co2 = flight_km * _get("flight_km", "co2", 0.115)
     yearly_transit_co2 = transit_km * _get("train_km", "co2", 0.01)
 
@@ -133,7 +139,7 @@ def run_duckdb_math(
 
     yearly_restaurant_co2 = restaurant_meals * _get("restaurant_meal", "co2", 3.5)
 
-    yearly_transport = yearly_car_co2 + yearly_transit_co2
+    yearly_transport = yearly_car_co2 + yearly_two_wheeler_co2 + yearly_auto_rickshaw_co2 + yearly_transit_co2
     yearly_flight = yearly_flight_co2
     yearly_restaurant = yearly_restaurant_co2
 
@@ -154,11 +160,15 @@ def run_duckdb_math(
         "🍽️ Dining Out (Above Home Cooking)": yearly_restaurant,
     }
 
+    discretionary = {k: v for k, v in breakdown.items() if "Basic Living" not in k}
+    worst_habit = max(discretionary, key=discretionary.get) if discretionary else "Unknown"
+
     return CarbonResult(
         yearly_co2_kg=yearly_co2,
         carbon_tax_inr=carbon_tax,
         breakdown=breakdown,
         is_anomaly=is_anomaly,
+        worst_habit=worst_habit,
     )
 
 
@@ -209,34 +219,5 @@ def classify_tier(yearly_co2: float) -> TierClassification:
 
 
 # ---------------------------------------------------------------------------
-# Internal error logging (avoids circular import with observability)
+# End of file
 # ---------------------------------------------------------------------------
-
-
-def _log_engine_error(error: Exception) -> None:
-    """Minimal error logger to avoid coupling to the UI layer."""
-    log_file = "data/error_logs.json"
-    os.makedirs(os.path.dirname(log_file), exist_ok=True)
-
-    try:
-        with open(log_file, encoding="utf-8") as f:
-            logs = json.load(f)
-            if not isinstance(logs, list):
-                logs = []
-    except (FileNotFoundError, json.JSONDecodeError):
-        logs = []
-
-    logs.append(
-        {
-            "error_type": type(error).__name__,
-            "component": "carbon_engine",
-            "message": str(error),
-            "status": "UNRESOLVED",
-            "resolution_strategy": None,
-        }
-    )
-
-    temp_file = f"{log_file}.tmp"
-    with open(temp_file, "w", encoding="utf-8") as f:
-        json.dump(logs, f, indent=2)
-    os.replace(temp_file, log_file)

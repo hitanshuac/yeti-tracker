@@ -1,6 +1,5 @@
 from src.carbon_engine import (
     _detect_anomaly,
-    _log_engine_error,
     classify_tier,
 )
 
@@ -46,13 +45,3 @@ def test_detect_anomaly_with_data(tmp_path):
 
     # Normal test: 5kg is <= 90th percentile
     assert _detect_anomaly("spike-session", 5.0, db_path=test_db) is False
-
-
-def test_log_engine_error(tmp_path):
-    """Test the internal error logger."""
-    try:
-        raise ValueError("Simulated engine crash")
-    except Exception as e:
-        # We can't easily redirect the path inside the function because it's hardcoded
-        # but calling it verifies it runs without syntax errors.
-        _log_engine_error(e)

@@ -1,5 +1,6 @@
 [
   {
+    "timestamp": 1782017667.7217548,
     "error_type": "EnvironmentError",
     "component": "parse_confession",
     "message": "Missing GROQ_API_KEY.",
@@ -7,230 +8,39 @@
     "resolution_strategy": null
   },
   {
-    "error_type": "EnvironmentError",
+    "timestamp": 1782017668.5725062,
+    "error_type": "RateLimitError",
     "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
+    "message": "Rate limit exceeded",
     "status": "UNRESOLVED",
     "resolution_strategy": null
   },
   {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
+    "timestamp": 1782017668.5836363,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
     "status": "UNRESOLVED",
     "resolution_strategy": null
   },
   {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
+    "timestamp": 1782018266.658645,
     "error_type": "BadRequestError",
     "component": "parse_confession",
-    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"car_km\": 200 * 1,\\n   \"flight_km\": 0,\\n   \"transit_km\": 0,\\n   \"daily_sleep_hours\": 8,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 0,\\n   \"restaurant_meals\": 0\\n}'}}",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"car_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 260 * 10,\\n   \"daily_sleep_hours\": 7,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9 * 6 * 52 / 52,\\n   \"restaurant_meals\": 0\\n}'}}",
     "status": "UNRESOLVED",
     "resolution_strategy": null
   },
   {
+    "timestamp": 1782018308.5933764,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"car_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 260 * 2 * 6,\\n   \"daily_sleep_hours\": 7,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9 * 6 * 52,\\n   \"restaurant_meals\": 2 * 365\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782020172.7296271,
     "error_type": "EnvironmentError",
     "component": "parse_confession",
     "message": "Missing GROQ_API_KEY.",
@@ -238,48 +48,7 @@
     "resolution_strategy": null
   },
   {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "EnvironmentError",
-    "component": "parse_confession",
-    "message": "Missing GROQ_API_KEY.",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
-    "error_type": "ValueError",
-    "component": "carbon_engine",
-    "message": "Simulated engine crash",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
+    "timestamp": 1782020173.5890675,
     "error_type": "RateLimitError",
     "component": "parse_confession",
     "message": "Rate limit exceeded",
@@ -287,13 +56,15 @@
     "resolution_strategy": null
   },
   {
-    "error_type": "ValueError",
-    "component": "carbon_engine",
-    "message": "Simulated engine crash",
+    "timestamp": 1782020173.6022375,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
     "status": "UNRESOLVED",
     "resolution_strategy": null
   },
   {
+    "timestamp": 1782020200.4735124,
     "error_type": "EnvironmentError",
     "component": "parse_confession",
     "message": "Missing GROQ_API_KEY.",
@@ -301,13 +72,7 @@
     "resolution_strategy": null
   },
   {
-    "error_type": "ValueError",
-    "component": "carbon_engine",
-    "message": "Simulated engine crash",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
+    "timestamp": 1782020201.3285553,
     "error_type": "RateLimitError",
     "component": "parse_confession",
     "message": "Rate limit exceeded",
@@ -315,6 +80,7 @@
     "resolution_strategy": null
   },
   {
+    "timestamp": 1782020201.3433511,
     "error_type": "JSONDecodeError",
     "component": "get_advisor_response",
     "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
@@ -322,6 +88,31 @@
     "resolution_strategy": null
   },
   {
+    "timestamp": 1782020287.4365976,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': 'max completion tokens reached before generating a valid document'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782020289.301872,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': 'max completion tokens reached before generating a valid document'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782020291.1419382,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': 'max completion tokens reached before generating a valid document'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782020392.5904274,
     "error_type": "EnvironmentError",
     "component": "parse_confession",
     "message": "Missing GROQ_API_KEY.",
@@ -329,13 +120,7 @@
     "resolution_strategy": null
   },
   {
-    "error_type": "ValueError",
-    "component": "carbon_engine",
-    "message": "Simulated engine crash",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
+    "timestamp": 1782020393.4982724,
     "error_type": "RateLimitError",
     "component": "parse_confession",
     "message": "Rate limit exceeded",
@@ -343,6 +128,7 @@
     "resolution_strategy": null
   },
   {
+    "timestamp": 1782020393.512985,
     "error_type": "JSONDecodeError",
     "component": "get_advisor_response",
     "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
@@ -350,6 +136,15 @@
     "resolution_strategy": null
   },
   {
+    "timestamp": 1782020787.597916,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 10 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, which we\\'ll add to their daily commute. Assuming they work 6 days a week, with 52 weeks in a year, their total workdays are 6 * 52 = 312 days. They work 9 hours in the office with AC, but we\\'re only interested in daytime_ac_hours, so we\\'ll calculate their average daytime AC hours. The user eats out at least twice a day, so we\\'ll calculate their yearly restaurant meals. To calculate car_km, we\\'ll assume it\\'s 0 since they didn\\'t mention using a car. For flight_km, we\\'ll also assume it\\'s 0 since they didn\\'t mention flying. The user didn\\'t provide information about their daily sleep hours, so we can\\'t calculate daily_sleep_hours yet.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 312 * 2 * 10,\\n   \"daily_sleep_hours\": 0,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 365 * 2\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782021007.9220939,
     "error_type": "EnvironmentError",
     "component": "parse_confession",
     "message": "Missing GROQ_API_KEY.",
@@ -357,13 +152,7 @@
     "resolution_strategy": null
   },
   {
-    "error_type": "ValueError",
-    "component": "carbon_engine",
-    "message": "Simulated engine crash",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
+    "timestamp": 1782021008.7657173,
     "error_type": "RateLimitError",
     "component": "parse_confession",
     "message": "Rate limit exceeded",
@@ -371,6 +160,7 @@
     "resolution_strategy": null
   },
   {
+    "timestamp": 1782021008.7786403,
     "error_type": "JSONDecodeError",
     "component": "get_advisor_response",
     "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
@@ -378,13 +168,7 @@
     "resolution_strategy": null
   },
   {
-    "error_type": "JSONDecodeError",
-    "component": "get_advisor_response",
-    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
+    "timestamp": 1782021393.321246,
     "error_type": "EnvironmentError",
     "component": "parse_confession",
     "message": "Missing GROQ_API_KEY.",
@@ -392,13 +176,7 @@
     "resolution_strategy": null
   },
   {
-    "error_type": "ValueError",
-    "component": "carbon_engine",
-    "message": "Simulated engine crash",
-    "status": "UNRESOLVED",
-    "resolution_strategy": null
-  },
-  {
+    "timestamp": 1782021394.1739979,
     "error_type": "RateLimitError",
     "component": "parse_confession",
     "message": "Rate limit exceeded",
@@ -406,10 +184,243 @@
     "resolution_strategy": null
   },
   {
+    "timestamp": 1782021394.1885042,
     "error_type": "JSONDecodeError",
     "component": "get_advisor_response",
     "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
     "status": "UNRESOLVED",
     "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782021959.0398169,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782021959.872848,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782021959.8867738,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022141.757594,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022142.6139739,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022142.6291864,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022241.29552,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 10 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, which we\\'ll add to their daily commute. Assuming they work 6 days a week, with 52 weeks in a year, their total workdays are 6 * 52 = 312 days. They work 9 hours in the office with AC, but we\\'re only interested in daytime_ac_hours, so we\\'ll calculate their average daytime AC hours. The user eats out at least twice a day, so we\\'ll calculate their yearly restaurant meals. To calculate car_km, we\\'ll assume it\\'s 0 since they didn\\'t mention using a car. For flight_km, we\\'ll also assume it\\'s 0 since they didn\\'t mention flying. The user didn\\'t provide information about their daily sleep hours, so we can\\'t calculate daily_sleep_hours yet.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 312 * 2 * 10,\\n   \"daily_sleep_hours\": 0,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 365 * 2\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022811.0633452,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022811.8878586,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022839.1102314,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022839.9688315,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022839.983244,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022890.1249065,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022890.925482,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782022890.9392915,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023196.5919366,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 20 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week, in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. Since they don\\'t have AC or a cooler at home, sleep_ac_on will be false. Assuming a normal sleep schedule, daily_sleep_hours will be around 7-8 hours, so we\\'ll use 7.5 as a reasonable estimate.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 20 * 2 * 260,\\n   \"daily_sleep_hours\": 7.5,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023198.6264727,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 20 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week, in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. Since they don\\'t have AC or a cooler at home, sleep_ac_on will be false. Assuming a normal sleep schedule, daily_sleep_hours will be around 7-8 hours, so we\\'ll use 7.5 as a rough estimate.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 20 * 2 * 260,\\n   \"daily_sleep_hours\": 7.5,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023200.6650152,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 20 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week, in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. Since they don\\'t have AC or a cooler at home, sleep_ac_on will be false. Assuming a normal sleep schedule, daily_sleep_hours will be around 7-8 hours, so we\\'ll use 7.5 as a rough estimate.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 20 * 2 * 260,\\n   \"daily_sleep_hours\": 7.5,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023359.0643103,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023359.9249253,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023359.9396074,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023509.147004,
+    "error_type": "EnvironmentError",
+    "component": "parse_confession",
+    "message": "Missing GROQ_API_KEY.",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023510.0501223,
+    "error_type": "RateLimitError",
+    "component": "parse_confession",
+    "message": "Rate limit exceeded",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023510.065671,
+    "error_type": "JSONDecodeError",
+    "component": "get_advisor_response",
+    "message": "Expecting property name enclosed in double quotes: line 1 column 3 (char 2)",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023587.7267098,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 20 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. The user doesn\\'t have AC at home, so sleep_ac_on is false. Assuming a standard 8 hours of sleep, daily_sleep_hours will be 8.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 20 * 2 * 365,\\n   \"daily_sleep_hours\": 8,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023589.735875,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 15 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. The user doesn\\'t have AC or a cooler at home, so sleep_ac_on is false. Assuming a normal sleep schedule, daily_sleep_hours will be around 7-8 hours, we\\'ll take 8 as a reasonable average.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 15 * 2 * 260,\\n   \"daily_sleep_hours\": 8,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023591.6713262,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 25 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. The user doesn\\'t have AC or a cooler at home, so sleep_ac_on is false. Assuming a normal sleep schedule, daily_sleep_hours will be around 7-8 hours, we\\'ll take 7 as an average.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 25 * 2 * 365,\\n   \"daily_sleep_hours\": 7,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023651.394539,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 25 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week in an office with AC, so daytime_ac_hours will be 9. The user eats out at least twice a day, so restaurant_meals will be 2 * 365 = 730. The user doesn\\'t have AC at home, so sleep_ac_on is false. Assuming a normal sleep schedule, daily_sleep_hours will be around 7-8 hours, we\\'ll take 7 as an average.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 25 * 2 * 365,\\n   \"daily_sleep_hours\": 7,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": null
+  },
+  {
+    "timestamp": 1782023653.839111,
+    "error_type": "BadRequestError",
+    "component": "parse_confession",
+    "message": "Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\\n  \"reasoning\": \"The user travels from Kandivali to Sakinaka every day through the metro. The distance between Kandivali and Sakinaka is approximately 25 km. Since they use the metro for this commute, we\\'ll consider this as transit_km. They also use Rapido bikes for less than 2-3 km, so we\\'ll assume an average of 2.5 km per day for two_wheeler_km. The user works 9 hours a day, 6 days a week in an office with AC, so daytime_ac_hours will be 9. They eat out at least twice a day, so restaurant_meals will be 2 * 365 = 730. The user doesn\\'t have AC or a cooler at home, so sleep_ac_on is false. Assuming a normal sleep schedule, daily_sleep_hours will be around 7-8 hours, so we\\'ll use 7.5, but since we need a whole number, we\\'ll round to 8 for simplicity.\",\\n   \"is_valid\": true,\\n   \"rejection_reason\": \"\",\\n   \"car_km\": 0,\\n   \"two_wheeler_km\": 2.5 * 365,\\n   \"auto_rickshaw_km\": 0,\\n   \"flight_km\": 0,\\n   \"transit_km\": 25 * 2 * 260,\\n   \"daily_sleep_hours\": 8,\\n   \"sleep_ac_on\": false,\\n   \"daytime_ac_hours\": 9,\\n   \"restaurant_meals\": 730\\n}'}}",
+    "status": "UNRESOLVED",
+    "resolution_strategy": "Updated regex in _recover_failed_generation to parse float numbers in math expressions and injected strict NO MATH prompt instructions."
   }
 ]

@@ -5,11 +5,11 @@ Searches the carbon_factors CSV for rows matching keywords from user text
 and returns a formatted context string for LLM prompt injection.
 """
 
-import json
-import os
 import re
 
 import duckdb
+
+from src.observability import log_error
 
 
 def _build_rag_query(text: str, dataset_path: str) -> str | None:
@@ -63,34 +63,5 @@ def fetch_rag_context(text: str, dataset_path: str = "data/carbon_factors.csv") 
             context_lines.append(f"- {row[0]} ({row[1]}): {row[2]} kg CO2/unit, ${row[3]} SCC/unit")
         return "\n".join(context_lines)
     except Exception as e:
-        _log_rag_error(e)
+        log_error(type(e).__name__, "rag_service", str(e))
         return ""
-
-
-def _log_rag_error(error: Exception) -> None:
-    """Minimal error logger for RAG service."""
-    log_file = "data/error_logs.json"
-    os.makedirs(os.path.dirname(log_file), exist_ok=True)
-
-    try:
-        with open(log_file, encoding="utf-8") as f:
-            logs = json.load(f)
-            if not isinstance(logs, list):
-                logs = []
-    except (FileNotFoundError, json.JSONDecodeError):
-        logs = []
-
-    logs.append(
-        {
-            "error_type": type(error).__name__,
-            "component": "rag_service",
-            "message": str(error),
-            "status": "UNRESOLVED",
-            "resolution_strategy": None,
-        }
-    )
-
-    temp_file = f"{log_file}.tmp"
-    with open(temp_file, "w", encoding="utf-8") as f:
-        json.dump(logs, f, indent=2)
-    os.replace(temp_file, log_file)

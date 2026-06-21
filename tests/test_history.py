@@ -83,13 +83,3 @@ def test_fetch_history_dataframe(test_db_path):
     append_history(session_id, 1500.0, "Cat 3", db_path=test_db_path)
     df_filtered = fetch_history_dataframe(session_id, db_path=test_db_path)
     assert len(df_filtered) == 1  # The 1500 value should be excluded
-
-
-def test_log_history_error(tmp_path):
-    """Test the internal error logger."""
-
-    try:
-        # We need to test the exception logging flow, but _log_history_error hardcodes the path.
-        pass
-    finally:
-        pass

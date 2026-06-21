@@ -13,6 +13,8 @@ def test_run_duckdb_math():
     """Verify DuckDB logic returns correct carbon and tax values."""
     result = run_duckdb_math(
         car_km=100,
+        two_wheeler_km=0,
+        auto_rickshaw_km=0,
         flight_km=500,
         transit_km=50,
         daily_sleep_hours=8,
@@ -23,9 +25,13 @@ def test_run_duckdb_math():
     )
     assert result.yearly_co2_kg > 0
     assert result.carbon_tax_inr > 0
+    assert isinstance(result.worst_habit, str)
+    assert result.worst_habit != ""
 
     result_zero = run_duckdb_math(
         car_km=0,
+        two_wheeler_km=0,
+        auto_rickshaw_km=0,
         flight_km=0,
         transit_km=0,
         daily_sleep_hours=8,
@@ -46,10 +52,8 @@ def test_parse_confession_fallback():
         del os.environ["GROQ_API_KEY"]
 
     result = parse_confession("I drove 20 km today")
-    assert result.car_km == 0
-    assert result.daily_sleep_hours == 8
-    assert result.sleep_ac_on is False
-    assert result.restaurant_meals == 0
+    assert result.is_valid is False
+    assert "Missing API Key" in result.rejection_reason
 
     if original_key:
         os.environ["GROQ_API_KEY"] = original_key

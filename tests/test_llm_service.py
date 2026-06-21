@@ -1,6 +1,6 @@
 import json
 
-from src.llm_service import ParsedPersonalData, get_advisor_response, parse_confession
+from src.llm_service import AdvisorRequest, ParsedPersonalData, get_advisor_response, parse_confession
 
 
 # Mock groq to simulate RateLimitError and responses
@@ -30,8 +30,25 @@ class MockGroq:
                     )
                 elif self.mode == "invalid_json":
                     return MockResponse("{ broken json")
+                elif self.mode == "invalid_bouncer":
+                    data = {
+                        "reasoning": "User says 365 flights.",
+                        "is_valid": False,
+                        "rejection_reason": "Yeti Error: Nobody flies 365 times a year.",
+                        "car_km": 0,
+                        "flight_km": 0,
+                        "transit_km": 0,
+                        "daily_sleep_hours": 0,
+                        "sleep_ac_on": False,
+                        "daytime_ac_hours": 0,
+                        "restaurant_meals": 0,
+                    }
+                    return MockResponse(json.dumps(data))
                 elif self.mode == "success_parse":
                     data = {
+                        "reasoning": "Seems valid",
+                        "is_valid": True,
+                        "rejection_reason": "",
                         "car_km": 10,
                         "flight_km": 0,
                         "transit_km": 5,
@@ -43,6 +60,7 @@ class MockGroq:
                     return MockResponse(json.dumps(data))
                 elif self.mode == "success_advisor":
                     data = {
+                        "analysis": "This is a mock analysis.",
                         "silver_lining": "Good job.",
                         "roast": "You are terrible.",
                         "guilt_easing_question": "Any plans?",
@@ -74,6 +92,7 @@ class MockResponse:
 
 def test_parse_confession_success(monkeypatch):
     """Verify parse_confession returns valid parsed data on success."""
+    monkeypatch.setenv("GROQ_API_KEY", "mock_key")
     monkeypatch.setattr("src.llm_service.Groq", lambda api_key: MockGroq("success_parse"))
 
     result = parse_confession("Mock input")
@@ -82,25 +101,41 @@ def test_parse_confession_success(monkeypatch):
     assert result.transit_km == 5
 
 
+def test_parse_confession_bouncer(monkeypatch):
+    """Verify parse_confession correctly sets is_valid when given bouncer data."""
+    monkeypatch.setenv("GROQ_API_KEY", "mock_key")
+    monkeypatch.setattr("src.llm_service.Groq", lambda api_key: MockGroq("invalid_bouncer"))
+
+    result = parse_confession("I flew 365 times today.")
+    assert isinstance(result, ParsedPersonalData)
+    assert result.is_valid is False
+    assert "Yeti Error" in result.rejection_reason
+    assert result.flight_km == 0
+
+
 def test_parse_confession_rate_limit(monkeypatch):
     """Verify parse_confession gracefully falls back on API errors."""
+    monkeypatch.setenv("GROQ_API_KEY", "mock_key")
     monkeypatch.setattr("src.llm_service.Groq", lambda api_key: MockGroq("rate_limit"))
 
-    # Should not raise, should return default ParsedPersonalData
+    # Should not raise, should return ParsedPersonalData with is_valid=False
     result = parse_confession("Mock input")
     assert isinstance(result, ParsedPersonalData)
-    assert result.car_km == 0
-    assert result.daily_sleep_hours == 8
+    assert result.is_valid is False
+    assert "Yeti Engine Error" in result.rejection_reason
 
 
 def test_get_advisor_response_success(monkeypatch):
     """Verify advisor returns correctly structured data."""
+    monkeypatch.setenv("GROQ_API_KEY", "mock_key")
     monkeypatch.setattr("src.llm_service.Groq", lambda api_key: MockGroq("success_advisor"))
 
-    result = get_advisor_response(
+    req = AdvisorRequest(
         carbon=5000.0,
         tax=10000.0,
         car_km=10,
+        two_wheeler_km=0,
+        auto_rickshaw_km=0,
         flight_km=0,
         transit_km=0,
         daily_sleep_hours=8,
@@ -110,7 +145,10 @@ def test_get_advisor_response_success(monkeypatch):
         tier="Human",
         goal="Mock goal",
         kpis="Mock kpis",
+        worst_habit="✈️ Flights",
     )
+    result = get_advisor_response(req)
+    assert result.analysis == "This is a mock analysis."
     assert result.roast == "You are terrible."
     assert len(result.alternatives) == 1
     assert result.alternatives[0].est_monthly_savings_inr == 500.0
@@ -118,12 +156,15 @@ def test_get_advisor_response_success(monkeypatch):
 
 def test_get_advisor_response_invalid_json(monkeypatch):
     """Verify advisor falls back safely if LLM returns broken JSON."""
+    monkeypatch.setenv("GROQ_API_KEY", "mock_key")
     monkeypatch.setattr("src.llm_service.Groq", lambda api_key: MockGroq("invalid_json"))
 
-    result = get_advisor_response(
+    req = AdvisorRequest(
         carbon=5000.0,
         tax=10000.0,
         car_km=10,
+        two_wheeler_km=0,
+        auto_rickshaw_km=0,
         flight_km=0,
         transit_km=0,
         daily_sleep_hours=8,
@@ -133,9 +174,13 @@ def test_get_advisor_response_invalid_json(monkeypatch):
         tier="Human",
         goal="Mock goal",
         kpis="Mock kpis",
+        worst_habit="✈️ Flights",
     )
+    result = get_advisor_response(req)
 
     # Fallback structure should be intact
+    assert hasattr(result, "analysis")
+    assert "System Override" in result.analysis
     assert hasattr(result, "roast")
     assert "But let's see if we can do better" in result.roast
     assert len(result.alternatives) == 2

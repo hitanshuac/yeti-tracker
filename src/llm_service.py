@@ -15,6 +15,8 @@ from dotenv import load_dotenv
 from groq import Groq, GroqError
 from pydantic import BaseModel, Field
 
+from src.observability import log_error
+
 load_dotenv(".secrets/.env")
 
 # ---------------------------------------------------------------------------
@@ -25,7 +27,12 @@ load_dotenv(".secrets/.env")
 class ParsedPersonalData(BaseModel):
     """Schema for parsed lifestyle activities from natural language."""
 
+    reasoning: str = ""
+    is_valid: bool = True
+    rejection_reason: str = ""
     car_km: int = Field(ge=0, default=0)
+    two_wheeler_km: int = Field(ge=0, default=0)
+    auto_rickshaw_km: int = Field(ge=0, default=0)
     flight_km: int = Field(ge=0, default=0)
     transit_km: int = Field(ge=0, default=0)
     daily_sleep_hours: int = Field(ge=0, le=24, default=8)
@@ -45,8 +52,9 @@ class AdvisorAlternative(BaseModel):
 
 
 class AdvisorResponse(BaseModel):
-    """Schema for the Yeti Advisor's full response."""
+    """Typed schema for the Yeti Advisor output."""
 
+    analysis: str = "System Override: No analysis provided."
     silver_lining: str = "You're being honest about your habits — that's the first step."
     roast: str = "But let's see if we can do better, shall we?"
     guilt_easing_question: str = "Tell me more about your daily routine — any hidden habits?"
@@ -70,6 +78,28 @@ class AdvisorResponse(BaseModel):
     )
 
 
+class AdvisorRequest(BaseModel):
+    """Encapsulates the request payload to the Advisor LLM."""
+
+    carbon: float
+    tax: float
+    car_km: int
+    two_wheeler_km: int
+    auto_rickshaw_km: int
+    flight_km: int
+    transit_km: int
+    daily_sleep_hours: int
+    sleep_ac_on: bool
+    daytime_ac_hours: int
+    restaurant_meals: int
+    tier: str
+    goal: str
+    kpis: str
+    worst_habit: str
+    rag_context: str = ""
+    raw_text: str = ""
+
+
 # ---------------------------------------------------------------------------
 # Prompt templates
 # ---------------------------------------------------------------------------
@@ -78,20 +108,23 @@ PROMPT_INGESTION_BAIT = """You are a warm, non-judgmental, hyper-supportive life
 Your goal is to safely extract data points without making the user feel guilty.
 NEVER mention carbon, climate change, or environmental impact.
 Act like a friendly lifestyle blogger just capturing their day.
-CRITICAL: You MUST calculate the YEARLY total for each category based on the text.
-If they say 'once a month', multiply by 12. If they say 'every workday', multiply by 260.
-If frequency is unspecified, assume the stated number is their yearly total.
-You MUST perform the math silently and output ONLY the final computed integer.
-DO NOT output formulas (e.g., no '260 * 10'). The JSON values MUST be raw integers.
-All distances MUST be in kilometers (km). If specific locations are mentioned without distances
-(e.g. "from Kandivali to Sakinaka"), you MUST estimate the real-world distance between them
-in km based on your geographic knowledge.
-For 'daily_sleep_hours', extract the average number of hours they sleep per night.
-For 'sleep_ac_on', extract whether they mention sleeping with the AC or cooler on (true/false).
-For 'daytime_ac_hours', extract the average number of hours they use the AC or cooler during the day while awake.
-You MUST output a strict JSON object exactly matching this format:
+
+CRITICAL DIRECTIVE ON MATH AND VALIDATION:
+1. You MUST calculate the YEARLY total for transportation (car_km, two_wheeler_km, auto_rickshaw_km, flight_km, transit_km) and restaurant_meals. If they say 'once a month', multiply by 12. If they say 'every workday', multiply by 260.
+2. You MUST extract the DAILY average (A NUMBER BETWEEN 0 AND 24) for 'daily_sleep_hours' and 'daytime_ac_hours'. NEVER multiply daily hours by 365.
+3. THE BOUNCER RULE: If the user inputs physically impossible data (e.g., >24 hours of AC/sleep in a day, sleeping 1 hour a year, 365 flights a year), you MUST set `is_valid` to false and provide a sarcastic `rejection_reason` explaining why their input defies physics (e.g. "Yeti Error: You cannot sleep 1 hour a year. Try lying to someone else."). Set all integers to 0.
+4. DO NOT OUTPUT MATH EQUATIONS in the JSON values. You MUST evaluate them yourself and output the final whole integer (e.g. output 730, NOT 2 * 365). Float numbers are NOT allowed.
+
+You MUST perform math silently. All distances MUST be in kilometers (km). If specific locations are mentioned without distances (e.g. "from Kandivali to Sakinaka"), you MUST estimate the real-world distance between them in km based on your geographic knowledge.
+
+You MUST output a strict JSON object exactly matching this format. Always write your step-by-step logical deduction in the 'reasoning' field first:
 {{
+  "reasoning": "Step-by-step logic goes here.",
+  "is_valid": true,
+  "rejection_reason": "",
   "car_km": 0,
+  "two_wheeler_km": 0,
+  "auto_rickshaw_km": 0,
   "flight_km": 0,
   "transit_km": 0,
   "daily_sleep_hours": 8,
@@ -109,20 +142,21 @@ The user's primary goal today is: {goal}. YOU MUST TAILOR YOUR ADVICE SPECIFICAL
 {rag_context}
 You must output a strict JSON object matching this schema:
 {{
+  "analysis": "One sentence explicitly acknowledging their worst habit based on the data.",
   "silver_lining": "One sentence praising the user for a sustainable choice they made or at least acknowledging their honesty.",
-  "roast": "One witty, aggressive observation calling out their massive forecast. DO NOT use abstract kg measurements. INVENT a unique, highly specific Indian analogy based EXACTLY on their worst habit (e.g. if they flew, talk about aviation fuel over Mumbai; if they used AC, talk about collapsing the local grid). NEVER repeat the same analogy twice.",
+  "roast": "One witty, observational joke about their worst habit. Do NOT attack the user. Use dry humor to highlight the scale of their impact, then immediately pivot to easing their guilt.",
   "guilt_easing_question": "A friendly, harmless-sounding follow up question that subtly encourages them to confess another bad habit (e.g., 'Do you have any fun weekend trips planned?').",
   "alternatives": [
     {{
       "type": "Convenience",
-      "alternative": "A simple baby step that is extremely easy to adopt",
+      "alternative": "A highly practical 'Baby Step' achievable in 30-60 days. NEVER suggest impossible geography (e.g., trains to Iceland).",
       "pros": "The benefits",
       "cons": "The downsides",
       "est_monthly_savings_inr": 500.00
     }},
     {{
       "type": "Maximum Impact",
-      "alternative": "A major lifestyle change that guarantees massive carbon savings",
+      "alternative": "A major lifestyle change that is STILL geographically and financially realistic.",
       "pros": "The benefits",
       "cons": "The downsides",
       "est_monthly_savings_inr": 2500.00
@@ -150,7 +184,7 @@ def sanitize_input(text: str) -> str:
     """
     if not isinstance(text, str):
         raise ValueError("Input must be a string")
-    sanitized = text[:1000]
+    sanitized = text[:500]
     for char in ["<", ">", "{", "}"]:
         sanitized = sanitized.replace(char, "")
     return sanitized.strip()
@@ -183,7 +217,7 @@ def _recover_failed_generation(error_msg: str) -> dict | None:
     raw_json = raw_json.replace("\\n", "\n").replace('\\"', '"')
 
     fixed_json = re.sub(
-        r"[\d]+(?:\s*[\*\+\-\/]\s*[\d\.]+)+",
+        r"[\d\.]+(?:\s*[\*\+\-\/]\s*[\d\.]+)+",
         _safe_eval_math_expr,
         raw_json,
     )
@@ -224,20 +258,20 @@ def _attempt_groq_extraction(client: Any, prompt: str) -> dict | None:
             model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.0,
-            max_tokens=200,
+            max_tokens=800,
             response_format={"type": "json_object"},
         )
         content = response.choices[0].message.content
         return json.loads(content)
     except GroqError as e:
         error_str = str(e)
-        _log_llm_error(type(e).__name__, "parse_confession", error_str)
+        log_error(type(e).__name__, "parse_confession", error_str)
         if getattr(e, "status_code", 200) == 429 or "rate limit" in error_str.lower():
             return {"rate_limit": True}
         return _handle_groq_error(error_str)
     except Exception as e:  # pylint: disable=broad-exception-caught
         error_str = str(e)
-        _log_llm_error(type(e).__name__, "parse_confession", error_str)
+        log_error(type(e).__name__, "parse_confession", error_str)
         return _handle_groq_error(error_str)
 
 
@@ -274,7 +308,7 @@ def _parse_groq_result(result: dict) -> ParsedPersonalData:
     try:
         return ParsedPersonalData(**mapped)
     except Exception as e:  # pylint: disable=broad-exception-caught
-        _log_llm_error(type(e).__name__, "parse_groq_result", str(e))
+        log_error(type(e).__name__, "parse_groq_result", str(e))
         return _fallback_parse(mapped)
 
 
@@ -289,8 +323,11 @@ def parse_confession(text: str) -> ParsedPersonalData:
     """
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
-        _log_llm_error("EnvironmentError", "parse_confession", "Missing GROQ_API_KEY.")
-        return ParsedPersonalData()
+        log_error("EnvironmentError", "parse_confession", "Missing GROQ_API_KEY.")
+        return ParsedPersonalData(
+            is_valid=False,
+            rejection_reason="Missing API Key. Please provide a GROQ_API_KEY to use auto-extraction.",
+        )
 
     safe_text = sanitize_input(text)
     client = Groq(api_key=api_key)
@@ -304,96 +341,61 @@ def parse_confession(text: str) -> ParsedPersonalData:
             return _parse_groq_result(result)
         time.sleep(1)
 
-    return ParsedPersonalData()
+    return ParsedPersonalData(
+        is_valid=False,
+        rejection_reason="Yeti Engine Error: Failed to extract data from the LLM. Please try again or adjust sliders manually.",
+    )
 
 
-# pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
-def _build_advisor_prompt(
-    carbon: float,
-    tax: float,
-    car_km: int,
-    flight_km: int,
-    transit_km: int,
-    daily_sleep_hours: int,
-    sleep_ac_on: bool,
-    daytime_ac_hours: int,
-    restaurant_meals: int,
-    tier: str,
-    goal: str,
-    kpis: str,
-    rag_context: str,
-) -> str:
+def _build_advisor_prompt(req: AdvisorRequest) -> str:
     """Helper to build the complex advisor prompt."""
-    if tier == "Category 3 Catastrophe" or carbon > 15000:
-        system_msg = "You are a ruthless climate auditor. The user is actively destroying the planet."
-    elif tier == "Category 2 Catastrophe" or carbon > 8000:
+    if req.tier == "Category 3 Catastrophe" or req.carbon > 15000:
+        system_msg = "You are a witty, pragmatic behavioral economist. Use dry, observational sarcasm to highlight their massive impact, but NEVER attack them. Immediately validate their lifestyle to ease their guilt."
+    elif req.tier == "Category 2 Catastrophe" or req.carbon > 8000:
         system_msg = (
-            "You are a strict, disappointed advisor. The user is careless. "
+            "You are a sarcastic but supportive lifestyle coach. Point out their specific actions with witty humor, "
+            "but keep the tone light and encouraging. "
             "CRITICAL INSTRUCTION: You MUST include a 'Near Miss' roast mentioning "
-            "that they were extremely close to staying in Tier 1. Make them regret a "
-            "specific action from today (e.g. 'If you had turned off the Daytime AC "
-            "45 minutes earlier, you would have survived.')."
+            "that they were extremely close to staying in Tier 1. Make them laugh about "
+            "a specific action from today."
         )
-    elif abs(carbon - 2500) < 100:
+    elif abs(req.carbon - 2500) < 100:
         system_msg = "System Error: No bloat detected. The Yeti is starving. You lived like a monk today. Act shocked."
     else:
         system_msg = "You are a friendly environmental scientist. The user's footprint is okay, but could be better."
 
     extra_txt = (
-        f"The user's EXACT YEARLY FORECAST is {carbon:,.0f} kg, creating a Social Cost of Carbon "
-        f"(Tax Debt) of INR {tax:,.2f} (calculated at INR 15.80 per kg CO2).\n"
-        f"This year, they will travel {car_km} km by car, {flight_km} km by plane, "
-        f"and {transit_km} km by train/bus.\n"
-        f"They sleep {daily_sleep_hours} hours a day (AC on: {sleep_ac_on}), "
-        f"use {daytime_ac_hours} hours of AC during the day, "
-        f"and eat out at restaurants {restaurant_meals} times."
+        f"CRITICAL: The user's highest discretionary carbon footprint comes from: {req.worst_habit}.\n"
+        f"The user's EXACT YEARLY FORECAST is {req.carbon:,.0f} kg, creating a Social Cost of Carbon "
+        f"(Tax Debt) of INR {req.tax:,.2f} (calculated at INR 15.80 per kg CO2).\n"
+        f"This year, they will travel {req.car_km} km by car, {req.two_wheeler_km} km by two-wheeler, "
+        f"{req.auto_rickshaw_km} km by auto-rickshaw/cab, {req.flight_km} km by plane, "
+        f"and {req.transit_km} km by train/bus.\n"
+        f"They sleep {req.daily_sleep_hours} hours a day (AC on: {req.sleep_ac_on}), "
+        f"use {req.daytime_ac_hours} hours of AC during the day, "
+        f"and eat out at restaurants {req.restaurant_meals} times.\n\n"
+        f"USER'S RAW CONFESSION: '{req.raw_text}'\n"
+        f"CRITICAL DIRECTIVE: You MUST read the raw confession. If the user explicitly states they cannot control a habit (e.g., 'office AC', 'no AC at home'), DO NOT suggest alternatives for it. Pivot your advice to habits they CAN control (like meals or transit).\n"
+        f"AC MITIGATION RULE: When suggesting AC reductions (especially for offices), NEVER suggest turning it off entirely, as that makes others suffer. Instead, suggest optimizing the temperature to 24°C, regular maintenance, or a hybrid fan/AC approach.\n"
+        f"PRAGMATISM RULE: All alternatives MUST be realistic 'Baby Steps' achievable within 30-60 days. NEVER suggest impossible geography (e.g., taking a train across an ocean to Iceland). Acknowledge that some things are necessary, and provide highly practical workarounds (e.g., if they must fly, suggest direct economy flights)."
     )
 
     return PROMPT_WRATH_SWITCH.format(
         system_msg=system_msg,
-        kpis=kpis,
-        goal=goal,
+        kpis=req.kpis,
+        goal=req.goal,
         extra_txt=extra_txt,
-        rag_context=rag_context,
+        rag_context=req.rag_context,
     )
 
 
-# pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
-def get_advisor_response(
-    carbon: float,
-    tax: float,
-    car_km: int,
-    flight_km: int,
-    transit_km: int,
-    daily_sleep_hours: int,
-    sleep_ac_on: bool,
-    daytime_ac_hours: int,
-    restaurant_meals: int,
-    tier: str,
-    goal: str,
-    kpis: str,
-    rag_context: str = "",
-) -> AdvisorResponse:
+def get_advisor_response(req: AdvisorRequest) -> AdvisorResponse:
     """Use LLM to generate personalized carbon reduction advice."""
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         return AdvisorResponse()
 
-    prompt = _build_advisor_prompt(
-        carbon,
-        tax,
-        car_km,
-        flight_km,
-        transit_km,
-        daily_sleep_hours,
-        sleep_ac_on,
-        daytime_ac_hours,
-        restaurant_meals,
-        tier,
-        goal,
-        kpis,
-        rag_context,
-    )
+    prompt = _build_advisor_prompt(req)
 
     client = Groq(api_key=api_key)
     try:
@@ -410,6 +412,7 @@ def get_advisor_response(
         except Exception:
             # Graceful partial parse — use defaults for missing fields
             return AdvisorResponse(
+                analysis=data.get("analysis", AdvisorResponse().analysis),
                 silver_lining=data.get("silver_lining", AdvisorResponse().silver_lining),
                 roast=data.get("roast", AdvisorResponse().roast),
                 guilt_easing_question=data.get("guilt_easing_question", AdvisorResponse().guilt_easing_question),
@@ -417,39 +420,5 @@ def get_advisor_response(
                 or AdvisorResponse().alternatives,
             )
     except Exception as e:
-        _log_llm_error(type(e).__name__, "get_advisor_response", str(e))
+        log_error(type(e).__name__, "get_advisor_response", str(e))
         return AdvisorResponse()
-
-
-# ---------------------------------------------------------------------------
-# Internal error logging
-# ---------------------------------------------------------------------------
-
-
-def _log_llm_error(error_type: str, component: str, message: str) -> None:
-    """Minimal error logger to avoid coupling to the UI layer."""
-    log_file = "data/error_logs.json"
-    os.makedirs(os.path.dirname(log_file), exist_ok=True)
-
-    try:
-        with open(log_file, encoding="utf-8") as f:
-            logs = json.load(f)
-            if not isinstance(logs, list):
-                logs = []
-    except (FileNotFoundError, json.JSONDecodeError):
-        logs = []
-
-    logs.append(
-        {
-            "error_type": error_type,
-            "component": component,
-            "message": message,
-            "status": "UNRESOLVED",
-            "resolution_strategy": None,
-        }
-    )
-
-    temp_file = f"{log_file}.tmp"
-    with open(temp_file, "w", encoding="utf-8") as f:
-        json.dump(logs, f, indent=2)
-    os.replace(temp_file, log_file)

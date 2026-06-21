@@ -36,3 +36,8 @@ All tickets for the Yeti-Tracker Hack2Skill project have been completed.
   - Anchor baseline statically to World Bank 2500 kg to prevent double-counting of survival electricity.
   - Implement Sleep-based gamification logic for electricity footprint (Sleep vs Awake vs Daytime AC).
   - Expose DuckDB `PERCENTILE_CONT(0.9)` anomaly detection math directly in the UI.
+
+- `[x]` **TICKET-010: High-Fidelity Transport & Scientific Transparency**
+  - Refactored LLM schemas to separate `two_wheeler_km` and `auto_rickshaw_km` from `car_km`.
+  - Display full transparency matrix (Agencies, Factors) via `carbon_factors.csv`.
+  - Fix JSON validation math expressions in Groq payload.

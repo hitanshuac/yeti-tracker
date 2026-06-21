@@ -120,7 +120,7 @@ def create_doom_vs_rescue(monthly_tax: float, savings: float) -> go.Figure:
     """
     months = [f"Month {i}" for i in range(1, 13)]
     doom = [monthly_tax * i for i in range(1, 13)]
-    optimized_monthly = monthly_tax - savings
+    optimized_monthly = max(0, monthly_tax - savings)
     rescue = [optimized_monthly * i for i in range(1, 13)]
     cumulative_saved = [(monthly_tax - optimized_monthly) * i for i in range(1, 13)]
 

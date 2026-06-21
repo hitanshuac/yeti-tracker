@@ -1,5 +1,4 @@
 """
-# pylint: disable=line-too-long,broad-exception-caught,unused-argument
 External API boundaries for Groq LLM integration.
 """
 
@@ -176,6 +175,6 @@ def get_advisor_response(req: AdvisorRequest) -> AdvisorResponse:
 
     try:
         return AdvisorResponse.model_validate(result)
-    except Exception as e:
+    except (ValueError, TypeError) as e:
         log_error(type(e).__name__, "get_advisor_response", str(e))
         return AdvisorResponse()

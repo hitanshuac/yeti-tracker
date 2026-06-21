@@ -7,9 +7,9 @@ and returns a formatted context string for LLM prompt injection.
 """
 
 import re
+from pathlib import Path
 
 import duckdb
-from pathlib import Path
 
 from src.observability import log_error
 

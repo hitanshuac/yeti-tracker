@@ -37,14 +37,21 @@ def _load_existing_logs(log_file: str) -> list[ErrorLogEntry]:
             try:
                 data = json.load(f)
                 if not isinstance(data, list):
-                    raise ValueError(f"Schema mismatch: Expected list, got {type(data).__name__}")
+                    raise ValueError(
+                        f"Schema mismatch: Expected list, got {type(data).__name__}"
+                    )
                 logs = [ErrorLogEntry.model_validate(item) for item in data]
             except (json.JSONDecodeError, ValidationError) as e:
                 raise ValueError(f"Schema mismatch in {log_file}: {e}") from e
     return logs
 
 
-def log_error(error_type: str, component: str, message: str, log_file: str = "data/error_logs.json") -> None:
+def log_error(
+    error_type: str,
+    component: str,
+    message: str,
+    log_file: str = "data/error_logs.json",
+) -> None:
     """Log an error to the JSON file with atomic writes and schema validation.
 
     Args:
@@ -63,7 +70,12 @@ def log_error(error_type: str, component: str, message: str, log_file: str = "da
 
     before_len = len(logs)
 
-    new_entry = ErrorLogEntry(timestamp=time.time(), error_type=error_type, component=component, message=message)
+    new_entry = ErrorLogEntry(
+        timestamp=time.time(),
+        error_type=error_type,
+        component=component,
+        message=message,
+    )
     logs.append(new_entry)
 
     temp_file = f"{log_file}.tmp"

@@ -1,5 +1,4 @@
 """
-# pylint: disable=line-too-long,broad-exception-caught,unused-argument
 Dashboard rendering layer for the Yeti-Tracker financial and advisor panels.
 
 Contains the Smart Advisor section, financial impact charts, and
@@ -97,8 +96,7 @@ def _render_bottom_advisor_dashboard(
             advice, _rag_context = _fetch_new_advice(result, tier_info, on_advisor_call)
     else:
         advice = st.session_state.cached_advice
-
-    _render_feedback_ui(advice, tier_info, on_reply)
+    _render_feedback_ui(advice, on_reply)
 
     total_monthly_savings = sum(a.est_monthly_savings_inr for a in advice.alternatives)
 
@@ -110,14 +108,12 @@ def _render_bottom_advisor_dashboard(
 
 def _render_feedback_ui(
     advice: AdvisorResponse,
-    tier_info: TierClassification,
     on_reply: Callable[[], None],
 ) -> None:
     """Render the advisor feedback interaction area.
 
     Args:
         advice: The current advisor response to display.
-        tier_info: Current gamification tier classification.
         on_reply: Callback for user reply submissions.
     """
     st.info(f" **Yeti Advisor asks:** {advice.guilt_easing_question}")
@@ -127,7 +123,10 @@ def _render_feedback_ui(
         key="reply_input",
         on_change=on_reply,
         placeholder="Type your response here and hit Enter...",
-        help="Continue the conversation with the Yeti Advisor. Your reply will be appended to the confessional.",
+        help=(
+            "Continue the conversation with the Yeti Advisor. "
+            "Your reply will be appended to the confessional."
+        ),
     )
 
 

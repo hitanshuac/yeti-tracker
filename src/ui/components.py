@@ -45,11 +45,14 @@ def _render_budget_bar(result: CarbonResult) -> None:
     st.markdown(
         f"<div title=' Everyone starts at 2,500 kg CO/year (India baseline). "
         f"The sliders track how much more your lifestyle adds on top.' "
-        f"style='background:rgba(128,128,128,0.2);border-radius:8px;overflow:hidden;height:32px;width:100%;position:relative;'>"
-        f"<div style='background:{bar_color};width:{budget_pct * 100:.1f}%;height:100%;border-radius:8px;"
+        f"style='background:rgba(128,128,128,0.2);border-radius:8px;overflow:hidden;"
+        f"height:32px;width:100%;position:relative;'>"
+        f"<div style='background:{bar_color};width:{budget_pct * 100:.1f}%;"
+        f"height:100%;border-radius:8px;"
         f"transition:width 0.5s ease;'></div>"
         f"<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
-        f"color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.8);font-weight:bold;font-size:0.85em;white-space:nowrap;'>{bar_label}</span>"
+        f"color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.8);font-weight:bold;"
+        f"font-size:0.85em;white-space:nowrap;'>{bar_label}</span>"
         f"</div>",
         unsafe_allow_html=True,
     )
@@ -83,12 +86,15 @@ def _render_tier_bar(result: CarbonResult) -> None:
     st.markdown(
         f"<div title='This bar tracks your total footprint. "
         f"Over 9,000 kg pushes you out of the Human tier into Catastrophes.' "
-        f"style='background:rgba(128,128,128,0.2);border-radius:8px;overflow:hidden;height:32px;width:100%;"
+        f"style='background:rgba(128,128,128,0.2);border-radius:8px;overflow:hidden;"
+        f"height:32px;width:100%;"
         f"position:relative;margin-bottom:8px;'>"
-        f"<div style='background:{tier_bar_color};width:{tier_pct * 100:.1f}%;height:100%;border-radius:8px;"
+        f"<div style='background:{tier_bar_color};width:{tier_pct * 100:.1f}%;"
+        f"height:100%;border-radius:8px;"
         f"transition:width 0.8s ease;'></div>"
         f"<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"
-        f"color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.8);font-weight:bold;font-size:0.85em;white-space:nowrap;'>{tier_bar_label}</span>"
+        f"color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.8);font-weight:bold;"
+        f"font-size:0.85em;white-space:nowrap;'>{tier_bar_label}</span>"
         f"</div>",
         unsafe_allow_html=True,
     )
@@ -127,7 +133,8 @@ def _render_top_progress_bars(
 
     if getattr(result, "is_anomaly", False):
         st.warning(
-            "ANOMALY DETECTED: Your recent input deviates significantly from your historical baseline!"
+            "ANOMALY DETECTED: Your recent input deviates significantly "
+            "from your historical baseline!"
         )
 
 

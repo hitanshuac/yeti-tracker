@@ -1,5 +1,4 @@
 """
-# pylint: disable=line-too-long,broad-exception-caught,unused-argument
 Pydantic response schemas (enforced, not decorative).
 """
 
@@ -25,7 +24,10 @@ class ParsedPersonalData(BaseModel):
     restaurant_meals: int = Field(ge=0, default=0)
     untracked_activities: list[str] = Field(
         default_factory=list,
-        description="Any high-carbon activities mentioned that don't fit the exact metrics above (e.g., eating beef, helicopter rides).",
+        description=(
+            "Any high-carbon activities mentioned that don't fit the exact "
+            "metrics above (e.g., eating beef, helicopter rides)."
+        ),
     )
 
     @field_validator("*", mode="before")
@@ -35,7 +37,7 @@ class ParsedPersonalData(BaseModel):
             try:
                 # pylint: disable=eval-used
                 return int(float(eval(v)))
-            except Exception:
+            except (SyntaxError, NameError, TypeError, ZeroDivisionError, ValueError):
                 pass
         return v
 

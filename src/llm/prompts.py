@@ -1,5 +1,4 @@
 """
-# pylint: disable=line-too-long,broad-exception-caught,unused-argument
 Prompt templates for LLM consumption.
 """
 
@@ -9,15 +8,29 @@ NEVER mention carbon, climate change, or environmental impact.
 Act like a friendly lifestyle blogger just capturing their day.
 
 CRITICAL DIRECTIVE ON MATH AND VALIDATION:
-1. You MUST calculate the YEARLY total for transportation (car_km, two_wheeler_km, auto_rickshaw_km, flight_km, bus_km, train_metro_km) and restaurant_meals. If they say 'every workday', multiply by 260. If they say 'every day', multiply by 365.
-2. You MUST extract the TOTAL DAILY average for 'ac_hours'. If the user has multiple AC units, multiply the daily hours by the number of units (e.g., 5 ACs for 24 hours = 120). NEVER multiply daily hours by 365. AC hours CAN and WILL exceed 24 if they have multiple units. Do NOT reject this!
-3. THE BOUNCER RULE: If the user inputs physically impossible data (e.g. sleeping 1 hour a year, 1000 flights a day), set `is_valid` to false. (NOTE: `ac_hours` is EXEMPT from this rule).
-4. FOR ALL YEARLY METRICS: If the user provides a daily or weekly value, you MUST output a string containing the math expression (e.g. "2 * 365" or "10 * 52"). DO NOT evaluate the math yourself!
-   - IMPORTANT FOR FLIGHTS: Multiply the number of flights by the round-trip distance in km. e.g. "52 * 1700" for weekly flights between cities 1700km apart.
-   - IMPORTANT FOR CABS/OLA: Extract this to `car_km` or `auto_rickshaw_km`. e.g., "80 * 52".
-5. THE OUT-OF-BOUNDS CATCHER: If the user mentions any high-carbon activities that do NOT fit into our exact numerical sliders (e.g. eating beef, helicopters), extract them into the `untracked_activities` array.
+1. You MUST calculate the YEARLY total for transportation (car_km, two_wheeler_km,
+   auto_rickshaw_km, flight_km, bus_km, train_metro_km) and restaurant_meals. If they
+   say 'every workday', multiply by 260. If they say 'every day', multiply by 365.
+2. You MUST extract the TOTAL DAILY average for 'ac_hours'. If the user has multiple AC
+   units, multiply the daily hours by the number of units (e.g., 5 ACs for 24 hours = 120).
+   NEVER multiply daily hours by 365. AC hours CAN and WILL exceed 24 if they have
+   multiple units. Do NOT reject this!
+3. THE BOUNCER RULE: If the user inputs physically impossible data (e.g. sleeping 1
+   hour a year, 1000 flights a day), set `is_valid` to false. (NOTE: `ac_hours` is
+   EXEMPT from this rule).
+4. FOR ALL YEARLY METRICS: If the user provides a daily or weekly value, you MUST
+   output a string containing the math expression (e.g. "2 * 365" or "10 * 52").
+   DO NOT evaluate the math yourself!
+   - IMPORTANT FOR FLIGHTS: Multiply the number of flights by the round-trip distance
+     in km. e.g. "52 * 1700" for weekly flights between cities 1700km apart.
+   - IMPORTANT FOR CABS/OLA: Extract this to `car_km` or `auto_rickshaw_km`.
+     e.g., "80 * 52".
+5. THE OUT-OF-BOUNDS CATCHER: If the user mentions any high-carbon activities that do
+   NOT fit into our exact numerical sliders (e.g. eating beef, helicopters), extract
+   them into the `untracked_activities` array.
 
-You MUST perform math silently. All distances MUST be in kilometers (km). Estimate distances between cities if needed.
+You MUST perform math silently. All distances MUST be in kilometers (km). Estimate
+distances between cities if needed.
 
 You MUST output a strict JSON object exactly matching this format. Always write your step-by-step logical deduction in the 'reasoning' field first:
 {{
@@ -66,6 +79,12 @@ You must output a strict JSON object matching this schema:
     }}
   ]
 }}
-CRITICAL INSTRUCTION: You MUST provide exactly two alternatives (one 'Convenience' and one 'Maximum Impact'). Together, these alternatives MUST reduce their total Social Cost of Carbon by AT LEAST 20%.
-LOGIC DIRECTIVE: Your alternatives MUST be hyper-specific to the exact categories driving their footprint. If their footprint comes entirely from AC, DO NOT suggest they stop driving. If they already use public transit, DO NOT suggest public transitinstead suggest they WFH or tackle their AC/Diet. DO NOT give redundant advice.
-DO NOT be insulting to their identity, attack the behavior. OUTPUT ONLY VALID JSON. No extra text."""
+CRITICAL INSTRUCTION: You MUST provide exactly two alternatives (one 'Convenience' and
+one 'Maximum Impact'). Together, these alternatives MUST reduce their total Social Cost
+of Carbon by AT LEAST 20%.
+LOGIC DIRECTIVE: Your alternatives MUST be hyper-specific to the exact categories
+driving their footprint. If their footprint comes entirely from AC, DO NOT suggest they
+stop driving. If they already use public transit, DO NOT suggest public transit instead
+suggest they WFH or tackle their AC/Diet. DO NOT give redundant advice.
+DO NOT be insulting to their identity, attack the behavior. OUTPUT ONLY VALID JSON.
+No extra text."""

@@ -6,8 +6,9 @@ All financial and CO2 calculations live here  no LLM, no UI.
 The engine reads emission factors from a CSV and returns typed results.
 """
 
-import duckdb
 from pathlib import Path
+
+import duckdb
 from pydantic import BaseModel, Field
 
 from src.observability import log_error

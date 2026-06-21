@@ -5,13 +5,13 @@ The Yeti-Tracker has successfully completed the Hack2Skill Challenge 3 sprint. T
 
 ## The Gamified Pivot
 The application was recently refactored from an 851-line `app.py` monolith into a cleanly separated layered architecture. It relies on a **Hybrid LLM Pipeline**:
-1. **Continuous Confessional**: The user types a natural language diary. `llm_service.py` parses it into 6 specific data points (including sleep vs awake habits). The Yeti Advisor's responses append into the UI, creating an addictive loop.
-2. **Regex Math Interceptor**: When the LLM hallucinates mathematical expressions (e.g., `260 * 2`) instead of computing them, `_recover_failed_generation` natively evals the math before passing it to the Verification Gate.
+1. **Continuous Confessional**: The user types a natural language diary. `src/llm/` parses it into 6 specific data points (including sleep vs awake habits). The Yeti Advisor's responses append into the UI, creating an addictive loop.
+2. **Regex Math Interceptor**: When the LLM hallucinates mathematical expressions (e.g., `260 * 2`) instead of computing them, the `parsers` natively evals the math before passing it to the Verification Gate.
 3. **Verification Gate & Scientific Transparency**: These values populate explicit UI sliders.
-4. **Security & Validation**: `security.py` applies SAST-compliant sanitization (HTML escaping and regex pattern enforcement) to all user text input to prevent prompt injection and XSS.
+4. **Security & Validation**: `src/llm/parsers.py` applies SAST-compliant sanitization (HTML escaping and regex pattern enforcement) to all user text input to prevent prompt injection and XSS.
 5. **Deterministic Engine**: `carbon_engine.py` using DuckDB processes the data dynamically, tracking the user's trajectory persistently via UUID session tracking in `history.py`.
 6. **UI De-Coupling**: `app.py` has been stripped of UI logic. All view layer mechanics reside in `src/ui/components.py` and `src/ui/dashboard.py`.
-7. **Smart Yeti Advisor**: A secondary LLM dynamically analyzes the user's largest un-optimized lifestyle category to deliver guaranteed, non-redundant mitigation strategies.
+7. **Smart Yeti Advisor**: A secondary LLM agent (`src/llm/client.py`) dynamically analyzes the user's largest un-optimized lifestyle category to deliver guaranteed, non-redundant mitigation strategies.
 
 ## Important Context for Future Agents
 - Do **NOT** remove the UI sliders. The architecture explicitly decoupled the LLM parsing from the DuckDB math to preserve idempotency and strict `f(x)=y` scientific validation.

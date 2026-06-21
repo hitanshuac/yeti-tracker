@@ -77,7 +77,7 @@ Yeti-Tracker enforces strict engineering standards via the `.agents` framework. 
 - `src/`: Core service modules orchestrating business logic:
   - `state_manager.py`: Pydantic AppState management.
   - `carbon_engine.py`: Deterministic DuckDB math & percentile anomaly detection.
-  - `llm_service.py`: Groq extraction and Advisor interactions.
+  - `llm/`: Decomposed Groq orchestration (client, models, parsers, prompts).
   - `rag_service.py`: Context retrieval.
   - `chart_factory.py`: Plotly visualizations.
   - `history.py`: DuckDB connection pooling and telemetry.

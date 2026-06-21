@@ -1,3 +1,13 @@
+---
+title: Yeti Tracker
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Yeti-Tracker: Personal Carbon Footprint Gamification 🌍
 
 **Vertical/Persona:** "Carbon Footprint Awareness Platform" (Hack2Skill Challenge 3)
@@ -63,7 +73,7 @@ Yeti-Tracker enforces strict engineering standards via the `.agents` framework. 
 
 ## Directory Structure
 
-- `app.py`: Thin Streamlit UI Orchestrator (~776 lines).
+- `app.py`: Thin Streamlit UI Orchestrator (~313 lines).
 - `src/`: Core service modules orchestrating business logic:
   - `state_manager.py`: Pydantic AppState management.
   - `carbon_engine.py`: Deterministic DuckDB math & percentile anomaly detection.
@@ -71,6 +81,10 @@ Yeti-Tracker enforces strict engineering standards via the `.agents` framework. 
   - `rag_service.py`: Context retrieval.
   - `chart_factory.py`: Plotly visualizations.
   - `history.py`: DuckDB connection pooling and telemetry.
+  - `observability.py`: Centralized error logging and tracing.
+  - `security.py`: Input sanitization and CWE-74 mitigation.
+  - `ui/`: Decoupled view layer (`components.py` and `dashboard.py`).
+- `tests/`: Automated SRE test suite (66 tests with 100% pass rate).
 - `scripts/`: Internal tools, including `diagram_extractor.py` (AST codebase mapping).
 - `data/`: Local storage for `yeti.duckdb`, CSV baselines, and `error_logs.json`.
 - `.agents/`: Governance rules, product templates, agentic skills, and autonomous workflows.
